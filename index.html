@@ -123,9 +123,9 @@ a{color:inherit;text-decoration:none}
 
 /* NAV */
 nav{position:sticky;top:0;z-index:200;background:var(--e900);
-  border-bottom:1px solid var(--bd);height:84px;
+  border-bottom:1px solid var(--bd);height:104px;
   display:flex;align-items:center;padding:0 48px;gap:24px}
-.nav-logo{height:60px;width:auto;filter:invert(1) brightness(2);
+.nav-logo{height:84px;width:auto;filter:invert(1) brightness(2);
   mix-blend-mode:screen;flex-shrink:0}
 .nav-links{display:flex;gap:26px;list-style:none;margin-left:auto}
 .nav-links a{color:rgba(255,255,255,0.55);font-size:12px;letter-spacing:0.1em;
@@ -385,8 +385,8 @@ nav{position:sticky;top:0;z-index:200;background:var(--e900);
 footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--bd)}
 .footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:48px;
   padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,0.06)}
-.f-logo{height:42px;width:auto;filter:invert(1) brightness(2);
-  mix-blend-mode:screen;opacity:.72;margin-bottom:16px}
+.f-logo{height:60px;width:auto;filter:invert(1) brightness(2);
+  mix-blend-mode:screen;opacity:.85;margin-bottom:16px}
 .f-vet{display:inline-flex;align-items:center;gap:7px;font-size:10px;
   letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.38);
   border:1px solid rgba(255,255,255,0.1);padding:5px 12px;margin-bottom:16px}
@@ -450,7 +450,8 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
 
 /* MOBILE */
 @media(max-width:768px){
-  nav{padding:0 18px;height:60px}
+  nav{padding:0 18px;height:72px}
+  .nav-logo{height:56px}
   .about-grid{grid-template-columns:1fr;gap:36px}
   .guarantee{grid-template-columns:1fr}
   .urgency{padding:13px 20px;font-size:12.5px}
@@ -485,7 +486,7 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
 
 <!-- NAV -->
 <nav role="navigation" aria-label="Main navigation">
-  <img class="nav-logo" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 60'&gt;&lt;rect width='240' height='60' fill='none'/&gt;&lt;text x='0' y='38' font-family='Helvetica,Arial,sans-serif' font-size='26' font-weight='900' fill='%23ffffff'&gt;CLEAN PLATE&lt;/text&gt;&lt;text x='1' y='54' font-family='Helvetica,Arial,sans-serif' font-size='11' letter-spacing='3' fill='%234aab74'&gt;HAULING CO.&lt;/text&gt;&lt;/svg&gt;" alt="Clean Plate Hauling Co." width="180" height="45"/>
+  <img class="nav-logo" src="logo.jpg" alt="Clean Plate Hauling Co." width="200" height="84" onerror="this.onerror=null;this.src=&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 70'&gt;&lt;text x='0' y='42' font-family='Helvetica,Arial,sans-serif' font-size='30' font-weight='900' fill='%23ffffff'&gt;CLEAN PLATE&lt;/text&gt;&lt;text x='2' y='62' font-family='Helvetica,Arial,sans-serif' font-size='13' letter-spacing='4' fill='%234aab74'&gt;HAULING CO.&lt;/text&gt;&lt;/svg&gt;&quot;"/>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
@@ -605,7 +606,8 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
     </div>
     <div class="about-stats">
       <div class="about-photo">
-        <div style="width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,#0b2318,#133d29);display:flex;align-items:center;justify-content:center">
+        <img src="owner.jpg" alt="Clean Plate Hauling Co. veteran owner removing a washer at a customer's home in Metro Detroit" onerror="this.onerror=null;this.parentNode.querySelector('.about-photo-fallback').style.display='flex';this.style.display='none'"/>
+        <div class="about-photo-fallback" style="display:none;width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,#0b2318,#133d29);align-items:center;justify-content:center">
           <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#4aab74" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
         </div>
         <div class="about-photo-cap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>&nbsp; The owner, on the job — every job.</div>
@@ -697,25 +699,20 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
   <rect width="400" height="300" fill="url(#wallB)"/>
   <rect y="210" width="400" height="90" fill="#b0a89c"/>
   <rect y="206" width="400" height="6" fill="#9a9288"/>
-  <!-- fridge -->
   <rect x="36" y="96" width="74" height="118" rx="3" fill="#e8e8e4" stroke="#c0c0b8" stroke-width="2"/>
   <line x1="36" y1="150" x2="110" y2="150" stroke="#c0c0b8" stroke-width="2"/>
   <rect x="100" y="112" width="5" height="26" rx="2" fill="#a8a8a0"/>
   <rect x="100" y="162" width="5" height="22" rx="2" fill="#a8a8a0"/>
-  <!-- stacked boxes -->
   <rect x="130" y="150" width="62" height="64" fill="#c9a878" stroke="#b08f5e" stroke-width="2"/>
   <line x1="130" y1="180" x2="192" y2="180" stroke="#b08f5e" stroke-width="1.5"/>
   <rect x="138" y="110" width="48" height="40" fill="#d4b888" stroke="#b08f5e" stroke-width="2"/>
-  <!-- old chair tipped -->
   <rect x="210" y="150" width="56" height="20" rx="2" fill="#8a6f5a"/>
   <rect x="210" y="120" width="20" height="50" rx="2" fill="#7a6150"/>
   <rect x="214" y="170" width="6" height="40" fill="#6a5444"/>
   <rect x="256" y="170" width="6" height="40" fill="#6a5444"/>
-  <!-- bags pile -->
   <ellipse cx="320" cy="194" rx="52" ry="28" fill="#5a5a52"/>
   <ellipse cx="332" cy="170" rx="38" ry="24" fill="#66665c"/>
   <ellipse cx="305" cy="178" rx="28" ry="18" fill="#52524a"/>
-  <!-- misc clutter -->
   <rect x="120" y="190" width="36" height="24" rx="2" fill="#4a4a44"/>
   <circle cx="285" cy="205" r="12" fill="#7a7a70"/>
 </svg>
@@ -739,14 +736,11 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
   <rect width="400" height="300" fill="url(#wallA)"/>
   <rect y="210" width="400" height="90" fill="url(#floorA)"/>
   <rect y="206" width="400" height="6" fill="#a89f90"/>
-  <!-- subtle sweep marks -->
   <path d="M40 250 Q120 240 200 250" stroke="#aaa194" stroke-width="1.5" fill="none" opacity="0.5"/>
   <path d="M200 268 Q280 258 360 268" stroke="#aaa194" stroke-width="1.5" fill="none" opacity="0.5"/>
-  <!-- window for life -->
   <rect x="280" y="60" width="84" height="64" rx="2" fill="#cfe3ec" stroke="#fff" stroke-width="4"/>
   <line x1="322" y1="60" x2="322" y2="124" stroke="#fff" stroke-width="3"/>
   <line x1="280" y1="92" x2="364" y2="92" stroke="#fff" stroke-width="3"/>
-  <!-- clean checkmark badge -->
   <circle cx="120" cy="150" r="44" fill="none" stroke="#1d6340" stroke-width="3" opacity="0.85"/>
   <polyline points="98,150 114,167 144,128" stroke="#1d6340" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
@@ -973,7 +967,7 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
 <footer role="contentinfo">
   <div class="footer-grid">
     <div>
-      <img class="f-logo" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 60'&gt;&lt;rect width='240' height='60' fill='none'/&gt;&lt;text x='0' y='38' font-family='Helvetica,Arial,sans-serif' font-size='26' font-weight='900' fill='%23ffffff'&gt;CLEAN PLATE&lt;/text&gt;&lt;text x='1' y='54' font-family='Helvetica,Arial,sans-serif' font-size='11' letter-spacing='3' fill='%234aab74'&gt;HAULING CO.&lt;/text&gt;&lt;/svg&gt;" alt="Clean Plate Hauling Co." width="180" height="45"/>
+      <img class="f-logo" src="logo.jpg" alt="Clean Plate Hauling Co." width="170" height="60" onerror="this.onerror=null;this.src=&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 60'&gt;&lt;text x='0' y='38' font-family='Helvetica,Arial,sans-serif' font-size='26' font-weight='900' fill='%23ffffff'&gt;CLEAN PLATE&lt;/text&gt;&lt;text x='1' y='54' font-family='Helvetica,Arial,sans-serif' font-size='11' letter-spacing='3' fill='%234aab74'&gt;HAULING CO.&lt;/text&gt;&lt;/svg&gt;&quot;"/>
       <div class="f-vet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>&nbsp; Veteran Owned &amp; Operated</div>
       <p class="f-desc">Professional junk removal for homeowners, landlords, and businesses across Metro Detroit. Based in Wixom, Michigan.</p>
     </div>
@@ -1038,7 +1032,6 @@ function handleSubmit(e){
   setTimeout(()=>t.classList.remove('show'),5000);
   e.target.reset();
 }
-// Scroll reveal
 const io=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
 },{threshold:0.12});
