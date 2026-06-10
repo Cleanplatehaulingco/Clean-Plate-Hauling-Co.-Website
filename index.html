@@ -5,20 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Junk Removal Wixom MI | Clean Plate Hauling Co. | Veteran-Owned</title>
 <meta name="description" content="Veteran-owned junk removal serving Wixom, Novi, Walled Lake & Metro Detroit. Flat-rate pricing, no hidden fees. Call or text 734-743-1877."/>
-<link rel="canonical" href="https://www.cleanplatehaulingco.com/"/>
+<link rel="canonical" href="https://cleanplatehaulingco.com/"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Clean Plate Hauling Co. | Junk Removal Wixom MI | Veteran-Owned"/>
 <meta property="og:description" content="Veteran-owned junk removal in Wixom & Metro Detroit. Flat-rate pricing, no hidden fees. Call or text 734-743-1877."/>
-<meta property="og:url" content="https://www.cleanplatehaulingco.com/"/>
+<meta property="og:url" content="https://cleanplatehaulingco.com/"/>
+<meta property="og:image" content="https://cleanplatehaulingco.com/og.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Clean Plate Hauling Co. | Junk Removal Wixom MI | Veteran-Owned"/>
+<meta name="twitter:description" content="Veteran-owned junk removal in Wixom &amp; Metro Detroit. Flat-rate pricing, no hidden fees. Call or text 734-743-1877."/>
+<meta name="twitter:image" content="https://cleanplatehaulingco.com/og.png"/>
+<meta name="theme-color" content="#071810"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23071810'/%3E%3Ctext x='32' y='45' font-family='Helvetica,Arial,sans-serif' font-size='33' font-weight='900' fill='%234aab74' text-anchor='middle'%3ECP%3C/text%3E%3C/svg%3E"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23071810'/%3E%3Ctext x='32' y='45' font-family='Helvetica,Arial,sans-serif' font-size='33' font-weight='900' fill='%234aab74' text-anchor='middle'%3ECP%3C/text%3E%3C/svg%3E"/>
 
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
   "@type":"LocalBusiness",
-  "@id":"https://www.cleanplatehaulingco.com/#business",
+  "@id":"https://cleanplatehaulingco.com/#business",
   "name":"Clean Plate Hauling Co.",
   "description":"Veteran-owned, licensed and insured junk removal serving Wixom and Metro Detroit. Residential hauling, garage and basement cleanouts, rental property cleanouts, debris removal. Flat-rate pricing, no hidden fees.",
-  "url":"https://www.cleanplatehaulingco.com",
+  "url":"https://cleanplatehaulingco.com",
   "telephone":"+17347431877",
   "email":"info@cleanplatehaulingco.com",
   "address":{
@@ -684,7 +694,7 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
 <section class="sec white" id="work" aria-labelledby="work-h">
   <div class="ey">Our Work</div>
   <h2 class="sh" id="work-h">Before &amp; After <span>Real Jobs</span></h2>
-  <p class="sh-sub">Photos from actual cleanouts in Wixom and Metro Detroit. Every job is swept clean before we leave.</p>
+  <p class="sh-sub">Here’s the difference on a typical cleanout — every job ends swept clean before we leave. Real job photos coming soon; follow us on Facebook for our latest work.</p>
   <div class="photo-grid reveal">
 
     <!-- BEFORE: cluttered room -->
@@ -921,7 +931,9 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
     <div class="fbox">
       <div class="fh">Request a Free Quote</div>
       <div class="fsub">Tell us what needs to go. We'll respond with a firm, honest price.</div>
-      <form id="quoteForm" onsubmit="handleSubmit(event)" novalidate>
+      <form id="quoteForm" name="quote" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)" novalidate>
+        <input type="hidden" name="form-name" value="quote"/>
+        <p style="display:none"><label>Don’t fill this out if you’re human: <input name="bot-field"/></label></p>
         <div class="f2">
           <div class="fg"><label for="fn">Your Name *</label><input id="fn" type="text" name="name" placeholder="John Smith" required autocomplete="name"/></div>
           <div class="fg"><label for="fp">Phone *</label><input id="fp" type="tel" name="phone" placeholder="734-000-0000" required autocomplete="tel"/></div>
@@ -1024,13 +1036,20 @@ function toggleFaq(btn){
 }
 function handleSubmit(e){
   e.preventDefault();
-  if(!e.target.name.value.trim()||!e.target.phone.value.trim()||!e.target.city.value.trim()){
+  var f=e.target, el=f.elements;
+  if(!el['name'].value.trim()||!el['phone'].value.trim()||!el['city'].value.trim()){
     alert('Please fill in your name, phone number, and city.');return;
   }
-  const t=document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),5000);
-  e.target.reset();
+  var btn=f.querySelector('.btn-form');
+  if(btn){btn.disabled=true;btn.textContent='Sending\u2026';}
+  fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()})
+    .then(function(r){ if(!r.ok){throw new Error('status '+r.status);} 
+      var t=document.getElementById('toast'); t.classList.add('show');
+      setTimeout(function(){t.classList.remove('show');},5000);
+      f.reset();
+    })
+    .catch(function(){ alert('Sorry \u2014 that didn\u2019t send. Please call or text us at 734-743-1877 and we\u2019ll take care of you.'); })
+    .finally(function(){ if(btn){btn.disabled=false;btn.innerHTML='Send Quote Request \u2192';} });
 }
 const io=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
