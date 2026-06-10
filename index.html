@@ -372,6 +372,9 @@ nav{position:sticky;top:0;z-index:200;background:var(--e900);
 .fg input::placeholder,.fg textarea::placeholder{color:#bbb}
 .fg select option{background:#fff}
 .fg textarea{resize:vertical;min-height:88px}
+.fg input[type=file]{padding:10px 12px;cursor:pointer;font-size:13px}
+.fg input[type=file]::file-selector-button{background:var(--e400);color:#fff;border:none;padding:8px 14px;margin-right:12px;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:0.04em;cursor:pointer;border-radius:3px}
+.fhint{font-size:12px;color:var(--tmuted);margin-top:6px;line-height:1.5}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .btn-form{background:var(--e400);color:#fff;border:none;padding:16px;
   font-size:13px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;
@@ -495,7 +498,7 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
 <!-- STICKY MOBILE BAR -->
 <div class="mbar" role="region" aria-label="Quick contact">
   <a href="tel:7347431877" class="mbar-call"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>&nbsp; Call Now</a>
-  <a href="sms:7347431877" class="mbar-text"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>&nbsp; Text for Quote</a>
+  <a href="sms:7347431877?&body=Hi!%20I%20need%20some%20junk%20removed.%20Photos%3A%20" class="mbar-text"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>&nbsp; Text for Quote</a>
 </div>
 
 <!-- NAV -->
@@ -527,7 +530,7 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
     </h1>
     <p class="hero-sub">Fast, professional hauling for homeowners, landlords, and property managers across Southeast Michigan. <strong>You get a firm price before we start — no surprises, no hidden fees.</strong></p>
     <div class="hero-ctas">
-      <a href="sms:7347431877" class="btn-hp"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>&nbsp; Text Photos for a Free Quote</a>
+      <a href="sms:7347431877?&body=Hi!%20I%20need%20some%20junk%20removed.%20Photos%3A%20" class="btn-hp"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>&nbsp; Text Photos for a Free Quote</a>
       <a href="tel:7347431877" class="btn-hg">Call 734-743-1877</a>
     </div>
     <p style="font-size:13px;color:rgba(255,255,255,0.55);margin:-24px 0 32px;letter-spacing:0.02em"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Fastest quotes come by text — snap a photo and send it over.</p>
@@ -791,7 +794,7 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
         <li>Curbside or garage pickup</li>
         <li>Area swept after removal</li>
       </ul>
-      <a href="sms:7347431877" class="pc-cta">Text for a Quote</a>
+      <a href="sms:7347431877?&body=Hi!%20I%20need%20some%20junk%20removed.%20Photos%3A%20" class="pc-cta">Text for a Quote</a>
     </div>
     <div class="pc feat">
       <div class="feat-pill">Most Popular</div>
@@ -804,7 +807,7 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
         <li>Area swept after removal</li>
         <li>Photo quote available</li>
       </ul>
-      <a href="sms:7347431877" class="pc-cta">Text Photos for a Quote</a>
+      <a href="sms:7347431877?&body=Hi!%20I%20need%20some%20junk%20removed.%20Photos%3A%20" class="pc-cta">Text Photos for a Quote</a>
     </div>
     <div class="pc">
       <div class="pt">Full Cleanout</div>
@@ -936,8 +939,8 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
     </div>
     <div class="fbox">
       <div class="fh">Request a Free Quote</div>
-      <div class="fsub">Tell us what needs to go. We'll respond with a firm, honest price.</div>
-      <form id="quoteForm" name="quote" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)" novalidate>
+      <div class="fsub">Tell us what needs to go — attach photos if you can. We'll respond with a firm, honest price.</div>
+      <form id="quoteForm" name="quote" method="POST" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)" novalidate>
         <input type="hidden" name="form-name" value="quote"/>
         <p style="display:none"><label>Don’t fill this out if you’re human: <input name="bot-field"/></label></p>
         <div class="f2">
@@ -962,7 +965,8 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
           </select>
         </div>
         <div class="fg"><label for="fd">What Needs to Go? (optional)</label><textarea id="fd" name="details" placeholder="Old couch and recliner, full garage, basement furniture..."></textarea></div>
-        <button type="submit" class="btn-form">Send Quote Request →</button>
+        <div class="fg"><label for="fph">Photos — Fastest Way to a Firm Price (optional)</label><input id="fph" type="file" name="photos" accept="image/*" multiple/><div class="fhint">Snap 1–3 photos of what needs to go. Photos too big to attach? Text them to 734-743-1877 instead.</div></div>
+        <button type="submit" class="btn-form">Get My Firm Price →</button>
         <div class="fnote"><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span>Your info is never shared · We respond promptly</span></div>
       </form>
     </div>
@@ -977,7 +981,7 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
   </div>
   <div class="cta-right">
     <a href="tel:7347431877" class="cta-phone">734-743-1877</a>
-    <a href="sms:7347431877" class="btn-cta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>&nbsp; Text Photos for a Quote</a>
+    <a href="sms:7347431877?&body=Hi!%20I%20need%20some%20junk%20removed.%20Photos%3A%20" class="btn-cta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>&nbsp; Text Photos for a Quote</a>
     <p class="cta-micro">7am – 8pm · 7 days a week · Prompt response</p>
   </div>
 </div>
@@ -1049,18 +1053,26 @@ function handleSubmit(e){
   }
   var name=el['name'].value.trim().split(' ')[0];
   var btn=f.querySelector('.btn-form');
+  var files=(el['photos']&&el['photos'].files)?el['photos'].files:[];
+  var total=0;for(var i=0;i<files.length;i++){total+=files[i].size;}
+  if(total>8*1024*1024){
+    alert('Those photos are too large to attach (8 MB max). Remove a photo and try again, or text your photos to 734-743-1877 for the fastest quote.');return;
+  }
   if(btn){btn.disabled=true;btn.textContent='Sending...';}
-  fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()})
+  var fd=new FormData(f), opts;
+  if(files.length>0){opts={method:'POST',body:fd};}
+  else{fd.delete('photos');opts={method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(fd).toString()};}
+  fetch('/',opts)
     .then(function(r){ if(!r.ok){throw new Error('status '+r.status);}
       var box=f.closest('.fbox');
       if(box){ box.innerHTML='<div style="text-align:center;padding:28px 8px">'
         +'<div style="width:66px;height:66px;border-radius:50%;background:var(--e50);display:flex;align-items:center;justify-content:center;margin:0 auto 18px"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1d6340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>'
         +'<div style="font-size:22px;font-weight:900;color:var(--td);margin-bottom:8px">Thanks'+(name?(", "+name):"")+'! Your request is in.</div>'
         +'<p style="font-size:14px;color:var(--tm);line-height:1.7;max-width:380px;margin:0 auto 18px">We will review it and reply with a firm price shortly. Want it faster? Text photos of what needs to go to <strong>734-743-1877</strong> and we will quote you right away.</p>'
-        +'<a href="sms:7347431877" class="btn-form" style="display:inline-block;text-decoration:none;width:auto;padding:14px 28px">Text 734-743-1877</a></div>';
+        +'<a href="sms:7347431877?&body=Hi!%20I%20need%20some%20junk%20removed.%20Photos%3A%20" class="btn-form" style="display:inline-block;text-decoration:none;width:auto;padding:14px 28px">Text 734-743-1877</a></div>';
       } else { var t=document.getElementById('toast'); t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},5000); f.reset(); }
     })
-    .catch(function(){ alert('Sorry - that did not send. Please call or text us at 734-743-1877 and we will take care of you.'); if(btn){btn.disabled=false;btn.innerHTML='Send Quote Request &rarr;';} });
+    .catch(function(){ alert('Sorry - that did not send. Please call or text us at 734-743-1877 and we will take care of you.'); if(btn){btn.disabled=false;btn.innerHTML='Get My Firm Price &rarr;';} });
 }
 const io=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
