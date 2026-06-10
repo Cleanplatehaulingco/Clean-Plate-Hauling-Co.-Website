@@ -97,6 +97,10 @@
 }
 </script>
 
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Service","name":"Junk Removal & Cleanouts","serviceType":"Junk removal, garage and basement cleanouts, appliance and furniture removal, rental cleanouts, debris hauling","provider":{"@type":"LocalBusiness","name":"Clean Plate Hauling Co.","telephone":"+17347431877","url":"https://cleanplatehaulingco.com/"},"areaServed":[{"@type":"City","name":"Wixom"},{"@type":"City","name":"Novi"},{"@type":"City","name":"Walled Lake"},{"@type":"City","name":"Commerce Township"},{"@type":"City","name":"Farmington Hills"},{"@type":"City","name":"Northville"},{"@type":"City","name":"South Lyon"},{"@type":"City","name":"Southfield"}],"url":"https://cleanplatehaulingco.com/"}
+</script>
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -850,11 +854,13 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
     <div class="area">South Lyon</div>
     <div class="area">Southfield</div>
   </div>
+  <p style="margin-top:8px;margin-bottom:6px;font-size:14px;color:var(--tm);line-height:1.8;max-width:780px">We provide fast, flat-rate <strong>junk removal and cleanouts</strong> across Wixom, Novi, Walled Lake, Commerce Township, Farmington Hills, Northville, South Lyon, and Southfield &mdash; garage and basement cleanouts, appliance and furniture removal, rental-property turnovers, and debris hauling throughout Oakland and Livingston Counties.</p>
   <p style="margin-top:18px;font-size:13px;color:var(--tmuted)">
     Don't see your city?
     <a href="tel:7347431877" style="color:var(--acc);font-weight:700;text-decoration:underline;text-underline-offset:3px">Call us to confirm your area.</a>
     We serve most of Oakland and Livingston Counties.
   </p>
+  <div style="margin-top:26px;border:1.5px solid var(--e100);border-radius:8px;overflow:hidden;line-height:0"><iframe title="Clean Plate Hauling Co. service area in Wixom and Metro Detroit" src="https://maps.google.com/maps?q=Wixom,MI&amp;z=10&amp;output=embed" width="100%" height="340" style="border:0;display:block" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
 </section>
 
 <!-- FAQ — exactly matches schema -->
@@ -1041,16 +1047,20 @@ function handleSubmit(e){
   if(!el['name'].value.trim()||!el['phone'].value.trim()||!el['city'].value.trim()){
     alert('Please fill in your name, phone number, and city.');return;
   }
+  var name=el['name'].value.trim().split(' ')[0];
   var btn=f.querySelector('.btn-form');
-  if(btn){btn.disabled=true;btn.textContent='Sending\u2026';}
+  if(btn){btn.disabled=true;btn.textContent='Sending...';}
   fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()})
-    .then(function(r){ if(!r.ok){throw new Error('status '+r.status);} 
-      var t=document.getElementById('toast'); t.classList.add('show');
-      setTimeout(function(){t.classList.remove('show');},5000);
-      f.reset();
+    .then(function(r){ if(!r.ok){throw new Error('status '+r.status);}
+      var box=f.closest('.fbox');
+      if(box){ box.innerHTML='<div style="text-align:center;padding:28px 8px">'
+        +'<div style="width:66px;height:66px;border-radius:50%;background:var(--e50);display:flex;align-items:center;justify-content:center;margin:0 auto 18px"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1d6340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>'
+        +'<div style="font-size:22px;font-weight:900;color:var(--td);margin-bottom:8px">Thanks'+(name?(", "+name):"")+'! Your request is in.</div>'
+        +'<p style="font-size:14px;color:var(--tm);line-height:1.7;max-width:380px;margin:0 auto 18px">We will review it and reply with a firm price shortly. Want it faster? Text photos of what needs to go to <strong>734-743-1877</strong> and we will quote you right away.</p>'
+        +'<a href="sms:7347431877" class="btn-form" style="display:inline-block;text-decoration:none;width:auto;padding:14px 28px">Text 734-743-1877</a></div>';
+      } else { var t=document.getElementById('toast'); t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},5000); f.reset(); }
     })
-    .catch(function(){ alert('Sorry \u2014 that didn\u2019t send. Please call or text us at 734-743-1877 and we\u2019ll take care of you.'); })
-    .finally(function(){ if(btn){btn.disabled=false;btn.innerHTML='Send Quote Request \u2192';} });
+    .catch(function(){ alert('Sorry - that did not send. Please call or text us at 734-743-1877 and we will take care of you.'); if(btn){btn.disabled=false;btn.innerHTML='Send Quote Request &rarr;';} });
 }
 const io=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
