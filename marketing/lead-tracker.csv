@@ -1,24 +1,39 @@
 Category,Company,City,Website,Contact Name,Phone,Email,Status,Last Touch,Next Step,Notes
-Property Manager,JMZ Management,Farmington Hills,jmzmanagement.com,,,,New - verify contact,,Day 1 email,Manages 1000+ properties across Novi/Wixom/Farmington Hills
-Property Manager,Renters Warehouse SE Michigan,Oakland County,renterswarehouse.com,,,,New - verify contact,,Day 1 email,Covers Farmington/Novi/Wixom rentals
-Property Manager,NHL Property Management,Farmington Hills,nhlpropertymanagement.com,,,,New - verify contact,,Day 1 email,Oakland/Wayne/Macomb single-family rentals
-Property Manager,G3 Management,Wixom,g3manage.com,,,,New - verify contact,,Day 1 email,Local to Wixom
-Estate Sale Co,Estate Pros,Oakland County,goestatepros.com,,,,New - verify contact,,Day 1 email,5000+ sales done; they offer cleanouts - pitch overflow/subcontract
-Estate Sale Co,Aaron's Estate Sales,Novi/Northville area,aaronsestatesales.com,,,,New - verify contact,,Day 1 email,Serves Novi & Northville directly
-Estate Sale Co,All Out Estate Sale Services,SE Michigan,alloutestatesaleservices.com,,,,New - verify contact,,Day 1 email,Serves Northville & Novi
-Realtor Office,Keller Williams Novi,Novi,—,,,,New - drop cards,,Visit office,39500 Orchard Hill Pl; ask who handles estate/probate listings
-Realtor Office,Keller Williams Advantage Northville/Novi,Northville,—,,,,New - drop cards,,Visit office,Active in Northville/Novi market
-Realtor Office,RE/MAX Classic,South Lyon,—,,,,New - drop cards,,Visit office,
-Realtor Office,RE/MAX Dream Properties,Northville,—,,,,New - drop cards,,Visit office,
-Realtor Office,Real Estate One,Northville,—,,,,New - drop cards,,Visit office,
-Realtor Team,Glover Agency (KW),Novi/Northville,gloveragency.com,,,,New - verify contact,,Day 1 email,High-volume team; covers Farmington Hills & South Lyon too
-Senior Move,Real T Simplistic,Royal Oak,realtsimplistic.com,,,,New - verify contact,,Day 1 email,Senior move managers + realtors; all Oakland County
-Senior Move,TidySmart,Metro Detroit,tidysmart.com,,,,New - verify contact,,Day 1 email,Senior downsizing management
-Senior Move,H.O.M.E. Senior Moving,Oakland County,homeseniormoving.com,,,,New - verify contact,,Day 1 email,Full senior relocation incl. downsizing
-Senior Move,Lily Rose Interiors,Oakland County,lilyroseinteriordesign.com,,,,New - verify contact,,Day 1 email,Senior move specialist
-Mover,Men on the Move,Metro Detroit,michiganmovers.com,,,,New - verify contact,,Day 1 email,Senior moving division - pitch haul-away partnership
-Mover,Professional Movers,Detroit/Oakland Cty,professionalmovers.com,,,,New - verify contact,,Day 1 email,Senior moving division
-Mover,Morse Moving & Storage,Metro Detroit,morsemoving.com,,,,New - verify contact,,Day 1 email,Senior moving services
-Storage,(Find: Public Storage / Extra Space / CubeSmart near Wixom-Novi),,,,,,To research,,Google Maps search,Abandoned unit cleanouts - talk to site managers in person
-Contractor,(Find: remodelers & GCs in Novi/Commerce on Google Maps),,,,,,To research,,Google Maps search,Debris hauls - 3500HD handles heavy loads
-Dumpster Rental,(Find: local dumpster rental cos),,,,,,To research,,Google Maps search,They get 'can you load it?' calls daily - referral swap
+Property Manager,JMZ Management,Farmington Hills,jmzmanagement.com,,,,New - verify contact,,Send email #1,Manages 1000+ properties across Novi/Wixom/Farmington Hills
+Property Manager,Renters Warehouse SE Michigan,Oakland County,renterswarehouse.com,,,,New - verify contact,,Send email #5,Covers Farmington/Novi/Wixom rentals
+Property Manager,NHL Property Management,Farmington Hills,nhlpropertymanagement.com,,,,New - verify contact,,Send email #3,Oakland/Wayne/Macomb single-family rentals
+Property Manager,G3 Management,Wixom,g3manage.com,,,,New - verify contact,,Send email #4,Local to Wixom - neighbor angle
+Property Manager,NuHome Property Management,Metro Detroit,npm.llc,,,,New - verify contact,,Send email #2,Owner-operated family business - kindred small-biz angle; serves Novi/Farmington Hills/Southfield
+Property Manager,Michigan Management & Property Maintenance,Farmington,michiganmanagement.com,,,,New - verify contact,,Day 1 email,Full-service incl. unit prep - pitch turnover cleanouts
+Property Manager,North Bloomfield Properties,Farmington Hills,northbloomfield.com,,,,New - verify contact,,Day 1 email,Michigan rental property management
+Estate Sale Co,Estate Pros,Oakland County,goestatepros.com,,,,New - verify contact,,Send email #6,5000+ sales; they offer cleanouts - pitch overflow/subcontract
+Estate Sale Co,Aaron's Estate Sales,Novi/Northville area,aaronsestatesales.com,,,,New - verify contact,,Send email #7,13+ years; serves Novi & Northville directly
+Estate Sale Co,All Out Estate Sale Services,SE Michigan,alloutestatesaleservices.com,,,,New - verify contact,,Send email #8,Serves Northville & Novi
+Realtor Office,Keller Williams Novi,Novi,—,,,,New - drop cards,,Walk-in Fri,39500 Orchard Hill Pl; ask who handles estate/probate listings
+Realtor Office,Keller Williams Advantage Northville/Novi,Northville,—,,,,New - drop cards,,Walk-in Fri,Active in Northville/Novi market
+Realtor Office,RE/MAX Classic,South Lyon,—,,,,New - drop cards,,Walk-in Fri,
+Realtor Office,RE/MAX Dream Properties,Northville,—,,,,New - drop cards,,Walk-in Fri,
+Realtor Office,Real Estate One,Northville,—,,,,New - drop cards,,Walk-in Fri,
+Realtor Team,Glover Agency (KW),Novi/Northville,gloveragency.com,,,,New - verify contact,,Send email #9,High-volume team; covers Farmington Hills & South Lyon too
+Senior Move,Real T Simplistic,Royal Oak,realtsimplistic.com,,,,New - verify contact,,Send email #10,Senior move managers + realtors (founders Kristyn & Nicole); all Oakland County
+Senior Move,TidySmart,Metro Detroit,tidysmart.com,,,,New - verify contact,,Day 2 email,Senior downsizing management
+Senior Move,H.O.M.E. Senior Moving,Oakland County,homeseniormoving.com,,,,New - verify contact,,Send email #11,Full senior relocation incl. downsizing
+Senior Move,Lily Rose Interiors,Oakland County,lilyroseinteriordesign.com,,,,New - verify contact,,Day 2 email,Senior move specialist
+Mover,Men on the Move,Metro Detroit,michiganmovers.com,,,,New - verify contact,,Day 3 email,Senior moving division - pitch haul-away partnership
+Mover,Professional Movers,Detroit/Oakland Cty,professionalmovers.com,,,,New - verify contact,,Day 3 email,Senior moving division
+Mover,Morse Moving & Storage,Metro Detroit,morsemoving.com,,,,New - verify contact,,Day 3 email,Senior moving services
+Contractor,Finished Basements Plus,Commerce Township,finishedbasementsplus.com,,,,New - verify contact,,Send email #12,80+ person team with Commerce warehouse - steady debris volume
+Contractor,Seghi Renovations,South Lyon,seghi.net,,,,New - verify contact,,Send email #13,Full-service renovations since 1989 - licensed & insured
+Contractor,SW Construction,Novi,swconstructionmi.com,,,,New - verify contact,,Day 4 email,Owner-managed kitchen/bath/basement remodels
+Contractor,Nvrrete,Commerce Township,nvrrete.com,,,,New - verify contact,,Day 4 email,Kitchen remodels & basement renovations
+Contractor,MMC Building,Novi/South Lyon,mmcbuilding.com,,,,New - verify contact,,Day 4 email,Remodeling + basement finishing + additions
+Contractor,RM Remodeling,South Lyon,rmremodeling.net,,,,New - verify contact,,Day 5 email,Kitchen/bath/basement
+Contractor,Wright's Renovations,serves Novi/South Lyon,wrights-renovations.com,,,,New - verify contact,,Day 5 email,Kitchens basements decks sunrooms
+Dumpster Rental,Christensen Dumpster Rental,Clarkston/Oakland Cty,cdisposal.com,,248-625-9332,,New - call,,Send email #14 then call,Family-owned roll-off co - referral swap for 'can you load it?' calls
+Dumpster Rental,Titan National,Novi area,titannational.com,,,,New - verify contact,,Day 5 email,Roll-offs 10-40 yd in Novi/Wixom
+Dumpster Rental,Community Disposal Service,SE Michigan,cdsmich.com,,,,New - verify contact,,Day 5 email,Roll-offs + they list junk removal - feel out partnership
+Storage,iStorage Self Storage,Wixom,nsastorage.com,,,,New - walk in,,Walk-in Sat,30320 Beck Rd - abandoned unit cleanouts; talk to site manager
+Storage,1-800 Self Storage Novi/Wixom,Novi,1800selfstorage.com,,,,New - walk in,,Walk-in Sat,47020 West Rd
+Storage,Public Storage Wixom,Wixom,publicstorage.com,,,,New - walk in,,Walk-in Sat,50586 Pontiac Trl
+Storage,Public Storage Commerce,Commerce Township,publicstorage.com,,,,New - walk in,,Walk-in Sat,3220 E Oakley Park Rd
+Storage,CubeSmart Wixom,Wixom,cubesmart.com,,,,New - walk in,,Walk-in Sat,Site manager keeps a vendor list - ask to be on it
