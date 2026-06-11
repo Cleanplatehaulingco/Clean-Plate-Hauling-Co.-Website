@@ -14,8 +14,8 @@
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{background:var(--off);color:var(--td);font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}img{display:block;max-width:100%}
-nav{position:sticky;top:0;z-index:200;background:var(--e900);display:flex;align-items:center;justify-content:space-between;padding:14px 24px;gap:14px}
-.nav-logo{height:38px;width:auto}
+nav{position:sticky;top:0;z-index:200;background:var(--e900);display:flex;align-items:center;justify-content:space-between;padding:10px 24px;gap:14px}
+.nav-logo{height:74px;width:auto;filter:invert(1);flex-shrink:0}
 .btn-nc{background:var(--e400);color:#fff;padding:10px 18px;font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase}
 .btn-ng{color:#fff;font-weight:800;font-size:14px;letter-spacing:0.04em}
 .hero{background:linear-gradient(165deg,var(--e950),var(--e900) 60%,#0b2318);color:#fff;padding:72px 24px 64px;text-align:center}
@@ -51,6 +51,20 @@ h2 em{color:var(--acc);font-style:normal}
 .qa h3{font-size:16px;font-weight:800;margin-bottom:8px}
 .qa p{font-size:14px;color:var(--tm)}
 .near{font-size:14px;color:var(--tm);line-height:2}
+.fbox{background:#fff;border:1.5px solid var(--bl);padding:26px;max-width:660px}
+.fg{margin-bottom:12px}
+.fg label{display:block;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--tmuted);font-weight:700;margin-bottom:6px}
+.fg input,.fg textarea{width:100%;background:var(--off);border:1.5px solid var(--bl);color:var(--td);padding:12px 14px;font-size:14px;font-family:inherit;outline:none;box-sizing:border-box}
+.fg input:focus,.fg textarea:focus{border-color:var(--acc)}
+.fg textarea{resize:vertical;min-height:80px}
+.fg input[type=file]{padding:10px 12px;cursor:pointer;font-size:13px}
+.fg input[type=file]::file-selector-button{background:var(--e400);color:#fff;border:none;padding:8px 14px;margin-right:12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border-radius:3px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.f2{grid-template-columns:1fr}}
+.btn-form{background:var(--e400);color:#fff;border:none;padding:15px;width:100%;font-size:13px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;font-family:inherit}
+.btn-form:hover{background:var(--e300)}
+.fhint{font-size:12px;color:var(--tmuted);margin-top:6px;line-height:1.6}
+.fhint a{color:var(--acc);font-weight:700}
 footer{background:var(--e950);color:rgba(255,255,255,0.7);padding:36px 24px;text-align:center;font-size:13px}
 footer a{color:var(--e200);font-weight:700}
 .mbar{display:none}
@@ -63,7 +77,7 @@ footer a{color:var(--e200);font-weight:700}
  .btn-ng{display:none}}
 </style></head><body>
 <nav><a href="/"><img class="nav-logo" src="/logo.png" alt="Clean Plate Hauling Co. — back to home"/></a>
-<div style="display:flex;gap:16px;align-items:center"><a href="tel:7347431877" class="btn-ng">734-743-1877</a><a href="/#contact" class="btn-nc">Free Quote</a></div></nav>
+<div style="display:flex;gap:16px;align-items:center"><a href="tel:7347431877" class="btn-ng">734-743-1877</a><a href="#quote" class="btn-nc">Free Quote</a></div></nav>
 <main>
 <div class="hero"><span class="kick">Veteran Owned &amp; Operated · Garages, Pole Barns & Lake Homes — We Haul It All</span>
 <h1>Junk Removal in<br><span>Commerce Township, Michigan</span></h1>
@@ -80,9 +94,54 @@ footer a{color:var(--e200);font-weight:700}
 <section><div class="price"><div><b>Single items from $75 · Small cleanouts $150–$250 · Full cleanouts from $300</b>
 <p>Firm flat-rate quote from photos, before we start. See full pricing on our <a href="/#pricing" style="color:var(--e200);font-weight:700">main pricing page</a>.</p></div>
 <a href="sms:7347431877?&body=Hi!%20I%20need%20some%20junk%20removed.%20Photos%3A%20" class="btn-hp"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>&nbsp; Get My Firm Price</a></div></section>
+<section id="quote"><h2>Get a Quick Quote in <em>Commerce Township</em></h2>
+<div class="fbox" id="qbox">
+<form name="quote" method="POST" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)" novalidate>
+<input type="hidden" name="form-name" value="quote"/>
+<p style="display:none"><label>Do not fill this out if you are human: <input name="bot-field"/></label></p>
+<input type="hidden" name="service" value="Quick quote - Commerce Township city page"/>
+<div class="f2">
+<div class="fg"><label for="qn">Your Name *</label><input id="qn" type="text" name="name" placeholder="John Smith" required autocomplete="name"/></div>
+<div class="fg"><label for="qp">Phone *</label><input id="qp" type="tel" name="phone" placeholder="734-000-0000" required autocomplete="tel"/></div>
+</div>
+<div class="fg"><label for="qc">Your City *</label><input id="qc" type="text" name="city" value="Commerce Township" required/></div>
+<div class="fg"><label for="qd">What Needs to Go?</label><textarea id="qd" name="details" placeholder="Old couch, full garage, yard debris..."></textarea></div>
+<div class="fg"><label for="qf">Photos — Fastest Way to a Firm Price (optional)</label><input id="qf" type="file" name="photos" accept="image/*" multiple/><div class="fhint">Snap 1–3 photos of what needs to go. Too big to attach? Text them to 734-743-1877.</div></div>
+<button type="submit" class="btn-form">Get My Firm Price →</button>
+<div class="fhint" style="text-align:center;margin-top:12px">Prefer email? <a href="mailto:info@cleanplatehaulingco.com?subject=Quote request - Commerce Township">info@cleanplatehaulingco.com</a> &nbsp;·&nbsp; Or call/text <a href="tel:7347431877">734-743-1877</a></div>
+</form></div></section>
 <section><h2>Commerce Township Junk Removal <em>Questions</em></h2><div class="qa"><h3>Can you clean out a pole barn or large shed in Commerce Township?</h3><p>Absolutely — big-volume cleanouts are our specialty. We sort donate/recycle/dump as we load, and a heavy-duty truck means fewer trips and a better price for you.</p></div><div class="qa"><h3>Do you haul renovation debris?</h3><p>Yes — drywall, trim, cabinets, flooring, decking, and light construction waste. We can't take hazardous materials (paint, chemicals, asbestos), but nearly everything else goes.</p></div><div class="qa"><h3>How much does junk removal cost in Commerce Township?</h3><p>Flat-rate: single items from $75, small cleanouts $150–$250, full garage or barn cleanouts from $300. Text photos to 734-743-1877 and get a firm number before we start.</p></div></section>
 <section><h2>Also Serving <em>Nearby</em></h2><p class="near"><a href="/junk-removal-wixom-mi.html" style="color:var(--e200);font-weight:700">Wixom</a> · <a href="/junk-removal-novi-mi.html" style="color:var(--e200);font-weight:700">Novi</a> · <a href="/junk-removal-walled-lake-mi.html" style="color:var(--e200);font-weight:700">Walled Lake</a> · <a href="/junk-removal-farmington-hills-mi.html" style="color:var(--e200);font-weight:700">Farmington Hills</a> · <a href="/junk-removal-northville-mi.html" style="color:var(--e200);font-weight:700">Northville</a> · <a href="/junk-removal-south-lyon-mi.html" style="color:var(--e200);font-weight:700">South Lyon</a> · <a href="/junk-removal-southfield-mi.html" style="color:var(--e200);font-weight:700">Southfield</a><br/>…and surrounding Oakland &amp; Livingston County communities. <a href="/" style="color:var(--acc);font-weight:700;text-decoration:underline">Back to main site →</a></p></section>
 </main>
 <footer>© 2026 Clean Plate Hauling Co. · Veteran Owned · Wixom, MI · <a href="tel:7347431877">734-743-1877</a> · <a href="mailto:info@cleanplatehaulingco.com">info@cleanplatehaulingco.com</a></footer>
 <div class="mbar"><a href="tel:7347431877" class="mbar-call">Call Now</a><a href="sms:7347431877?&body=Hi!%20I%20need%20some%20junk%20removed.%20Photos%3A%20" class="mbar-text">Text for Quote</a></div>
+<script>
+function handleSubmit(e){
+  e.preventDefault();
+  var f=e.target, el=f.elements;
+  if(!el['name'].value.trim()||!el['phone'].value.trim()){
+    alert('Please fill in your name and phone number.');return;
+  }
+  var first=el['name'].value.trim().split(' ')[0];
+  var btn=f.querySelector('.btn-form');
+  var files=(el['photos']&&el['photos'].files)?el['photos'].files:[];
+  var total=0;for(var i=0;i<files.length;i++){total+=files[i].size;}
+  if(total>8*1024*1024){
+    alert('Those photos are too large to attach (8 MB max). Remove a photo and try again, or text your photos to 734-743-1877 for the fastest quote.');return;
+  }
+  if(btn){btn.disabled=true;btn.textContent='Sending...';}
+  var fd=new FormData(f), opts;
+  if(files.length>0){opts={method:'POST',body:fd};}
+  else{fd.delete('photos');opts={method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(fd).toString()};}
+  fetch('/',opts)
+    .then(function(r){ if(!r.ok){throw new Error('status '+r.status);}
+      var box=document.getElementById('qbox');
+      box.innerHTML='<div style="text-align:center;padding:24px 8px">'
+        +'<div style="font-size:21px;font-weight:900;margin-bottom:8px">Thanks'+(first?(', '+first):'')+'! Your request is in.</div>'
+        +'<p style="font-size:14px;color:var(--tm);line-height:1.7;margin-bottom:16px">We will reply with a firm price shortly. Want it even faster? Text photos of what needs to go to <strong>734-743-1877</strong>.</p>'
+        +'<a href="sms:7347431877?&body=Hi!%20I%20need%20some%20junk%20removed.%20Photos%3A%20" class="btn-form" style="display:inline-block;width:auto;text-decoration:none;padding:14px 26px">Text 734-743-1877</a></div>';
+    })
+    .catch(function(){ alert('Sorry - that did not send. Please call or text us at 734-743-1877 and we will take care of you.'); if(btn){btn.disabled=false;btn.innerHTML='Get My Firm Price &rarr;';} });
+}
+</script>
 </body></html>
