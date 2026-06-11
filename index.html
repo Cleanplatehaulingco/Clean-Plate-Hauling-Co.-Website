@@ -503,6 +503,7 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
   .proof-banner{flex-direction:column;gap:16px;padding:28px 24px}
 }
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
 
@@ -951,7 +952,8 @@ footer{background:var(--e950);padding:64px 48px 36px;border-top:2px solid var(--
     <a href="tel:7347431877" style="color:var(--acc);font-weight:700;text-decoration:underline;text-underline-offset:3px">Call us to confirm your area.</a>
     We serve most of Oakland and Livingston Counties.
   </p>
-  <div style="margin-top:26px;border:1.5px solid var(--e100);border-radius:8px;overflow:hidden;line-height:0"><iframe title="Clean Plate Hauling Co. service area in Wixom and Metro Detroit" src="https://maps.google.com/maps?q=Wixom,MI&amp;z=10&amp;output=embed" width="100%" height="340" style="border:0;display:block" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+  <div style="margin-top:26px;border:1.5px solid var(--e100);border-radius:8px;overflow:hidden"><div id="svcmap" role="region" aria-label="Map of our service area: Wixom, Novi, Walled Lake, Commerce Township, Farmington Hills, Northville, South Lyon, and Southfield" style="height:380px;background:var(--e50)"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:14px"><a href="https://www.google.com/maps/place/Wixom,+MI" target="_blank" rel="noopener" style="color:var(--acc);font-weight:700;text-decoration:underline">View our Wixom, MI service area on Google Maps →</a></div></div></div>
+  <p style="margin-top:10px;font-size:12px;color:var(--tmuted)">Tap a green pin to see junk removal details for that city.</p>
 </section>
 
 <!-- FAQ — exactly matches schema -->
@@ -1174,6 +1176,39 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});}
   });
 });
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  var el=document.getElementById('svcmap');
+  if(!el||!window.L){return;}
+  el.innerHTML='';
+  var cities=[
+    ['Wixom',42.5249,-83.5363,'junk-removal-wixom-mi.html',true],
+    ['Novi',42.4806,-83.4755,'junk-removal-novi-mi.html',false],
+    ['Walled Lake',42.5378,-83.4810,'junk-removal-walled-lake-mi.html',false],
+    ['Commerce Twp',42.5809,-83.4949,'junk-removal-commerce-township-mi.html',false],
+    ['Farmington Hills',42.4853,-83.3771,'junk-removal-farmington-hills-mi.html',false],
+    ['Northville',42.4311,-83.4833,'junk-removal-northville-mi.html',false],
+    ['South Lyon',42.4606,-83.6516,'junk-removal-south-lyon-mi.html',false],
+    ['Southfield',42.4734,-83.2219,'junk-removal-southfield-mi.html',false]
+  ];
+  var map=L.map(el,{scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    maxZoom:18}).addTo(map);
+  L.circle([42.505,-83.44],{radius:21000,fillColor:'#1d6340',fillOpacity:0.07,
+    color:'#1d6340',opacity:0.4,weight:1.5,dashArray:'6 6'}).addTo(map);
+  var g=L.featureGroup();
+  cities.forEach(function(c){
+    var m=L.circleMarker([c[1],c[2]],{radius:c[4]?11:8,fillColor:'#1d6340',
+      color:'#fff',weight:2.5,fillOpacity:1}).addTo(g);
+    m.bindTooltip(c[0]+(c[4]?' — Home Base':''),{direction:'top',offset:[0,-8]});
+    m.bindPopup('<strong>'+c[0]+'</strong><br><a href="/'+c[3]+'" style="color:#1d6340;font-weight:700">Junk removal in '+c[0]+' →</a>');
+  });
+  g.addTo(map);
+  map.fitBounds(g.getBounds(),{padding:[36,36]});
+})();
 </script>
 </body>
 </html>
