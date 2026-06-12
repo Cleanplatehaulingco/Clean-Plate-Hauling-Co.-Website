@@ -62,15 +62,10 @@ def banner_knockout(width, height, spear, text, tsize, tspacing_frac):
         pts_top.append((x, ym - hh - bow * (1 - t * t)))
         pts_bot.append((x, ym + hh + bow * (1 - t * t)))
     d.polygon(pts_top + pts_bot[::-1], fill=255)
-    # curved blade spears: tapered, slightly concave edges, sharp tip
-    th = height * 0.155
-    ins = width * 0.012
-    left = (qbez((x0 + ins, ym - th), (x0 - spear * 0.52, ym - th * 0.42), (x0 - spear + 2, ym))
-            + qbez((x0 - spear + 2, ym), (x0 - spear * 0.52, ym + th * 0.42), (x0 + ins, ym + th)))
-    d.polygon(left, fill=255)
-    right = (qbez((x1 - ins, ym - th), (x1 + spear * 0.52, ym - th * 0.42), (x1 + spear - 2, ym))
-             + qbez((x1 + spear - 2, ym), (x1 + spear * 0.52, ym + th * 0.42), (x1 - ins, ym + th)))
-    d.polygon(right, fill=255)
+    # straight spear points — matches the original shirt logo
+    th = height * 0.10
+    d.polygon([(x0 + 2, ym - th), (x0 - spear, ym), (x0 + 2, ym + th)], fill=255)
+    d.polygon([(x1 - 2, ym - th), (x1 + spear, ym), (x1 - 2, ym + th)], fill=255)
     font = ImageFont.truetype(F, int(tsize))
     sp = tsize * tspacing_frac
     tw = spaced_len(d, text, font, sp)
