@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>Clean Plate CRM</title>
+<style>
+@font-face{font-family:'Norwester';src:url('brand/norwester.woff') format('woff');font-display:swap}
+:root{--e950:#040f09;--e900:#071810;--e800:#0b2318;--e400:#1d6340;--e300:#24804f;--e200:#4aab74;
+--e100:#c8e8d5;--e50:#f0f8f3;--off:#f7f7f5;--td:#111a14;--tm:#3d5247;--tmuted:#6b8070;--bl:#dde8e1;
+--amber:#b87700;--red:#b8453a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--off);color:var(--td);font-family:'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.5;padding-bottom:70px}
+header{background:var(--e900);color:#fff;padding:14px 16px 0;position:sticky;top:0;z-index:50}
+.hrow{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.brand{font-family:'Norwester','Arial Narrow',Arial,sans-serif;font-size:22px;letter-spacing:1px}
+.brand span{color:var(--e200)}
+.hsub{font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:0.06em}
+nav{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav button{background:transparent;border:none;color:rgba(255,255,255,0.65);padding:10px 13px;font-size:12.5px;
+font-weight:800;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav button.on{color:#fff;border-bottom-color:var(--e200)}
+nav button .bdg{background:var(--red);color:#fff;border-radius:9px;padding:1px 6px;font-size:10.5px;margin-left:4px}
+main{max-width:860px;margin:0 auto;padding:16px}
+h2{font-size:19px;font-weight:900;margin:6px 0 12px}
+h3{font-size:15px;font-weight:800;margin:14px 0 8px}
+.card{background:#fff;border:1.5px solid var(--bl);border-radius:8px;padding:14px;margin-bottom:10px}
+.muted{color:var(--tmuted);font-size:12.5px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.grow{flex:1}
+.pill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;
+padding:3px 9px;border-radius:10px;background:var(--e50);color:var(--e400);border:1px solid var(--e100)}
+.pill.warn{background:#fff7e6;color:var(--amber);border-color:#f0dcb0}
+.pill.due{background:#fdeeec;color:var(--red);border-color:#f2c9c4}
+.pill.win{background:var(--e400);color:#fff;border-color:var(--e400)}
+button.b{background:var(--e400);color:#fff;border:none;border-radius:6px;padding:9px 14px;font-size:13px;
+font-weight:800;cursor:pointer;letter-spacing:0.03em}
+button.b:active{background:var(--e300)}
+button.b.ghost{background:#fff;color:var(--e400);border:1.5px solid var(--e100)}
+button.b.sm{padding:6px 10px;font-size:12px}
+button.b.warnb{background:var(--amber)}
+input,select,textarea{width:100%;background:var(--off);border:1.5px solid var(--bl);border-radius:6px;
+color:var(--td);padding:10px 12px;font-size:14px;font-family:inherit;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--e400)}
+label{display:block;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--tmuted);
+font-weight:800;margin:10px 0 4px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:560px){.g3{grid-template-columns:1fr 1fr}}
+.stat{background:var(--e900);color:#fff;border-radius:8px;padding:14px;text-align:center}
+.stat b{display:block;font-size:24px;font-weight:900;color:var(--e200)}
+.stat span{font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:700}
+.tpl{background:var(--e50);border:1.5px solid var(--e100);border-radius:8px;padding:12px;margin:8px 0;
+white-space:pre-wrap;font-size:13.5px;max-height:230px;overflow:auto}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--e900);color:#fff;
+padding:10px 20px;border-radius:8px;font-size:13.5px;font-weight:700;display:none;z-index:99;box-shadow:0 4px 18px rgba(0,0,0,0.25)}
+.fab{position:fixed;bottom:16px;right:16px;left:16px;max-width:860px;margin:0 auto;display:flex;gap:8px;z-index:60}
+.fab button{flex:1;padding:14px;font-size:14px;border-radius:10px;box-shadow:0 4px 14px rgba(7,24,16,0.3)}
+details{margin:6px 0}
+summary{cursor:pointer;font-weight:800;font-size:14px;padding:6px 0}
+.steps b{display:block;margin-top:10px}
+a{color:var(--e400);font-weight:700}
+.srch{display:inline-block;background:#fff;border:1.5px solid var(--e100);border-radius:6px;padding:8px 12px;
+margin:3px 4px 3px 0;font-size:12.5px;font-weight:700;color:var(--e400);text-decoration:none}
+.cat-PM{border-left:5px solid #1d6340}.cat-Estate{border-left:5px solid #7a5af5}
+.cat-Realtor{border-left:5px solid #2278c8}.cat-Senior{border-left:5px solid #c8527a}
+.cat-Mover{border-left:5px solid #b87700}.cat-Contractor{border-left:5px solid #8a6f5a}
+.cat-Dumpster{border-left:5px solid #4a4a44}.cat-Storage{border-left:5px solid #2a9d8f}
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow"><div class="brand">CLEAN PLATE <span>CRM</span></div><div class="hsub">Outreach &amp; jobs — built to convert</div></div>
+  <nav id="nav"></nav>
+</header>
+<main id="view"></main>
+<div class="toast" id="toast"></div>
+<div class="fab" id="fab"></div>
+
+<script>
+/* ============ DATA ============ */
+const LS='cph_crm_v1';
+const today=()=>new Date().toISOString().slice(0,10);
+const addDays=(d,n)=>{const x=new Date(d+'T12:00');x.setDate(x.getDate()+n);return x.toISOString().slice(0,10);};
+const fmt=d=>!d?'—':new Date(d+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+
+const SEED=[
+['PM','JMZ Management','Farmington Hills','jmzmanagement.com','','Manages 1000+ properties across Novi/Wixom/Farmington Hills','jmz'],
+['PM','NuHome Property Management','Metro Detroit','npm.llc','','Owner-operated family business — kindred small-biz angle','nuhome'],
+['PM','NHL Property Management','Farmington Hills','nhlpropertymanagement.com','','Oakland/Wayne/Macomb single-family rentals','nhl'],
+['PM','G3 Management','Wixom','g3manage.com','','Local to Wixom — neighbor angle','g3'],
+['PM','Renters Warehouse SE Michigan','Oakland County','renterswarehouse.com','','Covers Farmington/Novi/Wixom rentals','rw'],
+['PM','Michigan Management & Property Maintenance','Farmington','michiganmanagement.com','','Full-service incl. unit prep — pitch turnover cleanouts',''],
+['PM','North Bloomfield Properties','Farmington Hills','northbloomfield.com','','Michigan rental property management',''],
+['Estate','Estate Pros','Oakland County','goestatepros.com','','5000+ sales; they offer cleanouts — pitch overflow/subcontract','estatepros'],
+['Estate',"Aaron's Estate Sales",'Novi/Northville','aaronsestatesales.com','','13+ years; serves Novi & Northville directly','aarons'],
+['Estate','All Out Estate Sale Services','SE Michigan','alloutestatesaleservices.com','','Serves Northville & Novi','allout'],
+['Realtor','Keller Williams Novi','Novi','','','39500 Orchard Hill Pl — walk in, ask who handles estate/probate listings',''],
+['Realtor','KW Advantage Northville/Novi','Northville','','','Walk in with flyers',''],
+['Realtor','RE/MAX Classic','South Lyon','','','Walk in with flyers',''],
+['Realtor','RE/MAX Dream Properties','Northville','','','Walk in with flyers',''],
+['Realtor','Real Estate One','Northville','','','Walk in with flyers',''],
+['Realtor','Glover Agency (KW)','Novi/Northville','gloveragency.com','','High-volume team; covers Farmington Hills & South Lyon','glover'],
+['Senior','Real T Simplistic','Royal Oak','realtsimplistic.com','','Senior move managers + realtors (Kristyn & Nicole); all Oakland County','rts'],
+['Senior','TidySmart','Metro Detroit','tidysmart.com','','Senior downsizing management',''],
+['Senior','H.O.M.E. Senior Moving','Oakland County','homeseniormoving.com','','Full senior relocation incl. downsizing','home'],
+['Senior','Lily Rose Interiors','Oakland County','lilyroseinteriordesign.com','','Senior move specialist',''],
+['Mover','Men on the Move','Metro Detroit','michiganmovers.com','','Senior moving division — pitch haul-away partnership',''],
+['Mover','Professional Movers','Detroit/Oakland Cty','professionalmovers.com','','Senior moving division',''],
+['Mover','Morse Moving & Storage','Metro Detroit','morsemoving.com','','Senior moving services',''],
+['Contractor','Finished Basements Plus','Commerce Township','finishedbasementsplus.com','','80+ person team, Commerce warehouse — steady debris volume','fbp'],
+['Contractor','Seghi Renovations','South Lyon','seghi.net','','Full-service renovations since 1989','seghi'],
+['Contractor','SW Construction','Novi','swconstructionmi.com','','Owner-managed kitchen/bath/basement remodels',''],
+['Contractor','Nvrrete','Commerce Township','nvrrete.com','','Kitchen remodels & basement renovations',''],
+['Contractor','MMC Building','Novi/South Lyon','mmcbuilding.com','','Remodeling + basement finishing + additions',''],
+['Contractor','RM Remodeling','South Lyon','rmremodeling.net','','Kitchen/bath/basement',''],
+['Contractor',"Wright's Renovations",'Novi/South Lyon','wrights-renovations.com','','Kitchens basements decks sunrooms',''],
+['Dumpster','Christensen Dumpster Rental','Clarkston','cdisposal.com','248-625-9332','Family-owned roll-off co — referral swap','christensen'],
+['Dumpster','Titan National','Novi area','titannational.com','','Roll-offs 10-40yd in Novi/Wixom',''],
+['Dumpster','Community Disposal Service','SE Michigan','cdsmich.com','','Roll-offs; feel out partnership',''],
+['Storage','iStorage Self Storage','Wixom','nsastorage.com','','30320 Beck Rd — walk in, ask for site manager',''],
+['Storage','1-800 Self Storage','Novi','1800selfstorage.com','','47020 West Rd — walk in',''],
+['Storage','Public Storage Wixom','Wixom','publicstorage.com','','50586 Pontiac Trl — walk in',''],
+['Storage','Public Storage Commerce','Commerce Twp','publicstorage.com','','3220 E Oakley Park Rd — walk in',''],
+['Storage','CubeSmart Wixom','Wixom','cubesmart.com','','Ask to be on the vendor list',''],
+];
+
+const SIG="\n[Your name] · Clean Plate Hauling Co. — Veteran Owned\n734-743-1877 (call/text) · cleanplatehaulingco.com";
+const CUSTOM={
+jmz:{s:"Turnover cleanouts for your Novi/Wixom portfolio — photo quotes in an hour",b:"Hi JMZ team,\n\nYou manage one of the biggest portfolios in our area — which means somebody's always moving out. I'm [Your name], owner of Clean Plate Hauling Co., a veteran-owned junk removal company based in Wixom.\n\nWhen a unit needs to be empty fast: your property manager texts me photos, gets a firm flat-rate price within the hour, and the unit is cleared and broom-swept on your deadline. Licensed and insured, 7 days a week.\n\nI'd love to be a cleanout vendor your managers can call. First one's quoted free either way — can I send my rate sheet?"+SIG},
+nuhome:{s:"From one owner-operator to another — turnover cleanouts",b:"Hi NuHome team,\n\nI read that you're owner-operated and treat properties like your own — that's exactly how I run my company. I'm [Your name], owner of Clean Plate Hauling Co., veteran-owned junk removal based in Wixom, serving Novi, Farmington Hills, and Southfield.\n\nWhen your tenants leave stuff behind: text me photos of the unit, get a firm flat-rate price within the hour, and it's empty and swept on your schedule. You'd be working directly with me, the same way your owners work directly with you.\n\nHappy to quote your next turnover free so you can see how we work."+SIG},
+nhl:{s:"Eviction & turnover cleanouts in Oakland County — firm prices from photos",b:"Hi NHL team,\n\nI'm [Your name], owner of Clean Plate Hauling Co. — veteran-owned junk removal based in Wixom. We clear rental turnovers and eviction sets across Oakland County, 7 days a week.\n\nThe process fits how PMs work: your manager texts photos of the unit, I reply with one firm flat-rate number, and it's cleared and broom-swept by your deadline. Licensed, insured, no surprises on the invoice.\n\nCan I be the cleanout number your team saves? Next unit quoted free."+SIG},
+g3:{s:"Wixom junk hauler — practically your neighbor",b:"Hi G3 team,\n\nWe're both based right here in Wixom, so I'll keep it short: I'm [Your name], owner of Clean Plate Hauling Co., veteran-owned junk removal. When one of your rentals needs a cleanout, I can often be there same-day — I'm minutes away.\n\nText photos of the unit → firm flat-rate price within the hour → empty and swept. Licensed and insured.\n\nCoffee's on me if you want to meet the guy behind the truck. Either way, your next cleanout is quoted free."+SIG},
+rw:{s:"Cleanout vendor for your Oakland County turnovers",b:"Hi,\n\nI'm [Your name], owner of Clean Plate Hauling Co. — veteran-owned junk removal based in Wixom, covering Farmington, Novi, Wixom, and the rest of your Oakland County footprint.\n\nFor turnovers and tenant-left-it-behind situations: text photos, get a firm flat-rate price within the hour, unit cleared and broom-swept on deadline. Licensed and insured, 7 days a week.\n\nWho on your team handles vendor relationships? I'd love to get set up in your system — and the first cleanout is quoted free."+SIG},
+estatepros:{s:"Overflow cleanout crew when your calendar's full",b:"Hi Estate Pros team,\n\nI know you offer cleanouts yourselves — after 5,000+ sales you've got it down. I'm not writing to compete with that. I'm [Your name], owner of Clean Plate Hauling Co., a veteran-owned hauler in Wixom — and I'd like to be the overflow crew you call when the calendar stacks up, a family needs a faster date, or a job's on the west side of the county near us.\n\nFirm flat-rate quotes from photos, broom-clean finish, your client treated like family. Subcontract or referral — whatever structure works for you.\n\nWorth a 10-minute call?"+SIG},
+aarons:{s:"Post-sale cleanouts for your Novi & Northville estates",b:"Hi Aaron's team,\n\nAfter 13+ years of sales, you know how it goes: the sale ends, and what's left still has to disappear before closing. That's my company. I'm [Your name], owner of Clean Plate Hauling Co. — veteran-owned, based in Wixom, covering Novi and Northville where you work.\n\nSend photos when a sale wraps → firm flat-rate price → house broom-clean for the family, scheduled around your closing date. Donations handled too.\n\nI'd love to be the cleanout crew you quote to clients. Can I send my rate sheet?"+SIG},
+allout:{s:"A reliable haul-away crew for after your sales",b:"Hi,\n\nI'm [Your name], owner of Clean Plate Hauling Co. — veteran-owned junk removal in Wixom, serving Northville, Novi, and all of Oakland County.\n\nWhen your sales wrap and there's still a houseful left: text me photos, get one firm flat-rate price, and the home is cleared and broom-swept before closing. Usable items get donated, not dumped.\n\nHappy to take the haul-away off your plate on your next few projects — first one quoted free."+SIG},
+glover:{s:"When a listing has to be EMPTY by photos or closing",b:"Hi Glover team,\n\nA team selling at your volume hits this constantly: estate listings, downsizers, sellers who left half the house behind. I'm [Your name], owner of Clean Plate Hauling Co. — veteran-owned junk removal based in Wixom, covering your whole Novi/Northville/Farmington Hills/South Lyon market.\n\nYour client (or your TC) texts photos → firm flat-rate price within the hour → house empty and broom-swept before photos or closing. Seven days a week.\n\nCan I drop off cards for the team? You look like the agents who have a guy for everything — I'd like to be that guy."+SIG},
+rts:{s:"Haul-away partner for your senior moves — handled with patience",b:"Hi Kristyn and Nicole,\n\nYour downsizing clients always have a category of stuff that isn't moving with them and isn't sellable — and somebody compassionate has to make it disappear. I'm [Your name], owner of Clean Plate Hauling Co., a veteran-owned hauler based in Wixom serving all of Oakland County.\n\nWe work the way your clients need: patient, scheduled around the family, donations first (usable items go to local charities, not the landfill), firm flat-rate price from photos before anything moves.\n\nI'd love to be the haul-away crew you recommend. Quick call this week?"+SIG},
+home:{s:'The "everything that\'s not moving" crew for your relocations',b:"Hi H.O.M.E. team,\n\nYou handle the move — but every senior relocation leaves behind furniture and household goods that need to go somewhere respectfully. I'm [Your name], owner of Clean Plate Hauling Co., veteran-owned junk removal in Wixom serving Oakland County.\n\nDonation runs included, firm flat-rate pricing from photos, scheduled around your moving dates, and the home left broom-clean for sale or lease.\n\nCould we set up a simple referral arrangement? Your clients get one less vendor to find; I make you look good."+SIG},
+fbp:{s:"Debris hauling for your basement crews — same-day when possible",b:"Hi,\n\nA team your size finishing basements across Oakland County generates steady tear-out debris — and waiting on a roll-off swap kills crew time. I'm [Your name], owner of Clean Plate Hauling Co. in Wixom, minutes from your Commerce shop.\n\nHeavy-duty truck, loaded by us not your crew, flat-rate from photos, often same-day. Old basement contents, demo debris, carpet, the homeowner's \"can you also take this?\" pile — handled.\n\nCan I be a number your project managers keep? First haul quoted free."+SIG},
+seghi:{s:"Haul-away support for your renovation jobs in South Lyon",b:"Hi Seghi team,\n\nThirty-five years of renovations means you know exactly how job-site junk slows a crew down. I'm [Your name], owner of Clean Plate Hauling Co. — veteran-owned hauling based in Wixom, working South Lyon weekly.\n\nWe haul remodel debris, old cabinets and fixtures, carpet, and the homeowner's clear-out pile — flat-rate from photos, scheduled around your crew, swept after. Your jobsite looks professional and your guys stay on the tools.\n\nHappy to quote your current project free to show you how we work."+SIG},
+christensen:{s:"Referral swap: you take the dumpster calls, we take the labor calls",b:"Hi Christensen team,\n\nYou get calls every week from people who really need junk removal — they don't want to load a dumpster themselves. I get calls from people who really need a roll-off. I'm [Your name], owner of Clean Plate Hauling Co., veteran-owned junk removal in Wixom.\n\nSimple idea: send me your \"can someone load it for me?\" calls, and every customer who needs a multi-week roll-off goes to you. No money changes hands — we both just stop turning away work.\n\nFamily business to family business — worth a quick call? I'm at 734-743-1877."+SIG}
+};
+
+const TPL={
+PM:{s:"Turnover cleanouts in {city} — flat-rate, photo quotes",b:"Hi {co} team,\n\nI'm [Your name], owner of Clean Plate Hauling Co. — a veteran-owned junk removal company based in Wixom. We do rental turnover and eviction cleanouts across {city}, 7 days a week.\n\nWhat makes us easy for PMs: text us photos of the unit, get a firm flat-rate price within the hour, and it's empty and broom-swept on your deadline. Licensed and insured, no hidden fees.\n\nI'd love to be your on-call cleanout crew — next one's quoted free either way."+SIG},
+Estate:{s:"Post-sale cleanouts — we haul what didn't sell",b:"Hi {co} team,\n\nAfter your sales wrap, somebody has to haul what's left. That's us — Clean Plate Hauling Co., veteran-owned, based in Wixom, serving all of Oakland County. Flat-rate quotes from photos, scheduled around your closing date, swept clean for the family.\n\nHappy to be the cleanout crew you quote to clients. Can I send my rate sheet?"+SIG},
+Realtor:{s:"When your listing needs to be EMPTY by closing",b:"Hi {co},\n\nI'm [Your name] with Clean Plate Hauling Co., veteran-owned junk removal in {city}. Realtors call us when a listing needs to be cleared before photos or closing — estates, downsizes, \"seller left everything\" situations.\n\nYour client texts us photos, gets a firm flat-rate price in an hour, and we handle it 7 days a week. You look like the agent who has a guy for everything.\n\nCan I drop off some cards for your next estate or probate listing?"+SIG},
+Senior:{s:"Haul-away partner for your downsizing clients",b:"Hi {co} team,\n\nWhen your downsizing clients have furniture and household goods that aren't moving with them, we haul it — donation runs included where possible. Veteran-owned, patient with families, flat-rate pricing from photos, 7 days a week across Metro Detroit.\n\nI'd love to be the haul-away crew you recommend. Quick call this week?"+SIG},
+Mover:{s:"Haul-away partner for your moving clients",b:"Hi {co} team,\n\nEvery move leaves behind furniture and household goods that aren't going on the truck. I'm [Your name], owner of Clean Plate Hauling Co. — veteran-owned junk removal in Wixom. We're the haul-away crew: donation runs included, firm flat-rate price from photos, scheduled around your move dates.\n\nCould we set up a simple referral arrangement?"+SIG},
+Contractor:{s:"Debris hauling for your jobs — flat rate, often same-day",b:"Hi {co} team,\n\nI'm [Your name], owner of Clean Plate Hauling Co. — veteran-owned hauling based in Wixom. We haul remodel debris, old cabinets and fixtures, carpet, and the homeowner's clear-out pile — flat-rate from photos, scheduled around your crew, swept after.\n\nYour jobsite stays clean and your guys stay on the tools. First haul quoted free."+SIG},
+Dumpster:{s:"Referral swap: you take the dumpster calls, we take the labor calls",b:"Hi {co} team,\n\nYou get calls from people who really need junk removal — they don't want to load a dumpster. I get calls from people who really need a roll-off. I'm [Your name], owner of Clean Plate Hauling Co., veteran-owned, in Wixom.\n\nSend me your \"can someone load it?\" calls and every multi-week roll-off customer of mine goes to you. We both stop turning away work.\n\nWorth a quick call? 734-743-1877."+SIG},
+Storage:{s:"WALK-IN SCRIPT (storage facilities — ask for the site manager)",b:"\"Hi — I'm [Your name], I own Clean Plate Hauling, we're a veteran-owned junk removal company right here in Wixom. When you get abandoned units or tenants who clear out and leave a mess, we do unit cleanouts — fast, flat-rate, and we sweep it broom-clean so you can re-rent it. Could I leave my card for your vendor list? And if there's a district manager who handles that, I'd love their contact.\"\n\nLeave 2 cards (one for them, one for the wall). Log the visit here."}
+};
+const BUMPS={
+bump3:{s:"Day-3 bump",b:"Hi — floating this up. Happy to quote your next cleanout free so you can see how we work.\n[Your name], Clean Plate Hauling, 734-743-1877"},
+bump7:{s:"Day-7 value bump (attach a before/after photo!)",b:"Did this garage in Novi this week — 3 hours, broom-swept. This is what your units/listings/jobsites get. — [Your name], Clean Plate Hauling, 734-743-1877"},
+bump21:{s:"Day-21 final note",b:"Last note from me — when a cleanout lands on your desk with a deadline, text photos to 734-743-1877 and you'll have a firm price within the hour. Here whenever you need us. — [Your name]"},
+call:{s:"PHONE / VOICEMAIL SCRIPT (30 sec)",b:"\"Hi, this is [Your name], owner of Clean Plate Hauling here in Wixom — veteran-owned junk removal. We do cleanouts across your area, flat-rate from photos, 7 days a week. I'd love to be the crew you call when something needs to disappear fast. I'll text you my info — it's 734-743-1877. Thanks!\""},
+quarterly:{s:"Quarterly check-in",b:"Hi [Name] — checking in from Clean Plate Hauling. Busy season for turnovers/cleanouts — if anything's piling up on your list, text photos to 734-743-1877 and I'll get you a firm price same day. — [Your name]"}
+};
+const SCRIPTS=[
+["Review request (text after EVERY job)","Thanks again for choosing Clean Plate Hauling! If you have 60 seconds, a Google review helps my small veteran-owned business more than you know: [your review link]"],
+["Missed-call auto-text","This is Clean Plate Hauling — sorry I missed you, I'm probably on a job. Text me photos of what you need gone and I'll send you a firm flat-rate price within the hour. — 734-743-1877"],
+["Photo-quote reply (lead texts pictures)","Got your photos, thanks! That's a firm $[X] — includes all labor, hauling, disposal, and sweep-up. No surprises. I have [day/time] open — want it gone?"],
+["Quote follow-up (24h no answer)","Hi [name], still want that [couch] gone? I have [day] open this week — same price, $[X] flat. — Clean Plate Hauling"],
+["Facebook group intro post","Hey neighbors 👋 I'm [Your name], just launched Clean Plate Hauling Co. — a veteran-owned junk removal company right here in [city]. Furniture, appliances, garage/basement cleanouts, yard debris — you text me photos, I text back a firm flat-rate price, no hidden fees. 7 days a week. Call/text 734-743-1877. (Mods, happy to delete if not allowed!)"],
+["\"ISO junk removal\" comment reply (speed wins)","Hey! Local veteran-owned hauler here in [city] — text me photos at 734-743-1877 and I'll send you a firm price today. Can usually get there within 24–48 hrs. 🇺🇸"],
+["Marketplace / Craigslist ad","JUNK REMOVAL — Veteran Owned • Flat Rate • Text Photos, Get a Price Today\nFurniture, appliances, garage & basement cleanouts, rental cleanouts, yard debris. Heavy-duty truck — big loads no problem. Serving Wixom, Novi, Walled Lake, Commerce, Farmington Hills, Northville, South Lyon, Southfield. Licensed & insured. No hidden fees: text photos → firm price → it's gone, swept clean.\n📞 734-743-1877 · cleanplatehaulingco.com"],
+["Realtor office walk-in script","\"Hi — quick one: I own Clean Plate Hauling, veteran-owned junk removal based in Wixom. When your agents get estate listings or sellers who leave stuff behind, we empty houses before photos or closing — firm price from photos, usually within a day or two. Who in the office handles estate and probate listings? I'd love to leave them a flyer.\""],
+["Voicemail greeting (record this)","You've reached [Your name] at Clean Plate Hauling Co. — veteran-owned junk removal serving Wixom and Metro Detroit. I'm probably out on a job, so here's the fastest way to get your price: text photos of what needs to go to this number, 734-743-1877, and I'll reply with a firm flat-rate quote. Or leave a message and I'll call you right back. Thanks!"]
+];
+
+/* prospect cadence: status -> {next status hint, days until due, which template} */
+const CAD={
+ 'New':       {do:'Send intro email', days:0,  tpl:'intro'},
+ 'Emailed':   {do:'Call them (Day 3)', days:3,  tpl:'call'},
+ 'Called':    {do:'Send value bump + photo (Day 7)', days:4, tpl:'bump7'},
+ 'Value Sent':{do:'Final note (Day 21)', days:14, tpl:'bump21'},
+ 'Final Sent':{do:'Quarterly check-in', days:60, tpl:'quarterly'},
+ 'Active ✦':  {do:'Monthly check-in', days:30, tpl:'quarterly'},
+ 'Dead':      {do:'', days:0, tpl:''}
+};
+const PSTATUSES=Object.keys(CAD);
+const LSTAGES=['New Lead','Contacted','Quoted','Scheduled','Completed','Review Asked'];
+
+/* ============ STATE ============ */
+let S=load();
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return d;}catch(e){}
+  return {prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],status:'New',last:'',due:today(),log:[]})),
+   leads:[],activity:[]};
+}
+function save(){localStorage.setItem(LS,JSON.stringify(S));}
+function act(t){S.activity.unshift({d:today(),t});S.activity=S.activity.slice(0,60);save();}
+
+/* ============ HELPERS ============ */
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._x);t._x=setTimeout(()=>t.style.display='none',2200);}
+function copy(txt,msg){navigator.clipboard.writeText(txt).then(()=>toast(msg||'Copied — paste and send!')).catch(()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast(msg||'Copied!');});}
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function msgFor(p,kind){
+  kind=kind||CAD[p.status].tpl;
+  if(kind==='intro'){const c=p.ek&&CUSTOM[p.ek]?CUSTOM[p.ek]:null;
+    if(c)return {s:c.s,b:c.b};
+    const t=TPL[p.cat]||TPL.PM;return {s:t.s.replace(/{co}/g,p.name).replace(/{city}/g,p.city),b:t.b.replace(/{co}/g,p.name).replace(/{city}/g,p.city)};}
+  const t=BUMPS[kind]||BUMPS.bump3;return {s:t.s,b:t.b};
+}
+function advance(p){
+  const order=['New','Emailed','Called','Value Sent','Final Sent'];
+  const i=order.indexOf(p.status);
+  const next=i>=0&&i<order.length-1?order[i+1]:p.status;
+  p.status=next;p.last=today();p.due=addDays(today(),CAD[next].days||0);
+  p.log.unshift(today()+' → '+next);act(p.name+' → '+next);save();render();
+}
+function setPStatus(p,st){p.status=st;p.last=today();p.due=st==='Dead'?'':addDays(today(),CAD[st].days||0);p.log.unshift(today()+' → '+st);act(p.name+' → '+st);save();render();}
+
+/* ============ VIEWS ============ */
+const TABS=['Today','Pipeline','Prospects','Scripts','Find','Stats','Playbook'];
+let tab='Today';
+function dueProspects(){return S.prospects.filter(p=>p.status!=='Dead'&&p.status!=='Active ✦'&&p.due&&p.due<=today());}
+function needReply(){return S.leads.filter(l=>l.stage==='New Lead');}
+function quoteChase(){return S.leads.filter(l=>l.stage==='Quoted'&&l.updated<today());}
+
+function render(){
+  const nav=document.getElementById('nav');
+  nav.innerHTML=TABS.map(t=>{
+    let b='';
+    if(t==='Today'){const n=dueProspects().length+needReply().length+quoteChase().length;if(n)b='<span class="bdg">'+n+'</span>';}
+    return '<button class="'+(tab===t?'on':'')+'" onclick="go(\''+t+'\')">'+t+b+'</button>';
+  }).join('');
+  document.getElementById('view').innerHTML=({Today:vToday,Pipeline:vPipe,Prospects:vPros,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
+  document.getElementById('fab').innerHTML=tab==='Pipeline'?'<button class="b" onclick="addLeadUI()">+ New Lead</button>':
+    tab==='Prospects'?'<button class="b" onclick="addProspectUI()">+ New Prospect</button>':'';
+}
+function go(t){tab=t;render();window.scrollTo(0,0);}
+
+function vToday(){
+  const due=dueProspects(),nr=needReply(),qc=quoteChase();
+  let h='<h2>Today — '+new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+'</h2>';
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><b style="color:var(--e200)">The 5-minute rule:</b> reply to every new lead within 5 minutes. Speed is the #1 reason a junk job books with you instead of the other guy.</div>';
+  if(nr.length){h+='<h3>🔥 Leads waiting on you ('+nr.length+')</h3>';nr.forEach(l=>{h+='<div class="card"><div class="row"><b class="grow">'+esc(l.name)+' · '+esc(l.city)+'</b><span class="pill due">REPLY NOW</span></div><div class="muted">'+esc(l.items||'')+' · '+esc(l.source)+' · '+esc(l.phone)+'</div><div class="row" style="margin-top:8px"><button class="b sm" onclick="copyScript(2)">📋 Photo-quote reply</button><a class="b sm ghost" href="sms:'+esc(l.phone)+'" style="text-decoration:none">💬 Text</a><button class="b sm ghost" onclick="bump(\''+l.id+'\')">Mark contacted</button></div></div>';});}
+  if(qc.length){h+='<h3>💰 Quotes to chase ('+qc.length+')</h3>';qc.forEach(l=>{h+='<div class="card"><div class="row"><b class="grow">'+esc(l.name)+' — $'+esc(l.quote||'?')+'</b><span class="pill warn">Follow up</span></div><div class="row" style="margin-top:8px"><button class="b sm" onclick="copyScript(3)">📋 Copy follow-up</button><a class="b sm ghost" href="sms:'+esc(l.phone)+'" style="text-decoration:none">💬 Text</a></div></div>';});}
+  h+='<h3>📨 Outreach due ('+due.length+')</h3>';
+  if(!due.length)h+='<div class="card muted">Nothing due — go to <a onclick="go(\'Find\')" style="cursor:pointer">Find</a> and add 5 new prospects, or post a before/after on Facebook.</div>';
+  due.slice(0,12).forEach(p=>{const m=msgFor(p);
+    h+='<div class="card cat-'+p.cat+'"><div class="row"><b class="grow">'+esc(p.name)+'</b><span class="pill">'+esc(p.cat)+'</span><span class="pill due">'+esc(CAD[p.status].do)+'</span></div>'+
+    '<div class="muted">'+esc(p.notes)+(p.web?' · <a href="https://'+esc(p.web)+'" target="_blank">'+esc(p.web)+'</a>':'')+'</div>'+
+    '<div class="row" style="margin-top:8px"><button class="b sm" onclick="copyMsg(\''+p.id+'\')">📋 Copy '+(p.status==='New'?'intro email':'message')+'</button><button class="b sm ghost" onclick="advanceP(\''+p.id+'\')">✓ Done — advance</button></div></div>';});
+  if(S.activity.length){h+='<h3>Recent activity</h3><div class="card">'+S.activity.slice(0,8).map(a=>'<div class="muted">'+fmt(a.d)+' — '+esc(a.t)+'</div>').join('')+'</div>';}
+  return h;
+}
+
+function vPipe(){
+  let h='<h2>Customer Pipeline</h2><p class="muted" style="margin-bottom:10px">Every call, text, and form fill goes here. Tap a stage button to move them forward.</p>';
+  LSTAGES.forEach(st=>{
+    const ls=S.leads.filter(l=>l.stage===st);
+    h+='<h3>'+st+' <span class="muted">('+ls.length+')</span></h3>';
+    if(!ls.length)h+='<div class="muted" style="margin-bottom:8px">—</div>';
+    ls.forEach(l=>{
+      const i=LSTAGES.indexOf(st);
+      h+='<div class="card"><div class="row"><b class="grow">'+esc(l.name)+'</b>'+(l.quote?'<span class="pill win">$'+esc(l.quote)+'</span>':'')+'</div>'+
+      '<div class="muted">'+esc(l.city)+' · '+esc(l.source)+' · '+esc(l.phone)+(l.items?' · '+esc(l.items):'')+'</div>'+
+      '<div class="row" style="margin-top:8px">'+
+      (i<LSTAGES.length-1?'<button class="b sm" onclick="moveLead(\''+l.id+'\',1)">→ '+LSTAGES[i+1]+'</button>':'')+
+      (st==='Completed'?'<button class="b sm warnb" onclick="copyScript(0);moveLead(\''+l.id+'\',1)">📋 Send review ask</button>':'')+
+      '<a class="b sm ghost" href="tel:'+esc(l.phone)+'" style="text-decoration:none">📞</a><a class="b sm ghost" href="sms:'+esc(l.phone)+'" style="text-decoration:none">💬</a>'+
+      '<button class="b sm ghost" onclick="editQuote(\''+l.id+'\')">$</button>'+
+      '<button class="b sm ghost" onclick="delLead(\''+l.id+'\')" style="color:var(--red)">✕</button></div></div>';});
+  });
+  return h;
+}
+
+function vPros(){
+  let h='<h2>B2B Prospects <span class="muted">('+S.prospects.filter(p=>p.status!=='Dead').length+' active)</span></h2>';
+  h+='<p class="muted" style="margin-bottom:10px">These book you <b>repeatedly</b>. The cadence runs itself: intro email → day-3 call → day-7 photo → day-21 note → quarterly. The Today tab tells you who\'s due.</p>';
+  const cats=[...new Set(S.prospects.map(p=>p.cat))];
+  cats.forEach(c=>{
+    const ps=S.prospects.filter(p=>p.cat===c);
+    h+='<details '+(c==='PM'?'open':'')+'><summary>'+c+' ('+ps.length+')</summary>';
+    ps.forEach(p=>{
+      h+='<div class="card cat-'+p.cat+'"><div class="row"><b class="grow">'+esc(p.name)+'</b><span class="pill '+(p.status==='Active ✦'?'win':p.due&&p.due<=today()&&p.status!=='Dead'?'due':'')+'">'+esc(p.status)+'</span></div>'+
+      '<div class="muted">'+esc(p.city)+(p.web?' · <a href="https://'+esc(p.web)+'" target="_blank">'+esc(p.web)+'</a>':'')+(p.phone?' · '+esc(p.phone):'')+' · due '+fmt(p.due)+'</div>'+
+      '<div class="muted" style="margin-top:3px">'+esc(p.notes)+'</div>'+
+      '<div class="row" style="margin-top:8px"><button class="b sm" onclick="copyMsg(\''+p.id+'\')">📋 Copy message</button><button class="b sm ghost" onclick="advanceP(\''+p.id+'\')">✓ Advance</button>'+
+      '<select style="width:auto;padding:6px" onchange="statP(\''+p.id+'\',this.value)"><option>set status…</option>'+PSTATUSES.map(s=>'<option '+(s===p.status?'selected':'')+'>'+s+'</option>').join('')+'</select></div>'+
+      (p.log.length?'<div class="muted" style="margin-top:6px;font-size:11.5px">'+p.log.slice(0,3).join(' · ')+'</div>':'')+'</div>';});
+    h+='</details>';
+  });
+  return h;
+}
+
+function vScripts(){
+  let h='<h2>Script Library</h2><p class="muted">Tap to copy. Personalize the [brackets] before sending.</p>';
+  SCRIPTS.forEach((s,i)=>{h+='<div class="card"><div class="row"><b class="grow">'+esc(s[0])+'</b><button class="b sm" onclick="copyScript('+i+')">📋 Copy</button></div><div class="tpl">'+esc(s[1])+'</div></div>';});
+  h+='<h3>Follow-up bumps</h3>';
+  Object.values(BUMPS).forEach(bp=>{h+='<div class="card"><div class="row"><b class="grow">'+esc(bp.s)+'</b><button class="b sm" onclick="copy('+JSON.stringify(bp.b).replace(/"/g,'&quot;')+')">📋 Copy</button></div></div>';});
+  return h;
+}
+
+const FINDCATS=[['property management','PM'],['estate sale company','Estate'],['real estate office','Realtor'],['senior living community','Senior'],['moving company','Mover'],['remodeling contractor','Contractor'],['general contractor','Contractor'],['dumpster rental','Dumpster'],['self storage','Storage'],['apartment complex','PM']];
+const FINDCITIES=['Wixom MI','Novi MI','Walled Lake MI','Commerce Township MI','Farmington Hills MI','Northville MI','South Lyon MI','Southfield MI','Milford MI','Livonia MI'];
+function vFind(){
+  let h='<h2>Find New Prospects</h2><p class="muted" style="margin-bottom:8px">The exact method I used to build your list. Pick a category + city, tap the search, and add the top 3–5 results that look established (real website, reviews, local).</p>';
+  h+='<div class="card"><label>Category</label><select id="fc">'+FINDCATS.map(c=>'<option value="'+c[0]+'" data-cat="'+c[1]+'">'+c[0]+'</option>').join('')+'</select><label>City</label><select id="fy">'+FINDCITIES.map(c=>'<option>'+c+'</option>').join('')+'</select><div class="row" style="margin-top:10px"><button class="b" onclick="openSearch()">🔍 Search Google Maps</button><button class="b ghost" onclick="addProspectUI()">+ Add what you found</button></div></div>';
+  h+='<h3>One-tap searches (highest value first)</h3><div>';
+  [['property management','Novi MI'],['property management','Southfield MI'],['estate sale company','Farmington Hills MI'],['apartment complex','Novi MI'],['remodeling contractor','Commerce Township MI'],['moving company','Novi MI'],['real estate office','South Lyon MI'],['self storage','Walled Lake MI']].forEach(q=>{
+    h+='<a class="srch" target="_blank" href="https://www.google.com/maps/search/'+encodeURIComponent(q[0]+' near '+q[1])+'">'+q[0]+' · '+q[1]+'</a>';});
+  h+='</div><h3>AI prospecting prompts (paste into Claude/ChatGPT with your Master Prompt)</h3>';
+  [["Personalize an intro email","Here's a company I want as a B2B account: [paste their About page or describe them]. Write my intro email — under 120 words, mention something specific about them, end with my phone number."],
+   ["Mine a category","List the types of businesses in Oakland County Michigan that regularly need junk hauled or spaces cleared, ranked by repeat-business potential. For each: who to ask for, and a one-line pitch."],
+   ["Turn search results into tracker rows","Here are Google Maps results I copied: [paste]. Turn them into rows: Category, Company, City, Website, Phone, one-line note on why they'd need a hauler."]].forEach(p=>{
+    h+='<div class="card"><div class="row"><b class="grow">'+esc(p[0])+'</b><button class="b sm" onclick="copy('+JSON.stringify(p[1]).replace(/"/g,'&quot;')+')">📋 Copy</button></div></div>';});
+  return h;
+}
+function openSearch(){const c=document.getElementById('fc').value,y=document.getElementById('fy').value;window.open('https://www.google.com/maps/search/'+encodeURIComponent(c+' near '+y),'_blank');}
+
+function vStats(){
+  const L=S.leads,P=S.prospects;
+  const done=L.filter(l=>['Completed','Review Asked'].includes(l.stage));
+  const rev=done.reduce((a,l)=>a+(parseFloat(l.quote)||0),0);
+  const quoted=L.filter(l=>['Quoted','Scheduled','Completed','Review Asked'].includes(l.stage)).length;
+  const conv=quoted?Math.round(done.length/quoted*100):0;
+  const wk=addDays(today(),-7);
+  const newWk=L.filter(l=>l.created>=wk).length;
+  const touchWk=S.activity.filter(a=>a.d>=wk).length;
+  const bySrc={};L.forEach(l=>{bySrc[l.source||'?']=(bySrc[l.source||'?']||0)+1;});
+  let h='<h2>Numbers</h2><div class="g3">'+
+  '<div class="stat"><b>'+L.length+'</b><span>Total leads</span></div>'+
+  '<div class="stat"><b>'+done.length+'</b><span>Jobs done</span></div>'+
+  '<div class="stat"><b>$'+rev.toLocaleString()+'</b><span>Revenue</span></div>'+
+  '<div class="stat"><b>'+conv+'%</b><span>Quote → booked</span></div>'+
+  '<div class="stat"><b>'+newWk+'</b><span>Leads this week</span></div>'+
+  '<div class="stat"><b>'+touchWk+'</b><span>Touches this week</span></div></div>';
+  h+='<h3>Leads by source</h3><div class="card">'+(Object.keys(bySrc).length?Object.entries(bySrc).map(e=>'<div class="row"><span class="grow">'+esc(e[0])+'</span><b>'+e[1]+'</b></div>').join(''):'<span class="muted">Log leads with their source and this tells you what\'s working.</span>')+'</div>';
+  h+='<h3>B2B funnel</h3><div class="card">'+PSTATUSES.filter(s=>s!=='Dead').map(st=>'<div class="row"><span class="grow">'+st+'</span><b>'+P.filter(p=>p.status===st).length+'</b></div>').join('')+'</div>';
+  h+='<h3>Backup</h3><div class="card"><p class="muted" style="margin-bottom:8px">Your data lives only on this device. Export weekly.</p><div class="row"><button class="b" onclick="exportJSON()">⬇ Backup (JSON)</button><button class="b ghost" onclick="exportCSV()">⬇ Leads CSV</button><label class="b ghost" style="display:inline-block;width:auto;cursor:pointer;margin:0">⬆ Restore<input type="file" accept=".json" style="display:none" onchange="importJSON(this)"></label></div></div>';
+  return h;
+}
+
+function vPlay(){
+  return '<h2>The System (TLDR)</h2>'+
+  '<div class="card steps"><b>How Clean Plate gets jobs — the whole machine:</b>'+
+  '<b>1 · Be findable (compounding)</b><span class="muted">Google Business Profile + reviews + the 8 city pages on cleanplatehaulingco.com. Post weekly, ask for a review after EVERY job. This becomes your #1 free lead source by month 2–3.</span>'+
+  '<b>2 · Be fast (converts)</b><span class="muted">Reply in under 5 minutes. Missed-call auto-text on. Photos → firm price within the hour. The site is built around this promise — keep it.</span>'+
+  '<b>3 · B2B engine (repeat money)</b><span class="muted">10 touches a day from the Prospects tab. One property manager = monthly cleanouts forever. The Today tab runs the cadence for you.</span>'+
+  '<b>4 · Paid taps (volume on demand)</b><span class="muted">Thumbtack now → Google Local Services Ads once GBP is verified + 5 reviews. Pay per lead, answer fast, win.</span>'+
+  '<b>5 · Log everything here</b><span class="muted">Every lead gets a source. Friday: open Stats, see what\'s working, do more of it.</span></div>'+
+  '<h3>Daily routine (30 min)</h3><div class="card steps">'+
+  '<b>7:00–7:30am</b><span class="muted">Today tab → reply to leads → confirm jobs</span>'+
+  '<b>After each job</b><span class="muted">Before/after photos → review text (Pipeline tab has the button) → log it</span>'+
+  '<b>7:00–7:45pm</b><span class="muted">Today tab → clear the outreach-due list → 1 social post → add 5 prospects if list is thin</span></div>'+
+  '<h3>Docs (in your website repo under /marketing)</h3><div class="card muted">outreach-playbook.md · launch-kit.md · ready-to-send.md · lead-tracker.csv · press-release.md · flyer.html (print) · brand/ (logos + 8K print masters)</div>'+
+  '<h3>The goal</h3><div class="card" style="background:var(--e900);color:#fff;border:none">First 30 days: <b style="color:var(--e200)">10 reviews · 2 recurring B2B accounts · every lead answered in 5 minutes.</b> Do that and you outconvert every franchise in Metro Detroit.</div>';
+}
+
+/* ============ ACTIONS ============ */
+function copyMsg(id){const p=S.prospects.find(x=>x.id===id);const m=msgFor(p);copy((m.s?'Subject: '+m.s+'\n\n':'')+m.b,'Copied — paste into email/text. Then hit ✓ Advance.');}
+function advanceP(id){advance(S.prospects.find(x=>x.id===id));}
+function statP(id,st){if(PSTATUSES.includes(st))setPStatus(S.prospects.find(x=>x.id===id),st);}
+function copyScript(i){copy(SCRIPTS[i][1]);}
+function bump(id){const l=S.leads.find(x=>x.id===id);l.stage='Contacted';l.updated=today();act('Replied to lead: '+l.name);save();render();}
+function moveLead(id,dir){const l=S.leads.find(x=>x.id===id);const i=LSTAGES.indexOf(l.stage)+dir;if(i>=0&&i<LSTAGES.length){l.stage=LSTAGES[i];l.updated=today();act(l.name+' → '+l.stage);save();render();}}
+function delLead(id){if(confirm('Delete this lead?')){S.leads=S.leads.filter(x=>x.id!==id);save();render();}}
+function editQuote(id){const l=S.leads.find(x=>x.id===id);const q=prompt('Quote amount ($):',l.quote||'');if(q!==null){l.quote=q;save();render();}}
+function addLeadUI(){
+  const name=prompt('Customer name:');if(!name)return;
+  const phone=prompt('Phone:')||'';
+  const city=prompt('City:')||'';
+  const source=prompt('Source (Google / Facebook / Thumbtack / Referral / Sign / Other):')||'Other';
+  const items=prompt('What needs to go?')||'';
+  S.leads.unshift({id:'l'+Date.now(),name,phone,city,source,items,quote:'',stage:'New Lead',created:today(),updated:today()});
+  act('New lead: '+name+' ('+source+')');save();render();toast('Lead added — reply within 5 minutes!');
+}
+function addProspectUI(){
+  const name=prompt('Company name:');if(!name)return;
+  const cat=prompt('Category (PM / Estate / Realtor / Senior / Mover / Contractor / Dumpster / Storage):','PM')||'PM';
+  const city=prompt('City:')||'';
+  const web=prompt('Website (optional):')||'';
+  const notes=prompt('Why they need a hauler (one line):')||'';
+  S.prospects.unshift({id:'p'+Date.now(),cat,name,city,web,phone:'',notes,ek:'',status:'New',last:'',due:today(),log:[]});
+  act('New prospect: '+name);save();render();toast('Added — intro email is ready on the Today tab');
+}
+function exportJSON(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cleanplate-crm-backup-'+today()+'.json';a.click();}
+function exportCSV(){const rows=[['Name','Phone','City','Source','Items','Quote','Stage','Created']].concat(S.leads.map(l=>[l.name,l.phone,l.city,l.source,l.items,l.quote,l.stage,l.created]));const csv=rows.map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='cleanplate-leads-'+today()+'.csv';a.click();}
+function importJSON(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.prospects&&d.leads){S=d;save();render();toast('Restored!');}else toast('Not a valid backup file');}catch(e){toast('Could not read that file');}};r.readAsText(f);}
+
+render();
+</script>
+</body>
+</html>

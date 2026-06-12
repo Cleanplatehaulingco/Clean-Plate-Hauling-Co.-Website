@@ -121,9 +121,9 @@ def build_full(K):
     cp = arched("CLEAN PLATE", 190 * K)
     cp.thumbnail((int(1140 * K), 10 ** 6), Image.LANCZOS)
     ban = banner_knockout(cp.width * 0.62, 96 * K, cp.width * 0.19, "HAULING CO.", 52 * K, 0.45)
-    sub = subline(44 * K, 38 * K)
-    ph = phone_img(74 * K)
-    return compose([(cp, 102 * K), (ban, 240 * K), (sub, 314 * K), (ph, 374 * K)], 1200 * K, 419 * K)
+    sub = subline(42 * K, 36 * K)
+    ph = phone_img(70 * K)
+    return compose([(cp, 102 * K), (ban, 236 * K), (sub, 324 * K), (ph, 396 * K)], 1200 * K, 452 * K)
 
 def build_og(K):
     BGC, STRIP, TAG = (7, 24, 16), (29, 99, 64), (74, 171, 116)
@@ -133,7 +133,7 @@ def build_og(K):
     ban = banner_knockout(cp.width * 0.64, 64 * K, cp.width * 0.20, "HAULING CO.", 34 * K, 0.45)
     sub = subline(30 * K, 26 * K)
     ph = phone_img(56 * K)
-    lock = compose([(cp, 90 * K), (ban, 196 * K), (sub, 252 * K), (ph, 302 * K)], 1200 * K, 360 * K)
+    lock = compose([(cp, 90 * K), (ban, 192 * K), (sub, 254 * K), (ph, 312 * K)], 1200 * K, 360 * K)
     og.paste((255, 255, 255), (0, int(95 * K), int(1200 * K), int(95 * K) + lock.height), lock.getchannel('A'))
     d = ImageDraw.Draw(og)
     tf = ImageFont.truetype(F, int(40 * K))
@@ -158,7 +158,7 @@ m_logo.resize((2200, 528), Image.LANCZOS).save('logo_new.png')
 
 m_full = build_full(6.4)             # 7680 px wide master
 m_full.save('print/logo-full-8k.png')
-m_full.resize((2400, 838), Image.LANCZOS).save('logo-full_new.png')
+m_full.resize((2400, 904), Image.LANCZOS).save('logo-full_new.png')
 
 build_og(4).resize((1200, 630), Image.LANCZOS).save('og_new.png')
 
