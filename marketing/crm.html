@@ -190,7 +190,7 @@ const LSTAGES=['New Lead','Contacted','Quoted','Scheduled','Completed','Review A
 let S=load();
 function load(){
   try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return d;}catch(e){}
-  return {prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],status:'New',last:'',due:today(),log:[]})),
+  return {prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',status:'New',last:'',due:today(),log:[]})),
    leads:[],activity:[]};
 }
 function save(){localStorage.setItem(LS,JSON.stringify(S));}
@@ -247,7 +247,7 @@ function vToday(){
   due.slice(0,12).forEach(p=>{const m=msgFor(p);
     h+='<div class="card cat-'+p.cat+'"><div class="row"><b class="grow">'+esc(p.name)+'</b><span class="pill">'+esc(p.cat)+'</span><span class="pill due">'+esc(CAD[p.status].do)+'</span></div>'+
     '<div class="muted">'+esc(p.notes)+(p.web?' · <a href="https://'+esc(p.web)+'" target="_blank">'+esc(p.web)+'</a>':'')+'</div>'+
-    '<div class="row" style="margin-top:8px"><button class="b sm" onclick="copyMsg(\''+p.id+'\')">📋 Copy '+(p.status==='New'?'intro email':'message')+'</button><button class="b sm ghost" onclick="advanceP(\''+p.id+'\')">✓ Done — advance</button></div></div>';});
+    '<div class="row" style="margin-top:8px"><button class="b sm" onclick="gm(\''+p.id+'\')">✉️ '+(p.status==='New'?'Send intro in Gmail':'Send in Gmail')+'</button><button class="b sm ghost" onclick="copyMsg(\''+p.id+'\')">📋 Copy</button><button class="b sm ghost" onclick="advanceP(\''+p.id+'\')">✓ Done — advance</button></div></div>';});
   if(S.activity.length){h+='<h3>Recent activity</h3><div class="card">'+S.activity.slice(0,8).map(a=>'<div class="muted">'+fmt(a.d)+' — '+esc(a.t)+'</div>').join('')+'</div>';}
   return h;
 }
@@ -283,7 +283,7 @@ function vPros(){
       h+='<div class="card cat-'+p.cat+'"><div class="row"><b class="grow">'+esc(p.name)+'</b><span class="pill '+(p.status==='Active ✦'?'win':p.due&&p.due<=today()&&p.status!=='Dead'?'due':'')+'">'+esc(p.status)+'</span></div>'+
       '<div class="muted">'+esc(p.city)+(p.web?' · <a href="https://'+esc(p.web)+'" target="_blank">'+esc(p.web)+'</a>':'')+(p.phone?' · '+esc(p.phone):'')+' · due '+fmt(p.due)+'</div>'+
       '<div class="muted" style="margin-top:3px">'+esc(p.notes)+'</div>'+
-      '<div class="row" style="margin-top:8px"><button class="b sm" onclick="copyMsg(\''+p.id+'\')">📋 Copy message</button><button class="b sm ghost" onclick="advanceP(\''+p.id+'\')">✓ Advance</button>'+
+      '<div class="row" style="margin-top:8px"><button class="b sm" onclick="gm(\''+p.id+'\')">✉️ Gmail</button><button class="b sm ghost" onclick="copyMsg(\''+p.id+'\')">📋 Copy</button><button class="b sm ghost" onclick="advanceP(\''+p.id+'\')">✓ Advance</button>'+
       '<select style="width:auto;padding:6px" onchange="statP(\''+p.id+'\',this.value)"><option>set status…</option>'+PSTATUSES.map(s=>'<option '+(s===p.status?'selected':'')+'>'+s+'</option>').join('')+'</select></div>'+
       (p.log.length?'<div class="muted" style="margin-top:6px;font-size:11.5px">'+p.log.slice(0,3).join(' · ')+'</div>':'')+'</div>';});
     h+='</details>';
@@ -300,7 +300,7 @@ function vScripts(){
 }
 
 const FINDCATS=[['property management','PM'],['estate sale company','Estate'],['real estate office','Realtor'],['senior living community','Senior'],['moving company','Mover'],['remodeling contractor','Contractor'],['general contractor','Contractor'],['dumpster rental','Dumpster'],['self storage','Storage'],['apartment complex','PM']];
-const FINDCITIES=['Wixom MI','Novi MI','Walled Lake MI','Commerce Township MI','Farmington Hills MI','Northville MI','South Lyon MI','Southfield MI','Milford MI','Livonia MI'];
+const FINDCITIES=['Wixom MI','Novi MI','Walled Lake MI','Commerce Township MI','Farmington Hills MI','Northville MI','South Lyon MI','Southfield MI','Milford MI','West Bloomfield MI','Livonia MI'];
 function vFind(){
   let h='<h2>Find New Prospects</h2><p class="muted" style="margin-bottom:8px">The exact method I used to build your list. Pick a category + city, tap the search, and add the top 3–5 results that look established (real website, reviews, local).</p>';
   h+='<div class="card"><label>Category</label><select id="fc">'+FINDCATS.map(c=>'<option value="'+c[0]+'" data-cat="'+c[1]+'">'+c[0]+'</option>').join('')+'</select><label>City</label><select id="fy">'+FINDCITIES.map(c=>'<option>'+c+'</option>').join('')+'</select><div class="row" style="margin-top:10px"><button class="b" onclick="openSearch()">🔍 Search Google Maps</button><button class="b ghost" onclick="addProspectUI()">+ Add what you found</button></div></div>';
@@ -357,6 +357,20 @@ function vPlay(){
 
 /* ============ ACTIONS ============ */
 function copyMsg(id){const p=S.prospects.find(x=>x.id===id);const m=msgFor(p);copy((m.s?'Subject: '+m.s+'\n\n':'')+m.b,'Copied — paste into email/text. Then hit ✓ Advance.');}
+function gm(id){
+  const p=S.prospects.find(x=>x.id===id);
+  const kind=CAD[p.status].tpl||'intro';
+  const intro=msgFor(p,'intro');
+  const m=kind==='intro'?intro:msgFor(p,kind);
+  const subj=kind==='intro'?m.s:('Re: '+intro.s);
+  if(!p.email){
+    const e=prompt("Their email address (grab it from their website's contact page). Leave blank to type it in Gmail:");
+    if(e===null)return;
+    if(e.trim()){p.email=e.trim();save();}
+  }
+  window.open('https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(p.email||'')+'&su='+encodeURIComponent(subj)+'&body='+encodeURIComponent(m.b),'_blank');
+  toast('Review it in Gmail and hit Send — then tap ✓ Advance here');
+}
 function advanceP(id){advance(S.prospects.find(x=>x.id===id));}
 function statP(id,st){if(PSTATUSES.includes(st))setPStatus(S.prospects.find(x=>x.id===id),st);}
 function copyScript(i){copy(SCRIPTS[i][1]);}
@@ -379,7 +393,7 @@ function addProspectUI(){
   const city=prompt('City:')||'';
   const web=prompt('Website (optional):')||'';
   const notes=prompt('Why they need a hauler (one line):')||'';
-  S.prospects.unshift({id:'p'+Date.now(),cat,name,city,web,phone:'',notes,ek:'',status:'New',last:'',due:today(),log:[]});
+  S.prospects.unshift({id:'p'+Date.now(),cat,name,city,web,phone:'',notes,ek:'',email:'',status:'New',last:'',due:today(),log:[]});
   act('New prospect: '+name);save();render();toast('Added — intro email is ready on the Today tab');
 }
 function exportJSON(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cleanplate-crm-backup-'+today()+'.json';a.click();}
