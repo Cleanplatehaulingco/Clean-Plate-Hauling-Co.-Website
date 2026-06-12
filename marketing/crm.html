@@ -187,11 +187,14 @@ const PSTATUSES=Object.keys(CAD);
 const LSTAGES=['New Lead','Contacted','Quoted','Scheduled','Completed','Review Asked'];
 
 /* ============ STATE ============ */
+/* researched decision makers (verify before relying on them) */
+const CONTACTS={'JMZ Management':'Jannelle Zawaideh — CEO','Real T Simplistic':'Kristyn Drury & Nicole Hyman — Founders','Estate Pros':'(operates as Pro Holdings LLC — check MI registry for owner)'};
 let S=load();
+function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];});return d;}
 function load(){
-  try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return d;}catch(e){}
-  return {prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',status:'New',last:'',due:today(),log:[]})),
-   leads:[],activity:[]};
+  try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return migrate(d);}catch(e){}
+  return migrate({prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',contact:'',status:'New',last:'',due:today(),log:[]})),
+   leads:[],activity:[]});
 }
 function save(){localStorage.setItem(LS,JSON.stringify(S));}
 function act(t){S.activity.unshift({d:today(),t});S.activity=S.activity.slice(0,60);save();}
@@ -283,8 +286,19 @@ function vPros(){
       h+='<div class="card cat-'+p.cat+'"><div class="row"><b class="grow">'+esc(p.name)+'</b><span class="pill '+(p.status==='Active ✦'?'win':p.due&&p.due<=today()&&p.status!=='Dead'?'due':'')+'">'+esc(p.status)+'</span></div>'+
       '<div class="muted">'+esc(p.city)+(p.web?' · <a href="https://'+esc(p.web)+'" target="_blank">'+esc(p.web)+'</a>':'')+(p.phone?' · '+esc(p.phone):'')+' · due '+fmt(p.due)+'</div>'+
       '<div class="muted" style="margin-top:3px">'+esc(p.notes)+'</div>'+
+      ((p.contact||p.email)?'<div class="muted" style="margin-top:3px;color:var(--e400);font-weight:700">'+(p.contact?'👤 '+esc(p.contact):'')+(p.contact&&p.email?' · ':'')+(p.email?'✉ '+esc(p.email):'')+'</div>':'')+
       '<div class="row" style="margin-top:8px"><button class="b sm" onclick="gm(\''+p.id+'\')">✉️ Gmail</button><button class="b sm ghost" onclick="copyMsg(\''+p.id+'\')">📋 Copy</button><button class="b sm ghost" onclick="advanceP(\''+p.id+'\')">✓ Advance</button>'+
       '<select style="width:auto;padding:6px" onchange="statP(\''+p.id+'\',this.value)"><option>set status…</option>'+PSTATUSES.map(s=>'<option '+(s===p.status?'selected':'')+'>'+s+'</option>').join('')+'</select></div>'+
+      '<details><summary style="font-size:12.5px;color:var(--e400)">🔎 Find decision maker &amp; email</summary>'+
+      '<div class="row" style="margin-top:6px">'+
+      (p.web?'<a class="srch" target="_blank" href="https://'+esc(p.web)+'">🌐 Their site</a>':'')+
+      '<a class="srch" target="_blank" href="https://www.linkedin.com/search/results/people/?keywords='+encodeURIComponent(p.name)+'">in LinkedIn</a>'+
+      '<a class="srch" target="_blank" href="https://www.google.com/search?q='+encodeURIComponent('"'+p.name+'" '+p.city+' owner OR president OR manager')+'">G Owner search</a>'+
+      '<a class="srch" target="_blank" href="https://cofs.lara.state.mi.us/CorpWeb/CorpSearch/CorpSearch.aspx">🏛 MI registry</a>'+
+      '<a class="srch" target="_blank" href="https://www.facebook.com/search/pages/?q='+encodeURIComponent(p.name)+'">ⓕ Facebook</a></div>'+
+      '<div class="row" style="margin-top:6px"><button class="b sm ghost" onclick="setContact(\''+p.id+'\')">👤 Save contact</button><button class="b sm ghost" onclick="setEmail(\''+p.id+'\')">✉ Save email</button><button class="b sm ghost" onclick="patterns(\''+p.id+'\')">🧩 Likely emails</button><button class="b sm" onclick="aiResearch(\''+p.id+'\')">🤖 Copy AI researcher</button></div>'+
+      '<div id="pat-'+p.id+'"></div>'+
+      '<div class="muted" style="margin-top:6px;font-size:11.5px">Order that works: their site\'s About/Contact page → LinkedIn → MI registry (registered agent = usually the owner) → 🧩 patterns. Save what you find and the Gmail button uses it automatically.</div></details>'+
       (p.log.length?'<div class="muted" style="margin-top:6px;font-size:11.5px">'+p.log.slice(0,3).join(' · ')+'</div>':'')+'</div>';});
     h+='</details>';
   });
@@ -374,6 +388,24 @@ function gm(id){
 function advanceP(id){advance(S.prospects.find(x=>x.id===id));}
 function statP(id,st){if(PSTATUSES.includes(st))setPStatus(S.prospects.find(x=>x.id===id),st);}
 function copyScript(i){copy(SCRIPTS[i][1]);}
+function setContact(id){const p=S.prospects.find(x=>x.id===id);const v=prompt('Decision maker name & title (e.g., Jane Smith — Operations Manager):',p.contact||'');if(v===null)return;p.contact=v.trim();save();render();toast(p.contact?'Saved — greet them by name in the email!':'Cleared');}
+function setEmail(id){const p=S.prospects.find(x=>x.id===id);const v=prompt('Their email address:',p.email||'');if(v===null)return;p.email=v.trim();save();render();}
+function domainOf(p){return (p.web||'').replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0];}
+function patterns(id){
+  const p=S.prospects.find(x=>x.id===id);const d=domainOf(p);
+  if(!d){toast('No website on file — tap 👤 Save contact and add their site first');return;}
+  let names=(p.contact||'').replace(/[—–(].*$/,'').trim().toLowerCase().split(/\s+/).filter(w=>/^[a-z'.-]{2,}$/.test(w));
+  let list=['info@'+d,'office@'+d];
+  if(names.length>=2){const f=names[0],l=names[names.length-1];
+    list=[f+'@'+d,f+'.'+l+'@'+d,(f[0]+l)+'@'+d,(f+l[0])+'@'+d,l+'@'+d].concat(list);}
+  else if(names.length===1){list=[names[0]+'@'+d].concat(list);}
+  list=[...new Set(list)];
+  document.getElementById('pat-'+p.id).innerHTML='<div style="margin-top:6px">'+list.map(e=>'<span class="srch" style="cursor:pointer" onclick="copy(\''+e+'\')">'+e+' 📋</span><a class="srch" target="_blank" href="https://www.google.com/search?q='+encodeURIComponent('"'+e+'"')+'">verify</a>').join('')+'</div><div class="muted" style="margin-top:4px;font-size:11.5px">Tap an address to copy · "verify" googles it in quotes (a hit = it\'s real). With small companies, info@ usually lands on the owner\'s phone anyway.</div>';
+}
+function aiResearch(id){
+  const p=S.prospects.find(x=>x.id===id);
+  copy('You are my B2B prospect researcher (like ZoomInfo, but you cite sources). Company: '+p.name+' — '+p.cat+' in '+p.city+', Michigan'+(p.web?' — website: '+p.web:'')+'.\n\nUsing web search, find:\n1) The decision maker who would hire a junk removal / cleanout vendor (owner, operations manager, property manager, or project manager). Full name + title.\n2) The best email to reach them. Check: the company website (contact/about/team pages), LinkedIn, their Facebook page, and the Michigan LARA business entity search at cofs.lara.state.mi.us (the registered agent of the LLC is often the owner).\n3) A direct phone number if listed.\n\nRules: NEVER invent an email address. If you infer one from a pattern, label it GUESS. Answer in exactly this format:\nName | Title | Email (or GUESS: address) | Phone | Source URLs','AI researcher copied — paste into Claude or ChatGPT (web search on), then save what it finds with 👤 and ✉');
+}
 function bump(id){const l=S.leads.find(x=>x.id===id);l.stage='Contacted';l.updated=today();act('Replied to lead: '+l.name);save();render();}
 function moveLead(id,dir){const l=S.leads.find(x=>x.id===id);const i=LSTAGES.indexOf(l.stage)+dir;if(i>=0&&i<LSTAGES.length){l.stage=LSTAGES[i];l.updated=today();act(l.name+' → '+l.stage);save();render();}}
 function delLead(id){if(confirm('Delete this lead?')){S.leads=S.leads.filter(x=>x.id!==id);save();render();}}
