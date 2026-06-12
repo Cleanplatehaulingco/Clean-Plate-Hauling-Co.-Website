@@ -220,7 +220,7 @@ function advance(p){
 function setPStatus(p,st){p.status=st;p.last=today();p.due=st==='Dead'?'':addDays(today(),CAD[st].days||0);p.log.unshift(today()+' → '+st);act(p.name+' → '+st);save();render();}
 
 /* ============ VIEWS ============ */
-const TABS=['Today','Pipeline','Prospects','Scripts','Find','Stats','Playbook'];
+const TABS=['Today','Pipeline','Prospects','Homeowners','Scripts','Find','Stats','Playbook'];
 let tab='Today';
 function dueProspects(){return S.prospects.filter(p=>p.status!=='Dead'&&p.status!=='Active ✦'&&p.due&&p.due<=today());}
 function needReply(){return S.leads.filter(l=>l.stage==='New Lead');}
@@ -233,7 +233,7 @@ function render(){
     if(t==='Today'){const n=dueProspects().length+needReply().length+quoteChase().length;if(n)b='<span class="bdg">'+n+'</span>';}
     return '<button class="'+(tab===t?'on':'')+'" onclick="go(\''+t+'\')">'+t+b+'</button>';
   }).join('');
-  document.getElementById('view').innerHTML=({Today:vToday,Pipeline:vPipe,Prospects:vPros,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
+  document.getElementById('view').innerHTML=({Today:vToday,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
   document.getElementById('fab').innerHTML=tab==='Pipeline'?'<button class="b" onclick="addLeadUI()">+ New Lead</button>':
     tab==='Prospects'?'<button class="b" onclick="addProspectUI()">+ New Prospect</button>':'';
 }
@@ -305,6 +305,33 @@ function vPros(){
   return h;
 }
 
+const HSCRIPTS=[
+["Estate sale — talk to the family/company on the final day","\"Hi — beautiful sale. I run Clean Plate Hauling here in town, veteran-owned. When the sale wraps, whatever's left — we haul it and leave the house broom-clean for closing. Here's my card; text photos of what remains and I'll send a firm price within the hour.\""],
+["Garage sale — Sunday afternoon drive-by","\"Looks like a great sale! Quick question — what happens to whatever doesn't sell? That's literally my job: Clean Plate Hauling, veteran-owned, right here in town. Text me a photo of the leftovers tonight and I'll quote you a flat price to make it all disappear Monday. No dump runs for you.\""],
+["Neighbor door-knock (10-around-1, after every job)","\"Hi! Quick hello — we just cleared out a garage for your neighbor down the street. I'm the owner of Clean Plate Hauling, local and veteran-owned. If you've got a garage, basement, or old furniture situation of your own, this card's worth $20 off. Text photos, get a firm price. Have a great day!\""],
+["Just-sold / moving home flyer note","Congrats on the sale! Moving means deciding what's NOT going with you — we haul the rest. Flat-rate price from photos before we start, donations handled, swept clean after. Text photos to 734-743-1877. — Clean Plate Hauling Co., veteran-owned in Wixom"],
+["Referral engine (text past customers monthly)","Hi [name]! Quick one from Clean Plate Hauling — if a friend or neighbor needs junk gone, send them my way and you BOTH get $25 off your next haul. Just have them mention your name. Thanks for the support! 🇺🇸"],
+["Bulk-pickup week post (time it to each city's bulk week)","Missed [city]'s bulk trash pickup? Or have stuff the truck won't take? We're your on-demand bulk pickup — text photos to 734-743-1877, get a firm flat-rate price, and it's gone this week. Veteran-owned, local."],
+["$5/day Facebook ad copy (boost your best before/after)","That garage didn't clean itself — we did. 💪 Clean Plate Hauling Co., veteran-owned junk removal serving [city] & Metro Detroit. Text photos → firm flat-rate price → gone & swept. No hidden fees, ever. 📞 734-743-1877"]
+];
+function vHome(){
+  const HC=FINDCITIES.map(c=>c.replace(' MI',''));
+  const slug=c=>c.toLowerCase().replace(/\s+/g,'-');
+  let h='<h2>Homeowner Demand Radar</h2>';
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><b style="color:var(--e200)">The cheat:</b> you can\'t cold-email homeowners — but the moments they need you are <b>public and dated</b>. Estate sales, garage sales, just-sold homes, and the 10 neighbors around every job. Intercept the moment, win the job.</div>';
+  h+='<h3>🏠 Estate sales this weekend (the #1 play)</h3><div class="card"><p class="muted" style="margin-bottom:6px">Every listing = a family that needs a cleanout within weeks. Visit on the final day, or note which company runs it (they\'re in your Prospects tab). Tap your cities:</p><div>'
+    +HC.map(c=>'<a class="srch" target="_blank" href="https://www.estatesales.net/MI/'+slug(c).replace(/-/g,'-')+'">'+c+'</a>').join('')
+    +'</div><div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(HSCRIPTS[0][1])">📋 What to say on the final day</button></div></div>';
+  h+='<h3>🏷 Garage &amp; moving sales (Sunday gold)</h3><div class="card"><p class="muted" style="margin-bottom:6px">Whatever didn\'t sell still has to disappear — show up Sunday afternoon or message the poster.</p><div><a class="srch" target="_blank" href="https://detroit.craigslist.org/search/gms">Craigslist garage/moving sales</a><a class="srch" target="_blank" href="https://www.facebook.com/marketplace/category/garage-sale">FB Marketplace garage sales</a><a class="srch" target="_blank" href="https://gsalr.com/">gsalr.com map</a></div><div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(HSCRIPTS[1][1])">📋 The \"didn\'t sell?\" line</button></div></div>';
+  h+='<h3>📦 Just-sold homes = guaranteed move-outs</h3><div class="card"><p class="muted" style="margin-bottom:6px">Every pending/sold listing is a family deciding what NOT to take. Drop the flyer at sold homes on your route:</p><div>'
+    +HC.slice(0,8).map(c=>'<a class="srch" target="_blank" href="https://www.zillow.com/'+slug(c)+'-mi/sold/">'+c+' sold</a>').join('')
+    +'</div><div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(HSCRIPTS[3][1])">📋 Flyer note for movers</button></div></div>';
+  h+='<h3>🚪 The 10-around-1 (highest ROI in this business)</h3><div class="card"><p class="muted" style="margin-bottom:6px">After EVERY job, put a card on the 10 nearest doors — \"we just worked on your street\" is the strongest social proof there is. Print the 4-per-page neighbor cards:</p><div class="row"><a class="srch" target="_blank" href="neighbor-flyer.html">🖨 Open neighbor cards (print)</a><button class="b sm" onclick="copy(HSCRIPTS[2][1])">📋 If they answer the door</button></div></div>';
+  h+='<h3>🔁 Referrals &amp; repeat</h3><div class="card"><div class="row"><span class="grow muted">$25-each-way referral text — send to every happy customer monthly</span><button class="b sm" onclick="copy(HSCRIPTS[4][1])">📋 Copy</button></div></div>';
+  h+='<h3>🗓 Bulk-pickup week + $5/day ads</h3><div class="card"><p class="muted" style="margin-bottom:6px">Google \"[city] bulk trash pickup schedule\" — the week it runs, post the bulk-week script in that city\'s groups. And once you have 3 good before/afters, boost one on Facebook at $5/day to your 12 cities (ages 30–65+).</p><div class="row"><button class="b sm" onclick="copy(HSCRIPTS[5][1])">📋 Bulk-week post</button><button class="b sm ghost" onclick="copy(HSCRIPTS[6][1])">📋 Ad copy</button></div></div>';
+  h+='<div class="card muted">Where homeowners actually convert, in order: <b>1)</b> Google/LSA when they search · <b>2)</b> ISO posts in FB groups &amp; Nextdoor (answer in minutes — scripts in Scripts tab) · <b>3)</b> these intercepts · <b>4)</b> referrals. Everything funnels to: text photos → firm price → booked.</div>';
+  return h;
+}
 function vScripts(){
   let h='<h2>Script Library</h2><p class="muted">Tap to copy. Personalize the [brackets] before sending.</p>';
   SCRIPTS.forEach((s,i)=>{h+='<div class="card"><div class="row"><b class="grow">'+esc(s[0])+'</b><button class="b sm" onclick="copyScript('+i+')">📋 Copy</button></div><div class="tpl">'+esc(s[1])+'</div></div>';});
