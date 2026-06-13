@@ -1,5 +1,7 @@
 # Clean Plate Hauling Co. — 30-Day Launch Campaign
 
+> 🆕 **New here? Open `START-HERE.md` first** — it's the one-page version (your daily 3 + launch-day steps). Come back here for the full day-by-day plan.
+
 **This is the timeline — the conductor.** Your other files are the ammo it fires:
 
 | Need | Open this file |
