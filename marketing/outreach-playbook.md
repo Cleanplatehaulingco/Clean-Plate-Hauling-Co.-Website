@@ -46,7 +46,7 @@ Most junk removal jobs come from someone Googling "junk removal near me."
 This is free and beats any cold outreach in volume.
 
 1. Go to business.google.com → create profile for "Clean Plate Hauling Co."
-2. Set it as a **service-area business** (hide your home address, list your 8 cities)
+2. Set it as a **service-area business** (hide your home address, list your 12 cities)
 3. Category: "Junk removal service" (primary), add "Debris removal service", "Garbage collection service"
 4. Add 10+ photos: your white Sierra 3500HD, you working, before/afters
 5. Hours 7am–8pm daily, phone 734-743-1877, link the website
@@ -106,7 +106,7 @@ One property manager who likes you = cleanouts every month, forever. This is the
 - Renters Warehouse SE Michigan — renterswarehouse.com
 - NHL Property Management — nhlpropertymanagement.com
 - G3 Management — g3manage.com
-- Find 20 more: Google Maps "property management" in each of your 8 cities
+- Find 20 more: Google Maps "property management" in each of your 12 cities
 
 **Estate sale companies** (they sell the good stuff — someone has to haul the rest):
 - Estate Pros — Oakland County — goestatepros.com

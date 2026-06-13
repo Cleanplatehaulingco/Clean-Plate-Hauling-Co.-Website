@@ -19,7 +19,7 @@ FOR IMMEDIATE RELEASE
 
 ## Local Veteran Launches Clean Plate Hauling Co., Bringing Flat-Rate Junk Removal to Wixom and Metro Detroit
 
-**WIXOM, MI — [Month Day, 2026]** — Clean Plate Hauling Co., a veteran-owned junk removal and hauling company, has officially launched in Wixom, serving homeowners, landlords, and businesses across Novi, Walled Lake, Commerce Township, Farmington Hills, Northville, South Lyon, Southfield, and the greater Metro Detroit area.
+**WIXOM, MI — [Month Day, 2026]** — Clean Plate Hauling Co., a veteran-owned junk removal and hauling company, has officially launched in Wixom, serving homeowners, landlords, and businesses across Novi, Walled Lake, Commerce Township, Farmington Hills, Northville, South Lyon, Southfield, Milford, West Bloomfield, White Lake, Livonia, and the greater Metro Detroit area.
 
 Founded by [Your full name], a [branch] veteran, the company takes aim at the junk removal industry's most common complaint: prices that change when the truck shows up. Clean Plate Hauling customers text photos of what needs to go to 734-743-1877 and receive a firm, flat-rate quote — typically within the hour — before any work begins.
 

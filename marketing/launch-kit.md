@@ -21,7 +21,7 @@ Everything here is ready to copy and paste. Work top to bottom.
 ## 2. Google Business Profile — Copy-Paste Pack
 
 Go to **business.google.com** → Add business → "Clean Plate Hauling Co."
-Choose **service-area business** (hide address), add your 8 cities as the service area.
+Choose **service-area business** (hide address), add your 12 cities as the service area.
 
 **Primary category:** Junk removal service
 **Extra categories:** Debris removal service · Waste management service
@@ -29,7 +29,7 @@ Choose **service-area business** (hide address), add your 8 cities as the servic
 **Hours:** 7:00 AM – 8:00 PM, all 7 days. **Phone:** 734-743-1877. **Site:** cleanplatehaulingco.com
 
 **Business description (paste as-is):**
-> Clean Plate Hauling Co. is a veteran-owned junk removal and hauling company based in Wixom, MI, serving Novi, Walled Lake, Commerce Township, Farmington Hills, Northville, South Lyon, Southfield, and Metro Detroit. We remove furniture, appliances, mattresses, and electronics, and handle full garage, basement, estate, and rental property cleanouts, plus yard debris and light construction waste. Flat-rate pricing with no hidden fees: text photos of what needs to go to 734-743-1877 and get a firm price before we start. Usable items are donated whenever possible. Open 7 days a week, 7am–8pm. Licensed and insured. Owner-operated — the person who quotes your job is the person who shows up.
+> Clean Plate Hauling Co. is a veteran-owned junk removal and hauling company based in Wixom, MI, serving Novi, Walled Lake, Commerce Township, Farmington Hills, Northville, South Lyon, Southfield, Milford, West Bloomfield, White Lake, Livonia, and Metro Detroit. We remove furniture, appliances, mattresses, and electronics, and handle full garage, basement, estate, and rental property cleanouts, plus yard debris and light construction waste. Flat-rate pricing with no hidden fees: text photos of what needs to go to 734-743-1877 and get a firm price before we start. Usable items are donated whenever possible. Open 7 days a week, 7am–8pm. Licensed and insured. Owner-operated — the person who quotes your job is the person who shows up.
 
 **Services to add** (Services tab — paste name + description):
 - Furniture removal — Couches, mattresses, dressers, exercise equipment. Flat-rate from $75.
