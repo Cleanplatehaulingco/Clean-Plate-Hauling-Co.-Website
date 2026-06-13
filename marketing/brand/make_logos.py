@@ -54,14 +54,13 @@ def banner_knockout(width, height, spear, text, tsize, tspacing_frac):
     ym = H / 2
     hh = height * 0.42
     bowT = height * 0.10
-    bowB = height * 0.20
     pts_top, pts_bot = [], []
     N = 80
     for i in range(N + 1):
         x = x0 + (x1 - x0) * i / N
         t = (x - W / 2) / (width / 2)
         pts_top.append((x, ym - hh - bowT * (1 - t * t)))
-        pts_bot.append((x, ym + hh - bowB * (1 - t * t)))
+        pts_bot.append((x, ym + hh))  # flat bottom
     d.polygon(pts_top + pts_bot[::-1], fill=255)
     # straight spear points, slightly separated from the banner (shirt logo style)
     th = height * 0.115
@@ -71,7 +70,7 @@ def banner_knockout(width, height, spear, text, tsize, tspacing_frac):
     font = ImageFont.truetype(F, int(tsize))
     sp = tsize * tspacing_frac
     tw = spaced_len(d, text, font, sp)
-    draw_spaced(d, (W / 2 - tw / 2, ym - (bowT + bowB) / 2 + height * 0.02), text, font, sp, 0)
+    draw_spaced(d, (W / 2 - tw / 2, ym - bowT / 2 + height * 0.05), text, font, sp, 0)
     ink = Image.new('RGBA', (W, H), INK)
     ink.putalpha(mask)
     return ink
