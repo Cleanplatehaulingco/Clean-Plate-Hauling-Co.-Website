@@ -120,6 +120,28 @@ One good property manager = a cleanout every few weeks, indefinitely. Spend your
 
 ---
 
+## 💰 AD SPEND — what to turn on, when, and how much
+
+**The one rule:** never buy leads faster than you can do the jobs *well.* You're one truck — an overbooked no-show earns you a 1-star review worth more than the ad ever made. Scale spend to capacity, not ego.
+
+**The ladder (lowest-risk first):**
+
+| When | Channel | Budget | Why |
+|---|---|---|---|
+| Week 1 | **Thumbtack** (pay per lead) | $50–100/wk cap | Jobs + first reviews right away, no reviews needed to start. You only pay when someone actually contacts you. |
+| At ~5 reviews | **Google Local Services Ads** (green "Guaranteed" badge) | $300–500/mo | The top spot on Google, *above* the map pack. Pay per **lead**, and you can dispute junk ones. Your best paid channel by far. |
+| LSA maxed, want more | **Google Search Ads** (optional) | $300–600/mo | Pay per click (~$5–15 in this category), needs tighter management. Do this last, if ever. |
+| Anytime, tiny | **Boost one great before/after on Facebook** | $5–10/day | Awareness only — don't expect direct calls. Free FB Marketplace listings work better. |
+
+**Month by month for a solo operator:**
+- **Month 1:** $0–150 — just Thumbtack on a small cap. Pour your energy into reviews + free channels; don't pay Google yet.
+- **Month 2** (once ~5 reviews): turn on **LSA at $300–500.** This is the real lever.
+- **Month 3+:** scale LSA to capacity; maybe test Search Ads. ~$500–1,000/mo *only if* jobs are flowing and you can handle them.
+
+**How you know it's working — track cost-per-job.** Tag every lead's source in the CRM. If $400 of LSA → 8 leads → 4 booked at ~$250 = $1,000, that's 2.5× back: keep going. Cut anything that doesn't pay back at least 2×. The numbers tell you where the next dollar goes.
+
+---
+
 ## 📊 YOUR FRIDAY SCOREBOARD (5 min)
 
 From `lead-tracker.csv`, tally: **Leads in · Quotes sent · Jobs booked · Revenue · Reviews · Best source.**
