@@ -234,7 +234,7 @@ const PROSPECT_EMAILS={
 "Wright's Renovations":'info@wrights-renovations.com'
 };
 let S=load();
-function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};return d;}
+function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};if(!d.pricing)d.pricing={dumpTon:75,dumpMin:30,fuel:25,hourly:60,priceAdj:1};if(d.pricing.priceAdj===undefined)d.pricing.priceAdj=1;return d;}
 function load(){
   try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return migrate(d);}catch(e){}
   return migrate({prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',contact:'',status:'New',last:'',due:today(),log:[]})),
@@ -264,7 +264,7 @@ function advance(p){
 function setPStatus(p,st){p.status=st;p.last=today();p.due=st==='Dead'?'':addDays(today(),CAD[st].days||0);p.log.unshift(today()+' → '+st);act(p.name+' → '+st);save();render();}
 
 /* ============ VIEWS ============ */
-const TABS=['Launch','Today','Pipeline','Prospects','Homeowners','Autopilot','Scripts','Find','Stats','Playbook'];
+const TABS=['Launch','Today','Pricing','Pipeline','Prospects','Homeowners','Autopilot','Scripts','Find','Stats','Playbook'];
 let tab='Launch';
 function dueProspects(){return S.prospects.filter(p=>p.status!=='Dead'&&p.status!=='Active ✦'&&p.due&&p.due<=today());}
 function needReply(){return S.leads.filter(l=>l.stage==='New Lead');}
@@ -278,7 +278,7 @@ function render(){
     if(t==='Launch'){const n=launchRemaining();if(n)b='<span class="bdg">'+n+'</span>';}
     return '<button class="'+(tab===t?'on':'')+'" onclick="go(\''+t+'\')">'+t+b+'</button>';
   }).join('');
-  document.getElementById('view').innerHTML=({Launch:vLaunch,Today:vToday,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
+  document.getElementById('view').innerHTML=({Launch:vLaunch,Today:vToday,Pricing:vPricing,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
   document.getElementById('fab').innerHTML=tab==='Pipeline'?'<button class="b" onclick="addLeadUI()">+ New Lead</button>':
     tab==='Prospects'?'<button class="b" onclick="addProspectUI()">+ New Prospect</button>':'';
 }
@@ -660,6 +660,78 @@ function vLaunch(){
   return h;
 }
 
+/* ============ QUOTE CALCULATOR ============ */
+const PTIERS=[
+ {k:'Min',label:'Min',frac:'1 item',tons:0.05,base:110,hrs:0.5},
+ {k:'1/8',label:'⅛',frac:'a few items',tons:0.12,base:125,hrs:0.75},
+ {k:'1/4',label:'¼',frac:'small pile',tons:0.25,base:175,hrs:1},
+ {k:'3/8',label:'⅜',frac:'',tons:0.4,base:225,hrs:1.25},
+ {k:'1/2',label:'½',frac:'half bed',tons:0.55,base:285,hrs:1.5},
+ {k:'5/8',label:'⅝',frac:'',tons:0.7,base:345,hrs:1.75},
+ {k:'3/4',label:'¾',frac:'',tons:0.85,base:400,hrs:2},
+ {k:'Full',label:'Full',frac:'heaped bed',tons:1.1,base:475,hrs:2.5}
+];
+const PITEMS=[
+ {k:'fridge',label:'Fridge / Freezer / AC',price:35,tons:0.08,note:'Freon fee'},
+ {k:'appliance',label:'Washer / Dryer / Stove',price:20,tons:0.07},
+ {k:'mattress',label:'Mattress / Box spring',price:25,tons:0.03},
+ {k:'tv',label:'TV / Electronics',price:25,tons:0.02},
+ {k:'tire',label:'Tire',price:8,tons:0.02},
+ {k:'piano',label:'Upright piano',price:150,tons:0.15,flag:'2-person job'},
+ {k:'hottub',label:'Hot tub',price:200,tons:0.2,flag:'disassembly + 2-person'}
+];
+const PACCESS=[
+ {k:'stairs',label:'Stairs / basement / upstairs',pct:0.15},
+ {k:'carry',label:'Long carry / no driveway',pct:0.10},
+ {k:'disassembly',label:'Disassembly',pct:0.10,hrs:0.5},
+ {k:'heavy',label:'Heavy/dense (concrete, dirt, tile)',weightMult:2.5}
+];
+let PSEL={tier:'1/4',items:{},access:[]};
+function pTier(k){PSEL.tier=k;render();}
+function pItem(k,d){PSEL.items[k]=Math.max(0,(PSEL.items[k]||0)+d);render();}
+function pAcc(k){const i=PSEL.access.indexOf(k);if(i>=0)PSEL.access.splice(i,1);else PSEL.access.push(k);render();}
+function pCfg(f,v){const n=parseFloat(v);if(!isNaN(n)&&n>=0){S.pricing[f]=n;save();render();}}
+function pReset(){PSEL={tier:'1/4',items:{},access:[]};render();}
+function priceCalc(){
+  const t=PTIERS.find(x=>x.k===PSEL.tier)||PTIERS[2],c=S.pricing;
+  let hrs=t.hrs,tons=t.tons,sur=0,pct=0,wMult=1,flags=[];
+  PITEMS.forEach(it=>{const q=PSEL.items[it.k]||0;if(q){sur+=it.price*q;tons+=(it.tons||0)*q;if(it.flag)flags.push(it.flag);}});
+  PACCESS.forEach(a=>{if(PSEL.access.indexOf(a.k)>=0){pct+=a.pct||0;hrs+=a.hrs||0;if(a.weightMult)wMult*=a.weightMult;}});
+  const dump=Math.max(c.dumpMin,tons*wMult*c.dumpTon),labor=hrs*c.hourly,floor=dump+c.fuel+labor;
+  const suggested=Math.round((t.base*(c.priceAdj||1)+sur)*(1+pct)/5)*5;
+  return {t,base:Math.round(t.base*(c.priceAdj||1)),sur,pct,hrs,dump,labor,fuel:c.fuel,floor,suggested,profit:suggested-floor,flags};
+}
+function pCopyQuote(){const r=priceCalc();copy("Got your photos, thanks! That's a firm $"+r.suggested+" — that covers all the labor, hauling, disposal, and sweep-up. No surprises, no hidden fees. I've got openings this week — want me to lock in a pickup window?","Quote copied — paste it to the customer");}
+function vPricing(){
+  const r=priceCalc(),c=S.pricing;
+  const pc=r.suggested<r.floor?'due':r.profit>=150?'win':r.profit>=60?'warn':'due';
+  const pmsg=r.suggested<r.floor?'⚠ BELOW COST — raise it':r.profit<60?'Thin margin':r.profit<150?'OK margin':'Healthy 💪';
+  let h='<h2>Quote Calculator</h2><p class="muted" style="margin-bottom:10px">Eyeball the photo → tap how full the truck gets → add special items → fire back a firm price that\'s never below cost.</p>';
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none">'
+    +'<div class="row"><div class="grow"><div style="font-size:11px;letter-spacing:.1em;color:rgba(255,255,255,.55);text-transform:uppercase">Quote this</div><div style="font-size:40px;font-weight:900;color:var(--e200);line-height:1.05">$'+r.suggested+'</div></div>'
+    +'<div style="text-align:right"><span class="pill '+pc+'">'+esc(pmsg)+'</span><div style="color:rgba(255,255,255,.7);margin-top:6px;font-size:12px">your cost ~$'+Math.round(r.floor)+'<br/>profit ~$'+Math.round(r.profit)+'</div></div></div>'
+    +(r.flags.length?'<div style="color:#ffd27a;margin-top:8px;font-size:12.5px">⚑ '+esc(r.flags.join(' · '))+'</div>':'')
+    +'<div class="row" style="margin-top:10px"><button class="b" onclick="pCopyQuote()">📋 Copy firm quote</button><button class="b ghost" onclick="pReset()">Reset</button></div></div>';
+  h+='<div class="card"><div class="row muted"><span class="grow">Base — '+r.t.k+' load</span><b>$'+r.base+'</b></div>'
+    +(r.sur?'<div class="row muted"><span class="grow">Special items</span><b>+$'+r.sur+'</b></div>':'')
+    +(r.pct?'<div class="row muted"><span class="grow">Access surcharge</span><b>+'+Math.round(r.pct*100)+'%</b></div>':'')
+    +'<div class="row" style="border-top:1px solid var(--bl);margin-top:6px;padding-top:6px"><span class="grow muted">Cost floor — dump $'+Math.round(r.dump)+' + fuel $'+r.fuel+' + labor $'+Math.round(r.labor)+' ('+r.hrs+'h)</span><b>$'+Math.round(r.floor)+'</b></div></div>';
+  h+='<h3>1 · How full does the truck get?</h3><div class="card"><div class="row" style="flex-wrap:wrap;gap:6px">'
+    +PTIERS.map(t=>'<button class="b sm '+(PSEL.tier===t.k?'':'ghost')+'" onclick="pTier(\''+t.k+'\')" style="min-width:62px;line-height:1.2">'+t.label+(t.frac?'<br><span style="font-size:9px;opacity:.7">'+t.frac+'</span>':'')+'</button>').join('')+'</div></div>';
+  h+='<h3>2 · Special items <span class="muted">(each adds its own dump fee)</span></h3><div class="card">'
+    +PITEMS.map(it=>{const q=PSEL.items[it.k]||0;return '<div class="row" style="margin-bottom:7px"><span class="grow">'+esc(it.label)+(it.note?' <span class="muted">('+esc(it.note)+')</span>':'')+' <span class="muted">+$'+it.price+'</span></span><button class="b sm ghost" onclick="pItem(\''+it.k+'\',-1)">−</button><b style="min-width:22px;text-align:center">'+q+'</b><button class="b sm ghost" onclick="pItem(\''+it.k+'\',1)">+</button></div>';}).join('')+'</div>';
+  h+='<h3>3 · Access &amp; load type</h3><div class="card"><div class="row" style="flex-wrap:wrap;gap:6px">'
+    +PACCESS.map(a=>'<button class="b sm '+(PSEL.access.indexOf(a.k)>=0?'':'ghost')+'" onclick="pAcc(\''+a.k+'\')">'+esc(a.label)+'</button>').join('')+'</div></div>';
+  h+='<details style="margin-top:10px"><summary>⚙️ Your cost settings — tune to your real numbers</summary><div class="card"><div class="g2">'
+    +'<div><label>Dump $ / ton</label><input type="number" value="'+c.dumpTon+'" onchange="pCfg(\'dumpTon\',this.value)"></div>'
+    +'<div><label>Dump minimum $</label><input type="number" value="'+c.dumpMin+'" onchange="pCfg(\'dumpMin\',this.value)"></div>'
+    +'<div><label>Fuel + wear / job $</label><input type="number" value="'+c.fuel+'" onchange="pCfg(\'fuel\',this.value)"></div>'
+    +'<div><label>Your target $ / hour</label><input type="number" value="'+c.hourly+'" onchange="pCfg(\'hourly\',this.value)"></div>'
+    +'<div><label>Market price adjust (1 = as-is)</label><input type="number" step="0.05" value="'+(c.priceAdj||1)+'" onchange="pCfg(\'priceAdj\',this.value)"></div>'
+    +'</div><p class="muted" style="margin-top:8px;font-size:11.5px">Defaults are Metro Detroit estimates. <b>Call your transfer station for their real per-ton rate</b> and set it here — that one number protects every quote. Saves on this device.</p></div></details>';
+  h+='<div class="card muted" style="font-size:11.5px"><b>How to use it:</b> the suggested price is your smart starting point — in nicer areas you can go above it for convenience. The hard rule from that ad: <b>never quote below the cost floor.</b> The dump weight you can\'t see in a photo is what eats the profit, so when in doubt, size up.</div>';
+  return h;
+}
 /* ============ ACTIONS ============ */
 function copyMsg(id){const p=S.prospects.find(x=>x.id===id);const m=msgFor(p);copy((m.s?'Subject: '+m.s+'\n\n':'')+m.b,'Copied — paste into email/text. Then hit ✓ Advance.');}
 function gm(id){
