@@ -338,31 +338,37 @@ function vPros(){
 }
 
 const AUTOTPL=[
-"Hi {{name}}! Got your quote request — I'm reviewing your photos and info now, and you'll have a firm flat-rate price within the hour (7am–8pm, 7 days). Fastest option: text photos of what needs to go to 734-743-1877 and I'll price it right away. Want to lock in a pickup window already? Book online here: [YOUR BOOKING LINK]\n\n— [Your name], Clean Plate Hauling Co. — Veteran Owned\n734-743-1877 (call/text) · cleanplatehaulingco.com",
-"Want it gone? Grab a pickup window that works for you — takes 30 seconds: [YOUR BOOKING LINK] — Clean Plate Hauling, 734-743-1877",
-"Sorry I missed your call! I'm on a job. Text me photos of what needs to go and I'll send a firm flat-rate price within the hour — or book a pickup window directly: [YOUR BOOKING LINK] — Clean Plate Hauling, veteran-owned"
+"Hi {{name}}! Thanks for reaching out to Clean Plate Hauling Co. — I've got your request and I'm on it. You'll have a firm flat-rate price within the hour (we run 7am–8pm, 7 days a week). Want it even faster? Text photos of what needs to go straight to 734-743-1877 and I'll price it on the spot.\n\n— [Your name], Clean Plate Hauling Co. — Veteran Owned\n734-743-1877 (call/text) · cleanplatehaulingco.com",
+"Hey, it's Clean Plate Hauling Co. — sorry I missed your call, I'm probably on a job. Text me photos of what needs to go and I'll send you a firm flat-rate price within the hour, or reply here and I'll call you right back. — 734-743-1877, veteran-owned",
+"Thanks for reaching out to Clean Plate Hauling! It's after hours right now (we run 7am–8pm, 7 days). Text photos of what needs to go to 734-743-1877 and you'll have a firm price first thing in the morning. — Veteran-owned, Wixom & Metro Detroit"
 ];
 function vAuto(){
-  let h='<h2>Autopilot</h2>';
-  h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><b style="color:var(--e200)">The honest playbook:</b> mass-automated cold email from a new Gmail gets flagged as spam, and your whole B2B market is a couple hundred local companies where reputation is everything. So: <b>machines answer and book instantly (inbound) — you send 10 personal touches a day (outbound)</b>. Set these up in order.</div>';
-  h+='<h3>1 · Self-booking calendar — FREE · do this today</h3><div class="card steps">'
-   +'<span class="muted">The single biggest "books appointments automatically" move. Leads pick their own 2-hour pickup window; it lands on your Google Calendar with reminders sent automatically.</span>'
-   +'<b>Setup (15 min):</b><span class="muted">1. Create a free account at <a href="https://cal.com" target="_blank">cal.com</a> (or Calendly) with your Gmail → connect Google Calendar.<br/>2. New event type: <b>"Junk Removal Pickup Window"</b> — 2 hours long, hours 7am–8pm, minimum 3 hours notice, add questions: phone, address, "what needs to go?", "text photos to 734-743-1877 for your firm price."<br/>3. <b>Send me your booking link</b> — I\'ll add a "Book Online" button to the website and every city page.<br/>4. Until then, paste the link into your texts:</span>'
-   +'<div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(AUTOTPL[1])">📋 Booking text snippet</button></div></div>';
+  let h='<h2>Inbound Autopilot</h2>';
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><b style="color:var(--e200)">The goal:</b> every lead gets answered in under a minute — even when you\'re under a truck. You\'re a <b>photo-text</b> business (text photos → firm price → schedule by text), so there\'s no booking calendar to babysit. Set these up in order; the first three are free.</div>';
+  h+='<h3>1 · Instant auto-reply to every website lead — FREE (Zapier)</h3><div class="card steps">'
+   +'<span class="muted">Right now a form lead hears nothing until someone sees the email. This replies in under a minute, 24/7 — before they call the next hauler.</span>'
+   +'<b>Setup (20 min, once):</b><span class="muted">1. Free account at <a href="https://zapier.com" target="_blank">zapier.com</a>.<br/>2. New Zap — Trigger: <b>Netlify → New Form Submission</b> (connect Netlify, pick the <b>quote</b> form).<br/>3. Action: <b>Gmail → Send Email</b> → To: the form\'s <b>email</b> field → paste the template below.<br/>4. Add a 2nd action: <b>SMS by Zapier</b> or a <b>Push Notification</b> to your phone so it buzzes the instant a lead lands.</span>'
+   +'<div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(AUTOTPL[0])">📋 Auto-reply email template</button></div>'
+   +'<span class="muted" style="display:block;margin-top:6px">Free plan covers ~100 leads/month — plenty to start.</span></div>';
+  h+='<h3>2 · Get pinged the second a lead lands — FREE (Netlify)</h3><div class="card steps">'
+   +'<span class="muted">So you and Samantha never miss a form lead, even before Zapier is wired up.</span>'
+   +'<b>Setup (2 min):</b><span class="muted">Netlify dashboard → your site → <b>Forms</b> → <b>Form notifications</b> → <b>Add notification → Email</b> → send to <b>cleanplatehauling@gmail.com</b>. Now every quote hits your inbox the instant it\'s sent.</span></div>';
   h+='<h3>2 · Instant reply to every website lead — FREE (Zapier)</h3><div class="card steps">'
    +'<span class="muted">Right now form leads wait until you see the email. This answers them in under a minute, 24/7.</span>'
    +'<b>Setup (20 min):</b><span class="muted">1. Free account at <a href="https://zapier.com" target="_blank">zapier.com</a>.<br/>2. New Zap — Trigger: <b>Netlify → New Form Submission</b> (connect Netlify, pick the "quote" form).<br/>3. Action: <b>Gmail → Send Email</b> → To: the form\'s email field → paste this template:</span>'
    +'<div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(AUTOTPL[0])">📋 Auto-reply email template</button></div>'
    +'<span class="muted" style="display:block;margin-top:6px">4. Add a second action: <b>Push Notification (Zapier app)</b> → so your phone buzzes with every lead instantly. Free plan covers ~100 leads/month.</span></div>';
-  h+='<h3>3 · Missed-call text-back — true automation: ~$15/mo</h3><div class="card steps">'
-   +'<span class="muted">Phone setting (free): iPhone auto-reply or carrier rules — works but basic. The upgrade: <a href="https://www.openphone.com" target="_blank">OpenPhone</a> gives your business number auto-text on missed calls, snippets, scheduled texts, and a shared inbox. Get it when you start missing calls weekly.</span>'
-   +'<div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(AUTOTPL[2])">📋 Missed-call auto-text (with booking link)</button></div></div>';
-  h+='<h3>4 · B2B sequences on autopilot — FREE tier (Apollo)</h3><div class="card steps">'
-   +'<span class="muted">If you want outreach emails sending while you sleep: <a href="https://apollo.io" target="_blank">Apollo.io</a> does it the safe way — connects to your Gmail properly, sends on a schedule, stops when they reply, and its database often includes the decision-maker emails (it\'s the budget ZoomInfo).</span>'
-   +'<b>Setup:</b><span class="muted">1. Free account → connect Gmail → import <b>lead-tracker.csv</b> from your repo.<br/>2. Build a 3-step sequence: Day 1 intro (paste from ready-to-send.md) → Day 4 bump → Day 12 value note.<br/>3. <b>Rules that keep you out of spam:</b> max 20–25 sends/day, personalize the first line of every intro, sequences pause the moment anyone replies.</span></div>';
-  h+='<h3>5 · AI receptionist — when volume justifies it (~$100/mo)</h3><div class="card steps">'
-   +'<span class="muted">Services like <a href="https://smith.ai" target="_blank">Smith.ai</a> or OpenPhone\'s AI answer your calls like a human, quote your flat rates, and book straight into your calendar. This is full autonomy for inbound — worth it the week you realize missed calls are costing more than $100/mo. Not before.</span></div>';
-  h+='<div class="card muted"><b>What stays human forever:</b> the 10 daily B2B touches (Today tab), final prices from photos, and showing up on time. That\'s the stuff that beats 1-800-GOT-JUNK — robots can\'t do it.</div>';
+  h+='<h3>3 · Missed-call text-back — FREE phone setting (→ OpenPhone upgrade)</h3><div class="card steps">'
+   +'<span class="muted">The #1 leak for a one-truck crew: a call you can\'t grab mid-lift. This turns it into a text thread instead of a lost job — it just says "text me photos," it never quotes or books.</span>'
+   +'<b>Free right now:</b><span class="muted">iPhone → Settings → Phone → <b>Respond with Text</b> → set one to the message below. (Android: Phone app → Settings → Quick responses.)</span>'
+   +'<div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(AUTOTPL[1])">📋 Missed-call auto-text</button><button class="b sm ghost" onclick="copy(AUTOTPL[2])">📋 After-hours reply</button></div>'
+   +'<b style="display:block;margin-top:8px">The upgrade (~$15/mo):</b><span class="muted"><a href="https://www.openphone.com" target="_blank">OpenPhone</a> auto-texts every missed call, sends after-hours replies, and gives Samantha a shared inbox. Get it the week you\'re missing calls daily.</span></div>';
+  h+='<h3>4 · Full autonomy: AI receptionist — only when volume justifies (~$100/mo)</h3><div class="card steps">'
+   +'<span class="muted"><a href="https://smith.ai" target="_blank">Smith.ai</a> or OpenPhone\'s AI answer your calls like a human and text the lead your number, 24/7. <b>Set it to take a message and promise a callback — NOT to quote prices or book jobs</b>, so you still see every job and set every price. The endgame for never missing a call. Worth it the week missed calls cost you more than $100/mo. Not a day before.</span></div>';
+  h+='<h3>5 · Outbound bonus: B2B sequences — FREE tier (Apollo)</h3><div class="card steps">'
+   +'<span class="muted">Inbound is the priority, but if you want your B2B intros sending while you sleep: <a href="https://apollo.io" target="_blank">Apollo.io</a> connects to Gmail, sends on a schedule, stops the moment anyone replies, and often has the decision-maker emails built in. Import <b>lead-tracker.csv</b>, build a 3-step sequence (intro → day-4 bump → day-12 value note), and cap it at 20–25 personalized sends/day to stay out of spam.</span></div>';
+  h+='<div class="card" style="border-left:5px solid var(--amber)"><b>Why there\'s no booking calendar here:</b> <span class="muted">You called this right. A self-booking link would let strangers lock appointments before you\'ve seen the job, set a price, or decided you even want it. Your flow stays in your hands: <b>photos → you decide &amp; price it → you offer a window by text.</b> Everything above only makes leads get a fast "got it," never a price or a commitment.</span></div>';
+  h+='<div class="card muted"><b>What stays 100% yours, always:</b> seeing the job, deciding if you\'ll take it, the price, and any negotiating. The robots only make sure no lead ever waits in silence — they never speak for you.</div>';
   return h;
 }
 const HSCRIPTS=[
