@@ -190,7 +190,7 @@ const LSTAGES=['New Lead','Contacted','Quoted','Scheduled','Completed','Review A
 /* researched decision makers (verify before relying on them) */
 const CONTACTS={'JMZ Management':'Jannelle Zawaideh — CEO','Real T Simplistic':'Kristyn Drury & Nicole Hyman — Founders','Estate Pros':'(operates as Pro Holdings LLC — check MI registry for owner)'};
 let S=load();
-function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];});return d;}
+function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};return d;}
 function load(){
   try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return migrate(d);}catch(e){}
   return migrate({prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',contact:'',status:'New',last:'',due:today(),log:[]})),
@@ -220,8 +220,8 @@ function advance(p){
 function setPStatus(p,st){p.status=st;p.last=today();p.due=st==='Dead'?'':addDays(today(),CAD[st].days||0);p.log.unshift(today()+' → '+st);act(p.name+' → '+st);save();render();}
 
 /* ============ VIEWS ============ */
-const TABS=['Today','Pipeline','Prospects','Homeowners','Autopilot','Scripts','Find','Stats','Playbook'];
-let tab='Today';
+const TABS=['Launch','Today','Pipeline','Prospects','Homeowners','Autopilot','Scripts','Find','Stats','Playbook'];
+let tab='Launch';
 function dueProspects(){return S.prospects.filter(p=>p.status!=='Dead'&&p.status!=='Active ✦'&&p.due&&p.due<=today());}
 function needReply(){return S.leads.filter(l=>l.stage==='New Lead');}
 function quoteChase(){return S.leads.filter(l=>l.stage==='Quoted'&&l.updated<today());}
@@ -231,9 +231,10 @@ function render(){
   nav.innerHTML=TABS.map(t=>{
     let b='';
     if(t==='Today'){const n=dueProspects().length+needReply().length+quoteChase().length;if(n)b='<span class="bdg">'+n+'</span>';}
+    if(t==='Launch'){const n=launchRemaining();if(n)b='<span class="bdg">'+n+'</span>';}
     return '<button class="'+(tab===t?'on':'')+'" onclick="go(\''+t+'\')">'+t+b+'</button>';
   }).join('');
-  document.getElementById('view').innerHTML=({Today:vToday,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
+  document.getElementById('view').innerHTML=({Launch:vLaunch,Today:vToday,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
   document.getElementById('fab').innerHTML=tab==='Pipeline'?'<button class="b" onclick="addLeadUI()">+ New Lead</button>':
     tab==='Prospects'?'<button class="b" onclick="addProspectUI()">+ New Prospect</button>':'';
 }
@@ -424,6 +425,185 @@ function vPlay(){
   '<h3>The goal</h3><div class="card" style="background:var(--e900);color:#fff;border:none">First 30 days: <b style="color:var(--e200)">10 reviews · 2 recurring B2B accounts · every lead answered in 5 minutes.</b> Do that and you outconvert every franchise in Metro Detroit.</div>';
 }
 
+/* ============ 90-DAY LAUNCH PLAN ============ */
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let launchView=null;
+function lstart(){return (S.launch&&S.launch.start)?S.launch.start:today();}
+function ldayNum(){return Math.floor((new Date(today()+'T12:00')-new Date(lstart()+'T12:00'))/86400000)+1;}
+function ldate(n){return addDays(lstart(),n-1);}
+function lweek(n){return Math.min(13,Math.max(1,Math.floor((n-1)/7)+1));}
+
+const LWEEKS={
+1:{t:"🚀 LAUNCH WEEK",g:"Get everything live and make noise. By Sunday: Google profile published, first reviews requested, announced on every channel, and Thumbtack turned on."},
+2:{t:"📣 SATURATE",g:"This week's targets: 5 Google reviews, a neighbor card on every job, and 20+ B2B intro emails sent."},
+3:{t:"🔌 PAID & REFERRALS",g:"Get Thumbtack producing, apply for Google Local Services Ads the moment you hit 5 reviews, and launch your $25 referral offer."},
+4:{t:"⚙️ SYSTEMIZE",g:"Close month 1 strong: 15 Google reviews, 2–3 B2B accounts in conversation, and you KNOW your #1 lead source."},
+5:{t:"📈 BUILD — LSA LIVE",g:"Month 2 starts. Get Local Services Ads running, keep the review engine on, and turn warm B2B prospects into recurring accounts."},
+6:{t:"📈 BUILD — SCALE WHAT WORKS",g:"Pour time into whatever booked the most last month. Cut anything that doesn't pay back at least 2×."},
+7:{t:"📈 BUILD — RECURRING B2B",g:"Lock in property managers and realtors as repeat accounts. One good PM = cleanouts every month, forever."},
+8:{t:"📈 BUILD — CLOSE MONTH 2",g:"Aim for 40+ reviews, a calendar that's full most weeks, and a clear read on your cost-per-job by channel."},
+9:{t:"🏆 COMPOUND — DOUBLE DOWN",g:"Month 3. You know what works — go all in on it. This is where the business starts running itself."},
+10:{t:"🏆 COMPOUND — REPUTATION",g:"Reviews and referrals should now be your biggest source. Keep the flywheel spinning."},
+11:{t:"🏆 COMPOUND — EFFICIENCY",g:"Tighten routes, dump runs, and pricing. Every saved hour is another job — or time with Lovelyn."},
+12:{t:"🏆 COMPOUND — RECURRING REVENUE",g:"Your B2B accounts should carry a revenue floor now. Nurture them like gold."},
+13:{t:"🏆 COMPOUND — PLAN THE NEXT 90",g:"Review the full quarter, decide if it's time for a helper or a dump trailer, and set the next 90-day target."}
+};
+
+const LDAYS={
+1:[
+ {t:"Upload ALL your photos to Google Business Profile (logo as profile pic, side-profile truck as cover, then the rest).",m:15},
+ {t:"Set up the profile: your 12 cities, hours 7am–8pm, categories, check the Veteran-Owned badge, and turn Messaging ON.",m:10},
+ {t:"Publish your first Google Post (\"We're open — text photos for a flat-rate quote\"). Copy is in launch-kit.md §2.",m:5,href:"launch-kit.md"},
+ {t:"Copy your Google review short link (Profile → \"Ask for reviews\") and save it in your phone notes — you'll use it daily.",m:5},
+ {t:"⭐ Text your review link to EVERYONE you've already hauled for. First reviews are the biggest boost a new profile gets. Script is in Scripts.",m:20,go:"Scripts"},
+ {t:"Post your Facebook page launch post, then PIN it to the top of the page. Full copy in launch-day-posts.md §1.",m:10,href:"launch-day-posts.md"},
+ {t:"Post your Nextdoor intro — your best free channel. Copy in launch-day-posts.md §2.",m:5,href:"launch-day-posts.md"},
+ {t:"Post in 3 local Facebook groups — the short, humble version. Copy in launch-day-posts.md §3.",m:10,href:"launch-day-posts.md"},
+ {t:"Set your missed-call auto-text on your phone (Scripts tab has the exact words). A missed call becomes a lead, not a lost job.",m:3,go:"Scripts"},
+ {t:"Record your voicemail greeting (Scripts tab). Warm, ~15 seconds, tells them to text photos.",m:3,go:"Scripts"},
+ {t:"Email the press release to the 5 local outlets listed in press-release.md.",m:10,href:"press-release.md"}
+],
+2:[
+ {t:"Sign up for Thumbtack as a Junk Removal pro in your zip codes — first paid leads while Google warms up. Set a small weekly cap.",m:20},
+ {t:"Send your first 5 B2B intro emails — open the Today tab, the cadence is queued and each email is pre-written.",m:20,go:"Today"},
+ {t:"Post a truck photo: \"Meet the workhorse — 2020 Sierra 3500HD. Your junk goes in ONE trip.\"",m:5},
+ {t:"Test that your missed-call text and voicemail actually fire — call your own number from another phone.",m:5}
+],
+3:[
+ {t:"Today tab → reply to any leads, then send today's due B2B touches.",m:20,go:"Today"},
+ {t:"Post a tip: \"Donate before you dump — Habitat ReStore & Salvation Army take more than you think. What they won't, we will.\"",m:10,go:"Scripts"},
+ {t:"Text 2–3 more past customers for a review if you missed anyone yesterday.",m:10,go:"Scripts"}
+],
+4:[
+ {t:"Today tab → reply to leads + send today's B2B touches.",m:20,go:"Today"},
+ {t:"Post a garage-cleanout service spotlight (weekly post #1 in launch-kit.md §2).",m:10,href:"launch-kit.md"},
+ {t:"Add 5 fresh B2B prospects so your list never runs dry (Find tab).",m:10,go:"Find"}
+],
+5:[
+ {t:"Today tab → reply to leads + send today's B2B touches.",m:20,go:"Today"},
+ {t:"Walk flyers into 3 realtor offices near a job today — ask who handles estate/probate listings. Print from flyer.html.",m:30,href:"flyer.html"},
+ {t:"Friday numbers: open Stats and jot leads, quotes, jobs, revenue, reviews — even if small. This is how you learn what works.",m:10,go:"Stats"}
+],
+6:[
+ {t:"Neighbor blitz: after each job today, put a card on the 10 nearest doors. Print from neighbor-flyer.html.",m:15,href:"neighbor-flyer.html"},
+ {t:"Answer any \"ISO junk removal\" posts in local groups/Nextdoor — first to reply usually wins (Scripts tab).",m:10,go:"Scripts"},
+ {t:"Post your veteran story: \"Why 'Clean Plate'? In the service, you finish what's on your plate.\"",m:5}
+],
+7:[
+ {t:"🎉 Week 1 review — open Stats. Count your reviews, leads, and jobs. You launched a real business this week.",m:10,go:"Stats"},
+ {t:"Reply to every Google review so far (grateful, 2 sentences, mention the city). Ask me to write them if you want.",m:10},
+ {t:"Plan week 2: your focus is reviews (target 5) and the B2B sprint. Then rest — you earned it.",m:10}
+],
+8:[
+ {t:"Today tab → reply to leads, then hit the B2B sprint hard: 5 intro emails today.",m:25,go:"Today"},
+ {t:"Post a before/after from any job this week (even a small one).",m:10},
+ {t:"Make sure your review link is everywhere: phone notes, your text signature, and on deck for the truck QR.",m:10}
+],
+9:[
+ {t:"Today tab → reply to leads + 5 B2B touches.",m:25,go:"Today"},
+ {t:"Post an FAQ: \"What we CAN'T take — paint, chemicals, asbestos. Everything else is fair game.\"",m:10},
+ {t:"Add 5 new prospects from a city you haven't mined yet (Find tab).",m:10,go:"Find"}
+],
+10:[
+ {t:"Today tab → reply to leads + B2B touches.",m:25,go:"Today"},
+ {t:"Post a donation-run photo: \"Today's load: 60% donated, 30% recycled.\" That's your differentiator.",m:10},
+ {t:"Send review texts to everyone you've hauled in the last few days (Scripts tab).",m:10,go:"Scripts"}
+],
+11:[
+ {t:"Today tab → reply to leads + B2B touches.",m:25,go:"Today"},
+ {t:"Walk into 3 storage facilities — ask to be on their vendor list for abandoned-unit cleanouts (Scripts has the walk-in line).",m:30,go:"Scripts"},
+ {t:"Post an estate-cleanout message (weekly post #4 in launch-kit.md).",m:10,href:"launch-kit.md"}
+],
+12:[
+ {t:"Today tab → reply to leads + B2B touches.",m:25,go:"Today"},
+ {t:"Post before/after #2 + \"Know someone moving or downsizing? Tag them 👇\"",m:10},
+ {t:"Add 5 new prospects (Find tab).",m:10,go:"Find"}
+],
+13:[
+ {t:"Neighbor blitz after each job — 10 cards, every time (neighbor-flyer.html).",m:15,href:"neighbor-flyer.html"},
+ {t:"Post a yard-debris message: \"Fence coming down? Deck demo? We haul what the trash truck won't.\"",m:5},
+ {t:"Answer ISO posts in groups/Nextdoor (Scripts tab).",m:10,go:"Scripts"}
+],
+14:[
+ {t:"📊 Two-week review — open Stats. Are you near 5 reviews? That unlocks Local Services Ads next week.",m:10,go:"Stats"},
+ {t:"Re-touch any B2B prospects who went quiet — the Today tab queues the follow-ups.",m:15,go:"Today"},
+ {t:"Plan week 3: turn on paid + launch your referral offer. The momentum compounds from here.",m:10}
+]
+};
+
+const LSPECIAL={
+15:[{t:"🟢 BIG ONE: if you're near 5 reviews, apply for Google Local Services Ads today (ads.google.com/localservices). The green 'Guaranteed' badge is the top spot on Google. Checklist in launch-kit.md §4.",m:30,href:"launch-kit.md"},
+    {t:"Launch your referral offer: text past customers \"$25 to you AND your friend for every booking.\" Script is in the Homeowners tab.",m:15,go:"Homeowners"}],
+22:[{t:"Re-touch your best quiet B2B prospects — \"still glad to be your turnover vendor.\" The Today tab queues them.",m:15,go:"Today"}],
+30:[{t:"🏁 MONTH 1 REVIEW — open Stats. Target check: 15 reviews · 2–3 B2B convos · you know your #1 source. Pour next month into whatever booked the most.",m:20,go:"Stats"}],
+31:[{t:"If LSA is approved, set your budget to how many jobs/week you can actually handle well — never buy leads faster than you can do them right.",m:10}],
+45:[{t:"Mid-month-2 check: is LSA paying back at least 2×? If yes, scale it. If not, tighten your service area and response time.",m:15,go:"Stats"}],
+60:[{t:"🏁 MONTH 2 REVIEW — open Stats. Calendar should be full most weeks now. Decide: is it time for a helper or a dump trailer?",m:20,go:"Stats"}],
+61:[{t:"Month 3 is about systemizing. If you're turning down jobs, tell me — I'll build you a crew checklist and a hiring post.",m:10}],
+75:[{t:"Reputation check: are reviews + referrals now your biggest source? That's the goal — the flywheel turning on its own.",m:15,go:"Stats"}],
+90:[{t:"🎓 90-DAY GRADUATION — full quarter review in Stats. You built a real business. Set the next 90-day target with me, and let's talk about what's next.",m:25,go:"Stats"}]
+};
+
+function rhythmTasks(n){
+  const dow=new Date(ldate(n)+'T12:00').getDay();
+  const tasks=[];
+  if(dow>=1&&dow<=5)tasks.push({t:"Today tab → reply to any lead, then send today's due B2B touches (intros + follow-ups). Aim for 5–10.",m:25,go:"Today"});
+  if(dow===1)tasks.push({t:"Monday reset: skim this week's goal above, and add 5 fresh prospects so you never run dry (Find tab).",m:10,go:"Find"});
+  if(dow===2)tasks.push({t:"Post one update — a service spotlight or a tip (Scripts tab has copy).",m:10,go:"Scripts"});
+  if(dow===3)tasks.push({t:"Add 5 new B2B prospects from a city you haven't mined (Find tab).",m:10,go:"Find"});
+  if(dow===4)tasks.push({t:"Post a before/after from a recent job, or a truck/donation photo. Real work is your best content.",m:10});
+  if(dow===5){tasks.push({t:"Walk flyers into 2–3 realtor offices or storage facilities near a job today (print flyer.html).",m:30,href:"flyer.html"});
+              tasks.push({t:"Friday numbers: open Stats, log the week, and double down on what's working.",m:10,go:"Stats"});}
+  if(dow===6){tasks.push({t:"Neighbor blitz: a card on the 10 nearest doors after each job today (neighbor-flyer.html).",m:15,href:"neighbor-flyer.html"});
+              tasks.push({t:"Answer any \"ISO junk removal\" posts in groups/Nextdoor — speed wins (Scripts tab).",m:10,go:"Scripts"});}
+  if(dow===0)tasks.push({t:"Plan next week + catch up on any review texts you owe. Then rest — time with Samantha and Lovelyn.",m:15});
+  return tasks;
+}
+
+function launchPlan(n){
+  const wk=lweek(n);
+  let tasks=LDAYS[n]?LDAYS[n].slice():rhythmTasks(n);
+  if(LSPECIAL[n])tasks=LSPECIAL[n].concat(tasks);
+  return {n,wk,wkInfo:LWEEKS[wk]||LWEEKS[13],tasks};
+}
+function launchRemaining(){const n=ldayNum();if(n<1||n>90)return 0;const dn=launchPlan(n);const done=(S.launch.done['d'+n]||[]);return Math.max(0,dn.tasks.length-done.filter(i=>i<dn.tasks.length).length);}
+function toggleL(n,i){const k='d'+n,arr=S.launch.done[k]||[],p=arr.indexOf(i);if(p>=0)arr.splice(p,1);else arr.push(i);S.launch.done[k]=arr;save();render();}
+function setLStart(){const v=prompt("Your Launch Day — the day your Google profile went live (YYYY-MM-DD):",lstart());if(v&&/^\d{4}-\d{2}-\d{2}$/.test(v.trim())){S.launch.start=v.trim();launchView=null;save();render();toast("Launch day set!");}else if(v)toast("Use the format YYYY-MM-DD");}
+function lJump(){launchView=Math.min(Math.max(ldayNum(),1),90);render();window.scrollTo(0,0);}
+function lNav(d){launchView=Math.min(90,Math.max(1,(launchView||ldayNum())+d));render();window.scrollTo(0,0);}
+
+function vLaunch(){
+  const cur=ldayNum();
+  if(launchView===null)launchView=Math.min(Math.max(cur,1),90);
+  const n=launchView,plan=launchPlan(n),done=(S.launch.done['d'+n]||[]),isToday=(n===cur);
+  let h='<h2>90-Day Launch Plan</h2>';
+  if(cur<1)h+='<div class="card"><span class="pill warn">Heads up</span> Your launch day is set for '+fmt(lstart())+'. The countdown starts then — <a onclick="setLStart()" style="cursor:pointer">change it</a> if that\'s wrong.</div>';
+  if(cur>90)h+='<div class="card" style="background:var(--e400);color:#fff;border:none"><b>🎓 You finished the 90-day plan.</b> Look back through any day below, or ask me to build your next-quarter plan.</div>';
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none">'+
+     '<div class="row"><b class="grow" style="font-size:18px;color:var(--e200)">Day '+n+' of 90</b>'+
+     '<span class="muted" style="color:rgba(255,255,255,0.7)">'+DOW[new Date(ldate(n)+'T12:00').getDay()]+' · '+fmt(ldate(n))+(isToday?' · TODAY':'')+'</span></div>'+
+     '<div style="margin-top:6px;font-weight:800">Week '+plan.wk+' of 13 · '+plan.wkInfo.t+'</div>'+
+     '<div class="muted" style="color:rgba(255,255,255,0.8);margin-top:4px">'+esc(plan.wkInfo.g)+'</div></div>';
+  h+='<div class="card" style="border-left:5px solid var(--e300)"><b>Every day, no matter what:</b> <span class="muted">① answer every lead in 5 minutes · ② send the review text before you leave every job · ③ log every lead. The tasks below are the <i>build</i> work on top of those three.</span></div>';
+  const total=plan.tasks.reduce((a,t)=>a+t.m,0),doneCount=done.filter(i=>i<plan.tasks.length).length;
+  h+='<div class="row" style="margin:6px 2px 10px"><b class="grow">Today\'s tasks — '+doneCount+'/'+plan.tasks.length+' done</b><span class="pill">⏱ ~'+total+' min total</span></div>';
+  plan.tasks.forEach((t,i)=>{const d=done.indexOf(i)>=0;
+    h+='<div class="card" style="'+(d?'opacity:.55;':'')+'border-left:4px solid '+(d?'var(--e200)':'var(--bl)')+'">'+
+       '<div class="row" style="align-items:flex-start;gap:10px">'+
+       '<input type="checkbox" '+(d?'checked ':'')+'onchange="toggleL('+n+','+i+')" style="width:22px;height:22px;margin-top:1px;padding:0;flex:none">'+
+       '<div class="grow"><div style="'+(d?'text-decoration:line-through;':'')+'font-weight:600">'+esc(t.t)+'</div>'+
+       '<div class="row" style="margin-top:6px"><span class="pill warn">⏱ '+t.m+' min</span>'+
+       (t.go?'<button class="b sm" onclick="go(\''+t.go+'\')">Open '+t.go+' →</button>':'')+
+       (t.href?'<a class="b sm ghost" href="'+t.href+'" target="_blank" style="text-decoration:none">Open file →</a>':'')+
+       '</div></div></div></div>';});
+  h+='<div class="row" style="margin:14px 0 4px">'+
+     '<button class="b ghost grow" '+(n<=1?'disabled style="opacity:.4"':'')+' onclick="lNav(-1)">← Prev day</button>'+
+     (!isToday&&cur>=1&&cur<=90?'<button class="b" onclick="lJump()">Jump to today (Day '+cur+')</button>':'')+
+     '<button class="b ghost grow" '+(n>=90?'disabled style="opacity:.4"':'')+' onclick="lNav(1)">Next day →</button></div>';
+  h+='<div class="card muted" style="font-size:11.5px">Add this page to your phone\'s home screen. Open it each morning, knock out the tasks, check them off. <a onclick="setLStart()" style="cursor:pointer">Set/adjust launch day</a> (currently '+fmt(lstart())+').</div>';
+  return h;
+}
+
 /* ============ ACTIONS ============ */
 function copyMsg(id){const p=S.prospects.find(x=>x.id===id);const m=msgFor(p);copy((m.s?'Subject: '+m.s+'\n\n':'')+m.b,'Copied — paste into email/text. Then hit ✓ Advance.');}
 function gm(id){
@@ -485,7 +665,7 @@ function addProspectUI(){
 }
 function exportJSON(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cleanplate-crm-backup-'+today()+'.json';a.click();}
 function exportCSV(){const rows=[['Name','Phone','City','Source','Items','Quote','Stage','Created']].concat(S.leads.map(l=>[l.name,l.phone,l.city,l.source,l.items,l.quote,l.stage,l.created]));const csv=rows.map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='cleanplate-leads-'+today()+'.csv';a.click();}
-function importJSON(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.prospects&&d.leads){S=d;save();render();toast('Restored!');}else toast('Not a valid backup file');}catch(e){toast('Could not read that file');}};r.readAsText(f);}
+function importJSON(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.prospects&&d.leads){S=migrate(d);save();render();toast('Restored!');}else toast('Not a valid backup file');}catch(e){toast('Could not read that file');}};r.readAsText(f);}
 
 render();
 </script>
