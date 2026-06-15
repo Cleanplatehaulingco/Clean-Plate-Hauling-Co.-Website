@@ -189,8 +189,39 @@ const LSTAGES=['New Lead','Contacted','Quoted','Scheduled','Completed','Review A
 /* ============ STATE ============ */
 /* researched decision makers (verify before relying on them) */
 const CONTACTS={'JMZ Management':'Jannelle Zawaideh — CEO','Real T Simplistic':'Kristyn Drury & Nicole Hyman — Founders','Estate Pros':'(operates as Pro Holdings LLC — check MI registry for owner)'};
+/* Best-bet B2B emails (researched). FOUND = real published address; the rest are the standard info@ inbox on the confirmed domain — worth a 5-sec verify. Auto-filled into any prospect missing an email; your edits always win. */
+const PROSPECT_EMAILS={
+'JMZ Management':'info@jmzmanagement.com',
+'NuHome Property Management':'contact@npm.llc',
+'NHL Property Management':'info@nhlpropertymanagement.com',
+'G3 Management':'G3ManagementMail@gmail.com',
+'Renters Warehouse SE Michigan':'clientservices@renterswarehouse.com',
+'Michigan Management & Property Maintenance':'info@michiganmanagement.com',
+'North Bloomfield Properties':'info@northbloomfield.com',
+'Estate Pros':'info@goestatepros.com',
+"Aaron's Estate Sales":'Aaron@aaronsestatesales.com',
+'All Out Estate Sale Services':'info@alloutestatesaleservices.com',
+'Glover Agency (KW)':'jeff@gloveragency.com',
+'Real T Simplistic':'Experts@RealTSimplistic.com',
+'TidySmart':'info@tidysmart.com',
+'H.O.M.E. Senior Moving':'info@homeseniormoving.com',
+'Lily Rose Interiors':'info@lilyroseinteriordesign.com',
+'Men on the Move':'moveinfo@michiganmovers.com',
+'Professional Movers':'professionalmoversmi@gmail.com',
+'Morse Moving & Storage':'info@morsemoving.com',
+'Christensen Dumpster Rental':'info@cdisposal.com',
+'Titan National':'info@titannational.com',
+'Community Disposal Service':'office@cdsmich.com',
+'Finished Basements Plus':'info@finishedbasementsplus.com',
+'Seghi Renovations':'jim@seghi.net',
+'SW Construction':'info@swconstructionmi.com',
+'Nvrrete':'info@nvrrete.com',
+'MMC Building':'mmcbuilding614@gmail.com',
+'RM Remodeling':'info@rmremodeling.net',
+"Wright's Renovations":'info@wrights-renovations.com'
+};
 let S=load();
-function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};return d;}
+function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};return d;}
 function load(){
   try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return migrate(d);}catch(e){}
   return migrate({prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',contact:'',status:'New',last:'',due:today(),log:[]})),
