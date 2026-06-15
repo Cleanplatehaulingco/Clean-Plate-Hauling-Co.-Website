@@ -1,6 +1,9 @@
 # 👈 START HERE
 
-You're running this solo right now. This is the only page you need to glance at. Everything else in this folder is backup you pull from when the campaign tells you to.
+You and Samantha run this together now — she's on the phones and leads, you're on the truck. This page is your orientation, but **your real daily driver is `crm.html` → the Launch tab.**
+
+> ## 📲 Do this every morning (the hand-holding, built in)
+> Open **`crm.html`** on your phone and tap the **Launch** tab. It knows what day of your 90-day plan it is and lays out **that day's exact tasks — each with a time estimate** — to check off as you go. No deciding, no guessing: open it, do what it says, tap the boxes. Launch day is ~90 minutes; after that it's ~30–45 min a day. Add the page to your phone's home screen so it's one tap away.
 
 ---
 
@@ -41,7 +44,8 @@ The day before, do the **Prep Day** checklist in `LAUNCH-CAMPAIGN.md` so launch 
 | **ready-to-send.md** | 14 B2B emails (property managers, realtors) ready to send. |
 | **press-release.md** | For the local newspapers. |
 | **neighbor-flyer.html / flyer.html** | Print these — door cards + flyers. |
-| **crm.html + lead-tracker.csv** | Track every lead. Open crm.html in your browser. |
+| **crm.html → Launch tab** | ⭐ Your day-by-day 90-day plan with time estimates. Open this every morning. |
+| **crm.html (other tabs) + lead-tracker.csv** | Track every lead, run B2B outreach, see your numbers. |
 
 ---
 
