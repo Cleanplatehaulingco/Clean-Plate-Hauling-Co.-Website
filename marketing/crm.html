@@ -351,7 +351,7 @@ function vPros(){
 }
 
 const AUTOTPL=[
-"Hi {{name}}! Thanks for reaching out to Clean Plate Hauling Co. — I've got your request and I'm on it. You'll have a firm flat-rate price within the hour (we run 7am–8pm, 7 days a week). Want it even faster? Text photos of what needs to go straight to 734-743-1877 and I'll price it on the spot.\n\n— [Your name], Clean Plate Hauling Co. — Veteran Owned\n734-743-1877 (call/text) · cleanplatehaulingco.com",
+"Hi {{name}}! Thanks for reaching out to Clean Plate Hauling Co. — we've got your request and we're on it. You'll get a firm flat-rate price back during our hours (7am–8pm, 7 days a week). Want it faster? Text photos of what needs to go straight to 734-743-1877 and we'll price it on the spot.\n\n— Clean Plate Hauling Co. — Veteran Owned\n734-743-1877 (call/text) · cleanplatehaulingco.com",
 "Hey, it's Clean Plate Hauling Co. — sorry I missed your call, I'm probably on a job. Text me photos of what needs to go and I'll send you a firm flat-rate price within the hour, or reply here and I'll call you right back. — 734-743-1877, veteran-owned",
 "Thanks for reaching out to Clean Plate Hauling! It's after hours right now (we run 7am–8pm, 7 days). Text photos of what needs to go to 734-743-1877 and you'll have a firm price first thing in the morning. — Veteran-owned, Wixom & Metro Detroit"
 ];
@@ -359,10 +359,16 @@ function vAuto(){
   let h='<h2>Inbound Autopilot</h2>';
   h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><b style="color:var(--e200)">The goal:</b> every lead gets answered in under a minute — even when you\'re under a truck. You\'re a <b>photo-text</b> business (text photos → firm price → schedule by text), so there\'s no booking calendar to babysit. Set these up in order; the first three are free.</div>';
   h+='<h3>1 · Instant auto-reply to every website lead — FREE (Zapier)</h3><div class="card steps">'
-   +'<span class="muted">Right now a form lead hears nothing until someone sees the email. This replies in under a minute, 24/7 — before they call the next hauler.</span>'
-   +'<b>Setup (20 min, once):</b><span class="muted">1. Free account at <a href="https://zapier.com" target="_blank">zapier.com</a>.<br/>2. New Zap — Trigger: <b>Netlify → New Form Submission</b> (connect Netlify, pick the <b>quote</b> form).<br/>3. Action: <b>Gmail → Send Email</b> → To: the form\'s <b>email</b> field → paste the template below.<br/>4. Add a 2nd action: <b>SMS by Zapier</b> or a <b>Push Notification</b> to your phone so it buzzes the instant a lead lands.</span>'
-   +'<div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(AUTOTPL[0])">📋 Auto-reply email template</button></div>'
-   +'<span class="muted" style="display:block;margin-top:6px">Free plan covers ~100 leads/month — plenty to start.</span></div>';
+   +'<span class="muted">Sends an instant "got it, your price is coming" to anyone who fills out the site form — 24/7, before they call the next hauler. It never quotes a price or books a job; you still send the real number. (Reaches leads who left an email; the rest are covered by step 2 below.)</span>'
+   +'<b>Setup (~15 min, once):</b>'
+   +'<span class="muted"><b>1.</b> Sign up free at <a href="https://zapier.com" target="_blank">zapier.com</a> with cleanplatehauling@gmail.com.<br/>'
+   +'<b>2.</b> Create → New Zap.<br/>'
+   +'<b>3. Trigger:</b> search <b>Netlify</b> → <b>New Form Submission</b> → connect Netlify → site <b>cleanplatehaulingco</b> → form <b>quote</b> → Test trigger.<br/>'
+   +'<b>4. Action:</b> search <b>Gmail</b> → <b>Send Email</b> → connect Gmail, then set <b>To</b> = the form\'s <b>Email</b> field · <b>From Name</b> = Clean Plate Hauling Co. · <b>Subject</b> = Got your request — Clean Plate Hauling Co. · <b>Body</b> = paste the template below (drop the <b>Name</b> field where it says {{name}}).<br/>'
+   +'<b>5.</b> Test the step → <b>Publish</b>. Every web lead with an email now gets an instant reply.</span>'
+   +'<div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(AUTOTPL[0])">📋 Auto-reply message</button></div>'
+   +'<span class="muted" style="display:block;margin-top:8px"><b>If it says "Insufficient Permission" connecting Google or Netlify:</b> that\'s the sign-in screen, not a mistake on your end. Reconnect that account and <b>check every permission box ("Select all")</b> before clicking Allow. For Netlify, be signed into the account that owns the site.</span>'
+   +'<span class="muted" style="display:block;margin-top:6px">Free plan covers ~100 leads/month. The message is written to be true at any hour, so there\'s no timer to manage.</span></div>';
   h+='<h3>2 · Get pinged the second a lead lands — FREE (Netlify)</h3><div class="card steps">'
    +'<span class="muted">So you and Samantha never miss a form lead, even before Zapier is wired up.</span>'
    +'<b>Setup (2 min):</b><span class="muted">Netlify dashboard → your site → <b>Forms</b> → <b>Form notifications</b> → <b>Add notification → Email</b> → send to <b>cleanplatehauling@gmail.com</b>. Now every quote hits your inbox the instant it\'s sent.</span></div>';
