@@ -67,11 +67,24 @@ margin:3px 4px 3px 0;font-size:12.5px;font-weight:700;color:var(--e400);text-dec
 .cat-Realtor{border-left:5px solid #2278c8}.cat-Senior{border-left:5px solid #c8527a}
 .cat-Mover{border-left:5px solid #b87700}.cat-Contractor{border-left:5px solid #8a6f5a}
 .cat-Dumpster{border-left:5px solid #4a4a44}.cat-Storage{border-left:5px solid #2a9d8f}
+#gate{position:fixed;inset:0;z-index:999;background:var(--e950);display:none;align-items:center;justify-content:center;padding:20px}
+#gate .gcard{background:var(--e900);border:1px solid var(--e800);border-radius:14px;padding:30px 24px;max-width:330px;width:100%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+#gate .gbrand{font-family:'Norwester','Arial Narrow',Arial,sans-serif;font-size:26px;letter-spacing:1px;color:#fff}
+#gate .gbrand span{color:var(--e200)}
+#gate #gpw{margin:18px 0 10px;text-align:center;font-size:15px}
+#gerr{display:none;color:#ff9b8f;font-size:12.5px;margin-bottom:10px}
 </style>
 </head>
 <body>
+<div id="gate"><div class="gcard">
+  <div class="gbrand">CLEAN PLATE <span>CRM</span></div>
+  <div style="color:rgba(255,255,255,.55);font-size:12px;letter-spacing:.04em;margin-top:3px">Private tool — enter password</div>
+  <input id="gpw" type="password" placeholder="Password" autocomplete="current-password"/>
+  <div id="gerr">Incorrect password — try again.</div>
+  <button class="b" style="width:100%" onclick="tryUnlock()">Unlock</button>
+</div></div>
 <header>
-  <div class="hrow"><div class="brand">CLEAN PLATE <span>CRM</span></div><div class="hsub">Outreach &amp; jobs — built to convert</div></div>
+  <div class="hrow"><div class="brand">CLEAN PLATE <span>CRM</span></div><div class="hsub">Outreach &amp; jobs — built to convert</div><button onclick="lock()" title="Lock this tool" style="margin-left:auto;align-self:center;background:transparent;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.7);border-radius:6px;padding:4px 9px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap">🔒 Lock</button></div>
   <nav id="nav"></nav>
 </header>
 <main id="view"></main>
@@ -704,7 +717,15 @@ function exportJSON(){const blob=new Blob([JSON.stringify(S,null,1)],{type:'appl
 function exportCSV(){const rows=[['Name','Phone','City','Source','Items','Quote','Stage','Created']].concat(S.leads.map(l=>[l.name,l.phone,l.city,l.source,l.items,l.quote,l.stage,l.created]));const csv=rows.map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='cleanplate-leads-'+today()+'.csv';a.click();}
 function importJSON(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.prospects&&d.leads){S=migrate(d);save();render();toast('Restored!');}else toast('Not a valid backup file');}catch(e){toast('Could not read that file');}};r.readAsText(f);}
 
-render();
+/* ---- access gate: SHA-256 of the passphrase (privacy lock for an internal tool, not high-grade security) ---- */
+const GATE_HASH='5d03c6cc82999234d06cd2f95a898b5725e0dd5d9ed4b288e6755440edf28683';
+const GATE_KEY='cph_unlock_v1';
+async function sha256hex(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+function showApp(){const g=document.getElementById('gate');if(g)g.style.display='none';render();}
+async function tryUnlock(){const i=document.getElementById('gpw'),e=document.getElementById('gerr');try{const h=await sha256hex(i.value);if(h===GATE_HASH){localStorage.setItem(GATE_KEY,'1');showApp();}else{e.textContent='Incorrect password — try again.';e.style.display='block';i.value='';i.focus();}}catch(_){e.textContent='Open this page over https to unlock.';e.style.display='block';}}
+function lock(){localStorage.removeItem(GATE_KEY);location.reload();}
+function boot(){if(localStorage.getItem(GATE_KEY)==='1'){showApp();return;}const g=document.getElementById('gate');if(g)g.style.display='flex';const i=document.getElementById('gpw');if(i){i.focus();i.addEventListener('keydown',ev=>{if(ev.key==='Enter')tryUnlock();});}}
+boot();
 </script>
 </body>
 </html>
