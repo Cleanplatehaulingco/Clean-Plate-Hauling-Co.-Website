@@ -300,7 +300,7 @@ const PROSPECT_EMAILS={
 'Lear Management Inc':'info@learmanagement.com'
 };
 let S=load();
-function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});const existing=new Set(d.prospects.map(p=>p.name));SEED.forEach(r=>{if(!existing.has(r[1])){d.prospects.push({id:'p_s_'+r[1].replace(/\W/g,''),cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:PROSPECT_EMAILS[r[1]]||'',contact:CONTACTS[r[1]]||'',status:'New',last:'',due:today(),log:[]}); }});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};if(!d.pricing)d.pricing={dumpTon:75,dumpMin:30,fuel:25,hourly:60,priceAdj:1};if(d.pricing.priceAdj===undefined)d.pricing.priceAdj=1;if(!d.metrics)d.metrics={reviews:1};return d;}
+function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});const existing=new Set(d.prospects.map(p=>p.name));SEED.forEach(r=>{if(!existing.has(r[1])){d.prospects.push({id:'p_s_'+r[1].replace(/\W/g,''),cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:PROSPECT_EMAILS[r[1]]||'',contact:CONTACTS[r[1]]||'',status:'New',last:'',due:today(),log:[]}); }});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};if(!d.pricing)d.pricing={dumpTon:75,dumpMin:30,fuel:25,hourly:60,priceAdj:1};if(d.pricing.priceAdj===undefined)d.pricing.priceAdj=1;if(!d.metrics)d.metrics={reviews:1};if(!d.huntLog)d.huntLog={};return d;}
 function load(){
   try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return migrate(d);}catch(e){}
   return migrate({prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',contact:'',status:'New',last:'',due:today(),log:[]})),
@@ -330,7 +330,7 @@ function advance(p){
 function setPStatus(p,st){p.status=st;p.last=today();p.due=st==='Dead'?'':addDays(today(),CAD[st].days||0);p.log.unshift(today()+' → '+st);act(p.name+' → '+st);save();render();}
 
 /* ============ VIEWS ============ */
-const TABS=['Launch','Today','Pricing','Pipeline','Prospects','Homeowners','Channels','Autopilot','Scripts','Find','Stats','Playbook'];
+const TABS=['Launch','Today','Hunt','Pricing','Pipeline','Prospects','Homeowners','Channels','Autopilot','Scripts','Find','Stats','Playbook'];
 let tab='Launch';
 function dueProspects(){return S.prospects.filter(p=>p.status!=='Dead'&&p.status!=='Active ✦'&&p.due&&p.due<=today());}
 function needReply(){return S.leads.filter(l=>l.stage==='New Lead');}
@@ -344,7 +344,7 @@ function render(){
     if(t==='Launch'){const n=launchRemaining();if(n)b='<span class="bdg">'+n+'</span>';}
     return '<button class="'+(tab===t?'on':'')+'" onclick="go(\''+t+'\')">'+t+b+'</button>';
   }).join('');
-  document.getElementById('view').innerHTML=({Launch:vLaunch,Today:vToday,Pricing:vPricing,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Channels:vChannels,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
+  document.getElementById('view').innerHTML=({Launch:vLaunch,Today:vToday,Hunt:vHunt,Pricing:vPricing,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Channels:vChannels,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
   document.getElementById('fab').innerHTML=tab==='Pipeline'?'<button class="b" onclick="addLeadUI()">+ New Lead</button>':
     tab==='Prospects'?'<button class="b" onclick="addProspectUI()">+ New Prospect</button>':'';
 }
@@ -621,6 +621,105 @@ function vPlay(){
   '<b>Mike — evening (~30 min)</b><span class="muted">Today tab → clear the B2B outreach-due list (5–10 touches) → add 5 prospects if the list is thin. Plus any flyer/neighbor drops on your routes.</span></div>'+
   '<h3>Docs (in your website repo under /marketing)</h3><div class="card muted">outreach-playbook.md · launch-kit.md · ready-to-send.md · lead-tracker.csv · press-release.md · flyer.html (print) · brand/ (logos + 8K print masters)</div>'+
   '<h3>The goal</h3><div class="card" style="background:var(--e900);color:#fff;border:none">First 30 days: <b style="color:var(--e200)">15 reviews · 2–3 recurring B2B accounts · every lead answered in 5 minutes.</b> Do that and you outconvert every franchise in Metro Detroit.</div>';
+}
+
+/* ============ HUNT LOG ============ */
+const HUNT_CATS=[
+  {k:'b2b',  icon:'🏢',label:'B2B drop',    note:'Walked into a business — PM, realtor, stager, storage, restoration'},
+  {k:'iso',  icon:'💬',label:'ISO reply',   note:'Replied to a "need a hauler" post on Facebook or Nextdoor'},
+  {k:'int',  icon:'🏡',label:'Interception',note:'Estate/garage sale stop, door-knock, neighbor card after a job'},
+  {k:'email',icon:'✉️', label:'Email sent',  note:'B2B intro or follow-up sent from the Today tab'},
+  {k:'post', icon:'📱',label:'Post',         note:'Google / Facebook / Nextdoor post — bonus, not counted toward 20'}
+];
+const HUNT_GOAL=20;
+function htDay(d){return S.huntLog[d]||{};}
+function htGet(d,k){return htDay(d)[k]||0;}
+function htAdj(k,delta){const d=today();if(!S.huntLog[d])S.huntLog[d]={};S.huntLog[d][k]=Math.max(0,(S.huntLog[d][k]||0)+delta);save();render();}
+function htTotal(d,excl){const day=htDay(d);return HUNT_CATS.filter(c=>!excl||c.k!==excl).reduce((a,c)=>a+(day[c.k]||0),0);}
+
+function vHunt(){
+  const td=today();
+  const total=htTotal(td,'post');
+  const posts=htGet(td,'post');
+  const pct=Math.min(100,Math.round(total/HUNT_GOAL*100));
+  const hit=total>=HUNT_GOAL;
+  let h='<h2>Hunt Log <span class="muted" style="font-size:13px;font-weight:400">— Mike\'s daily touches</span></h2>';
+
+  // Big today counter
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none">'
+    +'<div class="row"><div class="grow">'
+    +'<div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)">Today\'s contacts</div>'
+    +'<div style="font-size:52px;font-weight:900;color:var(--e200);line-height:1.1">'+total
+    +'<span style="font-size:20px;color:rgba(255,255,255,.3)"> / '+HUNT_GOAL+'</span></div>'
+    +(posts?'<div style="color:rgba(255,255,255,.5);font-size:12.5px;margin-top:2px">+'+posts+' post'+(posts!==1?'s':'')+'</div>':'')
+    +'</div>'
+    +(hit?'<div style="text-align:right"><div style="font-size:36px">🔥</div><div style="color:var(--e200);font-weight:900;font-size:13px;letter-spacing:.04em">GOAL HIT</div></div>':'')
+    +'</div>'
+    +'<div style="height:8px;border-radius:4px;background:rgba(255,255,255,.15);overflow:hidden;margin-top:12px">'
+    +'<div style="height:100%;border-radius:4px;background:var(--e200);width:'+pct+'%"></div></div>'
+    +'<div style="color:rgba(255,255,255,.5);font-size:11.5px;margin-top:6px">Goal: 20 real contacts/day. Do this consistently for 2–3 weeks and the phone starts ringing on its own.</div></div>';
+
+  // Tap-to-log buttons
+  h+='<h3>Tap + to log each touch</h3>';
+  HUNT_CATS.forEach(function(c){
+    const n=htGet(td,c.k),bonus=(c.k==='post');
+    h+='<div class="card" style="padding:12px 14px">'
+      +'<div class="row" style="gap:10px;align-items:center">'
+      +'<div style="font-size:28px;line-height:1;width:36px;text-align:center">'+c.icon+'</div>'
+      +'<div class="grow"><div style="font-weight:800">'+c.label+(bonus?' <span class="muted" style="font-size:11px;font-weight:400">bonus</span>':'')+'</div>'
+      +'<div class="muted" style="font-size:12px">'+c.note+'</div></div>'
+      +'<div style="display:flex;align-items:center;gap:8px">'
+      +'<button class="b sm ghost" onclick="htAdj(\''+c.k+'\',-1)" style="padding:6px 11px;font-size:15px">−</button>'
+      +'<span style="font-size:26px;font-weight:900;min-width:32px;text-align:center;color:'+(n>0?'var(--e400)':'var(--tmuted)')+'">'+n+'</span>'
+      +'<button class="b'+(bonus?' ghost':'')+'" onclick="htAdj(\''+c.k+'\',1)" style="padding:8px 16px;font-size:20px">+</button>'
+      +'</div></div></div>';
+  });
+
+  // 7-day bar chart
+  h+='<h3>Last 7 days — watch the stack build</h3><div class="card">';
+  let weekTotal=0,bestDay=0;
+  for(let i=0;i<7;i++){const t=htTotal(addDays(td,-i),'post');weekTotal+=t;if(t>bestDay)bestDay=t;}
+  const barMax=Math.max(HUNT_GOAL,bestDay,1);
+  h+='<div style="display:flex;align-items:flex-end;gap:4px;height:86px">';
+  for(let i=6;i>=0;i--){
+    const d=addDays(td,-i),dt=new Date(d+'T12:00'),t=htTotal(d,'post'),isT=(d===td);
+    const barH=t>0?Math.max(5,Math.round(t/barMax*62)):2;
+    const barC=t>=HUNT_GOAL?'var(--e300)':t>0?'var(--e100)':'var(--bl)';
+    h+='<div style="flex:1;text-align:center">'
+      +'<div style="font-size:'+(isT?'13':'11')+'px;font-weight:'+(isT?'900':'700')+';color:'+(isT?'var(--td)':'var(--tmuted)')+'">'+DOW[dt.getDay()]+'</div>'
+      +'<div style="display:flex;align-items:flex-end;justify-content:center;height:52px;margin:2px 0">'
+      +'<div style="width:30px;border-radius:3px 3px 0 0;background:'+barC+';height:'+barH+'px"></div></div>'
+      +'<div style="font-weight:800;font-size:'+(isT?'15':'13')+'px;color:'+(t>=HUNT_GOAL?'var(--e400)':isT?'var(--td)':'var(--tmuted)')+'">'+t+'</div>'
+      +'</div>';
+  }
+  h+='</div>';
+  h+='<div style="border-top:1px solid var(--bl);margin-top:10px;padding-top:10px">'
+    +'<div class="row"><span class="grow muted">7-day total</span><b>'+weekTotal+' contacts</b></div>'
+    +'<div class="muted" style="font-size:11.5px;margin-top:4px">Target: 20/day → 140/week. '
+    +(weekTotal>=140?'You\'re hitting it. The math is on your side now. 🔥':weekTotal>=80?'Good momentum — push every day this week.':'Even 70 touches in a week means 70 real humans who know your name. The phone can\'t stay quiet at that pace.')
+    +'</div></div></div>';
+
+  // Status card
+  if(hit){
+    h+='<div class="card" style="background:var(--e400);color:#fff;border:none"><b>Goal hit — go be with your family. 🔥</b> <span style="opacity:.85">'+total+' contacts today. That\'s the work. Do it again tomorrow and the math takes care of itself.</span></div>';
+  } else {
+    const behind=HUNT_GOAL-total;
+    const msg=behind>=15?'20 contacts a day is the plan. Nobody who does this consistently stays hungry — the demand is there, you just have to keep showing up.':
+              behind>=8?'B2B drops in the morning, ISO replies midday, intercept on the route home. You\'re '+behind+' away from today\'s goal.':
+              behind>=3?'Almost there — '+behind+' more touches and today turns green.':'One last push — '+behind+' touch'+(behind!==1?'es':'')+' to go.';
+    h+='<div class="card" style="border-left:5px solid var(--e300)"><b>'+total+' logged.</b> <span class="muted">'+msg+'</span></div>';
+  }
+
+  // What counts accordion
+  h+='<details style="margin-top:6px"><summary>What counts as a touch?</summary><div class="card muted" style="font-size:12.5px">'
+    +'<b>🏢 B2B drop:</b> walked in the door of any business — property manager, realtor, stager, storage facility, restoration company, probate attorney. Even if nobody was there and you just left a card. Each location = 1 touch.<br/><br/>'
+    +'<b>💬 ISO reply:</b> replied to any "need a hauler / who does junk removal?" post in a Facebook group or Nextdoor. Speed wins — first to reply usually books it. Each reply = 1 touch.<br/><br/>'
+    +'<b>🏡 Interception:</b> stopped at an estate sale\'s final day, knocked at a home with a dumpster or for-sale sign, left neighbor cards after a job (count stops, not the number of cards).<br/><br/>'
+    +'<b>✉️ Email sent:</b> sent a B2B intro or follow-up email from the Today tab. Real emails to real humans — not mass blasts.<br/><br/>'
+    +'<b>📱 Post (bonus):</b> published a Google update, Facebook, or Nextdoor post. Good habit, but it\'s not a direct human contact so it doesn\'t count toward your 20.'
+    +'</div></details>';
+
+  return h;
 }
 
 /* ============ 90-DAY LAUNCH PLAN ============ */
