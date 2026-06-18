@@ -549,18 +549,18 @@ function vStats(){
 function vPlay(){
   return '<h2>The System (TLDR)</h2>'+
   '<h3>Who does what — you + Samantha</h3>'+
-  '<div class="card steps"><b>Mike — the field</b><span class="muted">Run the jobs, drive, load, leave it swept clean. Price from photos in the Pricing tab. Ask for the review BEFORE you pull out of the driveway. Grow the in-person B2B relationships.</span>'+
-  '<b>Samantha — command center</b><span class="muted">Answer every call/text in under 5 min. Get photos → send to Mike → text the firm quote back. Log every lead, run the B2B sends (Today tab), post daily, fire the review texts, chase quotes at 24h.</span></div>'+
+  '<div class="card steps"><b>Mike — field + B2B</b><span class="muted">Run the jobs, drive, load, leave it swept clean. Price from photos in the Pricing tab. Ask for the review BEFORE you pull out of the driveway. And own all B2B outreach — the Today-tab sends plus the in-person drops (flyers, storage/realtor walk-ins).</span>'+
+  '<b>Samantha — phones + social</b><span class="muted">Answer every call/text in under 5 min and book it. Get photos → send to Mike → text his firm quote back. Log every lead, post daily, run the social channels, fire the review texts, chase quotes at 24h. Realistically ~1 focused hour/day around Lovelyn — phones first, posts second.</span></div>'+
   '<div class="card steps"><b>How Clean Plate gets jobs — the whole machine:</b>'+
   '<b>1 · Be findable (compounding)</b><span class="muted">Google Business Profile + reviews + the 12 city pages on cleanplatehaulingco.com. Post weekly, ask for a review after EVERY job. This becomes your #1 free lead source by month 2–3.</span>'+
   '<b>2 · Be fast (converts)</b><span class="muted">Reply in under 5 minutes. Missed-call auto-text on. Photos → firm price within the hour. The site is built around this promise — keep it.</span>'+
-  '<b>3 · B2B engine (repeat money)</b><span class="muted">10 touches a day from the Prospects tab. One property manager = monthly cleanouts forever. The Today tab runs the cadence for you.</span>'+
+  '<b>3 · B2B engine (repeat money) — Mike</b><span class="muted">5–10 touches a day from the Prospects tab, worked in the evenings. One property manager = monthly cleanouts forever. The Today tab runs the cadence for you.</span>'+
   '<b>4 · Paid taps (volume on demand)</b><span class="muted">Thumbtack now → Google Local Services Ads once GBP is verified + 5 reviews. Pay per lead, answer fast, win.</span>'+
   '<b>5 · Log everything here</b><span class="muted">Every lead gets a source. Friday: open Stats, see what\'s working, do more of it.</span></div>'+
-  '<h3>Daily routine (30 min)</h3><div class="card steps">'+
-  '<b>7:00–7:30am</b><span class="muted">Today tab → reply to leads → confirm jobs</span>'+
-  '<b>After each job</b><span class="muted">Before/after photos → review text (Pipeline tab has the button) → log it</span>'+
-  '<b>7:00–7:45pm</b><span class="muted">Today tab → clear the outreach-due list → 1 social post → add 5 prospects if list is thin</span></div>'+
+  '<h3>Daily routine</h3><div class="card steps">'+
+  '<b>Samantha — all day + ~1 hr</b><span class="muted">Answer every call/text in 5 min, get photos to Mike, text his quote back, book it. In your focused hour: one social post + reply to any "ISO" posts in groups/Nextdoor + fire the day\'s review texts.</span>'+
+  '<b>Mike — after each job</b><span class="muted">Before/after photos → review text before you pull out of the driveway → log it.</span>'+
+  '<b>Mike — evening (~30 min)</b><span class="muted">Today tab → clear the B2B outreach-due list (5–10 touches) → add 5 prospects if the list is thin. Plus any flyer/neighbor drops on your routes.</span></div>'+
   '<h3>Docs (in your website repo under /marketing)</h3><div class="card muted">outreach-playbook.md · launch-kit.md · ready-to-send.md · lead-tracker.csv · press-release.md · flyer.html (print) · brand/ (logos + 8K print masters)</div>'+
   '<h3>The goal</h3><div class="card" style="background:var(--e900);color:#fff;border:none">First 30 days: <b style="color:var(--e200)">15 reviews · 2–3 recurring B2B accounts · every lead answered in 5 minutes.</b> Do that and you outconvert every franchise in Metro Detroit.</div>';
 }
@@ -595,7 +595,7 @@ const LDAYS={
  {t:"Set up the profile: your 12 cities, hours 7am–8pm, categories, check the Veteran-Owned badge, and turn Messaging ON.",m:10},
  {t:"Publish your first Google Post (\"We're open — text photos for a flat-rate quote\"). Copy is in launch-kit.md §2.",m:5,href:"launch-kit.md"},
  {t:"Copy your Google review short link (Profile → \"Ask for reviews\") and save it in your phone notes — you'll use it daily.",m:5},
- {t:"⭐ Text your review link to EVERYONE you've already hauled for. First reviews are the biggest boost a new profile gets. Script is in Scripts.",m:20,go:"Scripts"},
+ {t:"⭐ Text your review link to EVERYONE you've already hauled for — your customers, your call. First reviews are the biggest boost a new profile gets. Script is in Scripts.",m:20,go:"Scripts",who:'M'},
  {t:"Post your Facebook page launch post, then PIN it to the top of the page. Full copy in launch-day-posts.md §1.",m:10,href:"launch-day-posts.md"},
  {t:"Post your Nextdoor intro — your best free channel. Copy in launch-day-posts.md §2.",m:5,href:"launch-day-posts.md"},
  {t:"Post in 3 local Facebook groups — the short, humble version. Copy in launch-day-posts.md §3.",m:10,href:"launch-day-posts.md"},
@@ -610,17 +610,17 @@ const LDAYS={
  {t:"Test that your missed-call text and voicemail actually fire — call your own number from another phone.",m:5}
 ],
 3:[
- {t:"Today tab → reply to any leads, then send today's due B2B touches.",m:20,go:"Today"},
+ {t:"Send today's due B2B touches — intros + follow-ups (Today tab).",m:18,go:"Today",who:'M'},
  {t:"Post a tip: \"Donate before you dump — Habitat ReStore & Salvation Army take more than you think. What they won't, we will.\"",m:10,go:"Scripts"},
  {t:"Text 2–3 more past customers for a review if you missed anyone yesterday.",m:10,go:"Scripts"}
 ],
 4:[
- {t:"Today tab → reply to leads + send today's B2B touches.",m:20,go:"Today"},
+ {t:"Send today's due B2B touches — intros + follow-ups (Today tab).",m:18,go:"Today",who:'M'},
  {t:"Post a garage-cleanout service spotlight (weekly post #1 in launch-kit.md §2).",m:10,href:"launch-kit.md"},
  {t:"Add 5 fresh B2B prospects so your list never runs dry (Find tab).",m:10,go:"Find"}
 ],
 5:[
- {t:"Today tab → reply to leads + send today's B2B touches.",m:20,go:"Today"},
+ {t:"Send today's due B2B touches — intros + follow-ups (Today tab).",m:18,go:"Today",who:'M'},
  {t:"Walk flyers into 3 realtor offices near a job today — ask who handles estate/probate listings. Print from flyer.html.",m:30,href:"flyer.html"},
  {t:"Friday numbers: open Stats and jot leads, quotes, jobs, revenue, reviews — even if small. This is how you learn what works.",m:10,go:"Stats"}
 ],
@@ -635,27 +635,27 @@ const LDAYS={
  {t:"Plan week 2: your focus is reviews (target 5) and the B2B sprint. Then rest — you earned it.",m:10}
 ],
 8:[
- {t:"Today tab → reply to leads, then hit the B2B sprint hard: 5 intro emails today.",m:25,go:"Today"},
+ {t:"B2B sprint: send 5 intro emails today (Today tab).",m:20,go:"Today",who:'M'},
  {t:"Post a before/after from any job this week (even a small one).",m:10},
  {t:"Make sure your review link is everywhere: phone notes, your text signature, and on deck for the truck QR.",m:10}
 ],
 9:[
- {t:"Today tab → reply to leads + 5 B2B touches.",m:25,go:"Today"},
+ {t:"Send 5 B2B touches today (Today tab).",m:20,go:"Today",who:'M'},
  {t:"Post an FAQ: \"What we CAN'T take — paint, chemicals, asbestos. Everything else is fair game.\"",m:10},
  {t:"Add 5 new prospects from a city you haven't mined yet (Find tab).",m:10,go:"Find"}
 ],
 10:[
- {t:"Today tab → reply to leads + B2B touches.",m:25,go:"Today"},
+ {t:"Send today's due B2B touches (Today tab).",m:18,go:"Today",who:'M'},
  {t:"Post a donation-run photo: \"Today's load: 60% donated, 30% recycled.\" That's your differentiator.",m:10},
  {t:"Send review texts to everyone you've hauled in the last few days (Scripts tab).",m:10,go:"Scripts"}
 ],
 11:[
- {t:"Today tab → reply to leads + B2B touches.",m:25,go:"Today"},
+ {t:"Send today's due B2B touches (Today tab).",m:18,go:"Today",who:'M'},
  {t:"Walk into 3 storage facilities — ask to be on their vendor list for abandoned-unit cleanouts (Scripts has the walk-in line).",m:30,go:"Scripts"},
  {t:"Post an estate-cleanout message (weekly post #4 in launch-kit.md).",m:10,href:"launch-kit.md"}
 ],
 12:[
- {t:"Today tab → reply to leads + B2B touches.",m:25,go:"Today"},
+ {t:"Send today's due B2B touches (Today tab).",m:18,go:"Today",who:'M'},
  {t:"Post before/after #2 + \"Know someone moving or downsizing? Tag them 👇\"",m:10},
  {t:"Add 5 new prospects (Find tab).",m:10,go:"Find"}
 ],
@@ -688,16 +688,19 @@ const WHO={M:{n:'Mike',c:'#1d6340',bg:'#e8f3ec'},S:{n:'Samantha',c:'#2278c8',bg:
 let launchWho='all';
 function setLWho(k){launchWho=k;render();}
 function whoFor(s){const x=(s||'').toLowerCase();
-  if(/(walk flyers|walk into|realtor office|storage facilit|neighbor blitz|nearest door|record your voicemail|voicemail greeting|missed-call|respond with text|order .*magnet|test that your missed)/.test(x))return 'M';
-  if(/(google business profile|set up the profile|publish your first google|review short link|upload all your photos|week 1 review|two-week review|month 1 review|month 2 review|graduation|plan week|plan next week|friday numbers|reputation check|mid-month|systemiz)/.test(x))return 'B';
+  // Either — milestones, numbers, planning the business (checked first so a plan that mentions "B2B" doesn't fall to Mike)
+  if(/(week 1 review|two-week review|month 1 review|month 2 review|month 3|90-day|graduation|plan week|plan next week|friday numbers|reputation check|mid-month|systemiz|decide: is it time)/.test(x))return 'B';
+  // Mike — outbound B2B outreach + in-person field work
+  if(/(b2b|intro email|due b2b|follow-up|re-touch|prospect|find tab|walk flyer|walk into|realtor office|storage facilit|vendor list|neighbor blitz|nearest door|drop.*card|cards on|magnet|truck letter)/.test(x))return 'M';
+  // Samantha (default) — social posts, business profile, content, phones, booking, inbound leads
   return 'S';}
 function rhythmTasks(n){
   const dow=new Date(ldate(n)+'T12:00').getDay();
   const tasks=[];
-  if(dow>=1&&dow<=5)tasks.push({t:"Today tab → reply to any lead, then send today's due B2B touches (intros + follow-ups). Aim for 5–10.",m:25,go:"Today",who:'S'});
-  if(dow===1)tasks.push({t:"Monday reset: skim this week's goal above, and add 5 fresh prospects so you never run dry (Find tab).",m:10,go:"Find",who:'S'});
+  if(dow>=1&&dow<=5)tasks.push({t:"Send today's due B2B touches — intros + follow-ups, aim for 5–10 (Today tab).",m:20,go:"Today",who:'M'});
+  if(dow===1)tasks.push({t:"Monday: add 5 fresh prospects so your B2B list never runs dry (Find tab).",m:10,go:"Find",who:'M'});
   if(dow===2)tasks.push({t:"Post one update — a service spotlight or a tip (Scripts tab has copy).",m:10,go:"Scripts",who:'S'});
-  if(dow===3)tasks.push({t:"Add 5 new B2B prospects from a city you haven't mined (Find tab).",m:10,go:"Find",who:'S'});
+  if(dow===3)tasks.push({t:"Add 5 new B2B prospects from a city you haven't mined (Find tab).",m:10,go:"Find",who:'M'});
   if(dow===4)tasks.push({t:"Post a before/after from a recent job, or a truck/donation photo. Real work is your best content.",m:10,who:'S'});
   if(dow===5){tasks.push({t:"Walk flyers into 2–3 realtor offices or storage facilities near a job today (print flyer.html).",m:30,href:"flyer.html",who:'M'});
               tasks.push({t:"Friday numbers: open Stats, log the week, and double down on what's working.",m:10,go:"Stats",who:'B'});}
@@ -734,15 +737,16 @@ function vLaunch(){
      '<div class="muted" style="color:rgba(255,255,255,0.8);margin-top:4px">'+esc(plan.wkInfo.g)+'</div></div>';
   const rvL=(S.metrics&&S.metrics.reviews)||0,nmL=rvL<5?5:rvL<15?15:rvL<40?40:rvL+10;
   h+='<div class="card"><div class="row"><span class="grow">⭐ <b>'+rvL+'</b> Google reviews <span class="muted">· next goal '+nmL+'</span></span><button class="b sm ghost" onclick="reviewAdj(-1)">−</button><button class="b sm" onclick="reviewAdj(1)">+ New</button><button class="b sm ghost" onclick="go(\'Stats\')">Scoreboard →</button></div></div>';
-  h+='<div class="card" style="border-left:5px solid var(--e300)"><b>Every day, no matter what:</b> <span class="muted">① answer every lead in 5 minutes · ② send the review text before you leave every job · ③ log every lead. The tasks below are the <i>build</i> work on top of those three.</span></div>';
+  h+='<div class="card" style="border-left:5px solid var(--e300)"><b>Every day, no matter what:</b> <span class="muted">① <b>Sam</b> answers every lead within 5 minutes &amp; books it · ② <b>Mike</b> sends the review text before leaving every job · ③ log every lead. The tasks below are the <i>build</i> work on top of those three.</span></div>';
   const showT=t=>launchWho==='all'||t.who===launchWho||t.who==='B';
   const mCount=plan.tasks.filter(t=>t.who==='M'||t.who==='B').length,sCount=plan.tasks.filter(t=>t.who==='S'||t.who==='B').length;
   h+='<div class="row" style="gap:6px;margin:2px 0 6px;flex-wrap:wrap">'
     +['all','M','S'].map(k=>'<button class="b sm '+(launchWho===k?'':'ghost')+'" onclick="setLWho(\''+k+'\')">'+(k==='all'?'👥 Everyone':WHO[k].n+'\'s list')+'</button>').join('')+'</div>';
-  h+='<div class="muted" style="margin:0 2px 10px;font-size:11.5px">Mike: '+mCount+' tasks · Samantha: '+sCount+' tasks · grey = either of you. Tap a name to see just that list.</div>';
+  h+='<div class="muted" style="margin:0 2px 10px;font-size:11.5px"><b style="color:#1d6340">Mike</b> ('+mCount+') — B2B + the truck, carries the heavier list · <b style="color:#2278c8">Samantha</b> ('+sCount+') — phones &amp; booking + ~1 focused hr/day on posts (around Lovelyn). Tap a name to filter.</div>';
   const shown=plan.tasks.map((t,i)=>({t,i})).filter(o=>showT(o.t));
   const total=shown.reduce((a,o)=>a+o.t.m,0),doneCount=shown.filter(o=>done.indexOf(o.i)>=0).length;
   h+='<div class="row" style="margin:6px 2px 10px"><b class="grow">'+(launchWho==='all'?'Today\'s tasks':WHO[launchWho].n+'\'s tasks')+' — '+doneCount+'/'+shown.length+' done</b><span class="pill">⏱ ~'+total+' min</span></div>';
+  if(launchWho==='S'&&total>60)h+='<div class="card" style="border-left:5px solid var(--amber);font-size:12.5px"><b>Heavier than your usual hour.</b> <span class="muted">Phones &amp; Lovelyn come first — knock out the top ones and let the rest slide to tomorrow. Nothing here breaks if it waits a day.</span></div>';
   shown.forEach(o=>{const t=o.t,i=o.i,d=done.indexOf(i)>=0,w=WHO[t.who]||WHO.B;
     h+='<div class="card" style="'+(d?'opacity:.55;':'')+'border-left:4px solid '+(d?'var(--e200)':w.c)+'">'+
        '<div class="row" style="align-items:flex-start;gap:10px">'+

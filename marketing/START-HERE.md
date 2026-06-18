@@ -1,17 +1,17 @@
 # 👈 START HERE
 
-You and Samantha run this together now — she's on the phones and leads, you're on the truck. This page is your orientation, but **your real daily driver is `crm.html` → the Launch tab.**
+You and Samantha run this together now — she's on the phones, booking, and the social posts (about a focused hour a day, around Lovelyn); you're on the truck and all the B2B outreach. This page is your orientation, but **your real daily driver is `crm.html` → the Launch tab.**
 
 > ## 📲 Do this every morning (the hand-holding, built in)
 > Open **`crm.html`** on your phone and tap the **Launch** tab. It knows what day of your 90-day plan it is and lays out **that day's exact tasks — each with a time estimate** — to check off as you go. No deciding, no guessing: open it, do what it says, tap the boxes. Launch day is ~90 minutes; after that it's ~30–45 min a day. Add the page to your phone's home screen so it's one tap away.
 
 ---
 
-## ⛳ The 3 things you do EVERY day (do these and you beat 90% of your competition)
+## ⛳ The 3 things that happen EVERY day (do these and you beat 90% of your competition)
 
-1. **Answer fast.** Call or text every lead back within **5 minutes**. Junk removal goes to whoever answers first — not whoever's cheapest.
-2. **Ask for the review.** Before you pull out of the driveway on **every** job, send the review text. (It's in `LAUNCH-CAMPAIGN.md` → Review Engine.) This is the #1 thing that grows you on Google.
-3. **Log the lead.** Name, phone, city, and where they found you. Open `crm.html`, 30 seconds. This is how you learn what's working.
+1. **Answer fast — Sam.** Call or text every lead back within **5 minutes** and book it. Junk removal goes to whoever answers first — not whoever's cheapest.
+2. **Ask for the review — Mike.** Before you pull out of the driveway on **every** job, send the review text. (It's in `LAUNCH-CAMPAIGN.md` → Review Engine.) This is the #1 thing that grows you on Google.
+3. **Log the lead — either of you.** Name, phone, city, and where they found you. Open `crm.html`, 30 seconds. This is how you learn what's working.
 
 That's it. Everything below just feeds these three.
 
