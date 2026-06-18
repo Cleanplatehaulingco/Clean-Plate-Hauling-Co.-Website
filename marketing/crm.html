@@ -300,7 +300,7 @@ const PROSPECT_EMAILS={
 'Lear Management Inc':'info@learmanagement.com'
 };
 let S=load();
-function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});const existing=new Set(d.prospects.map(p=>p.name));SEED.forEach(r=>{if(!existing.has(r[1])){d.prospects.push({id:'p_s_'+r[1].replace(/\W/g,''),cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:PROSPECT_EMAILS[r[1]]||'',contact:CONTACTS[r[1]]||'',status:'New',last:'',due:today(),log:[]}); }});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};if(!d.launch.startSynced){d.launch.start='2026-06-17';d.launch.startSynced=true;}if(!d.pricing)d.pricing={dumpTon:75,dumpMin:30,fuel:25,hourly:60,priceAdj:1};if(d.pricing.priceAdj===undefined)d.pricing.priceAdj=1;if(!d.metrics)d.metrics={reviews:4};if(!d.metrics.reviewsSynced){d.metrics.reviews=Math.max(d.metrics.reviews||0,4);d.metrics.reviewsSynced=true;}if(!d.huntLog)d.huntLog={};return d;}
+function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});const existing=new Set(d.prospects.map(p=>p.name));SEED.forEach(r=>{if(!existing.has(r[1])){d.prospects.push({id:'p_s_'+r[1].replace(/\W/g,''),cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:PROSPECT_EMAILS[r[1]]||'',contact:CONTACTS[r[1]]||'',status:'New',last:'',due:today(),log:[]}); }});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};if(!d.launch.startSynced){d.launch.start='2026-06-17';d.launch.startSynced=true;}if(!d.pricing)d.pricing={dumpTon:75,dumpMin:30,fuel:25,hourly:60,priceAdj:1};if(d.pricing.priceAdj===undefined)d.pricing.priceAdj=1;if(!d.metrics)d.metrics={reviews:4};if(!d.metrics.reviewsSynced){d.metrics.reviews=Math.max(d.metrics.reviews||0,4);d.metrics.reviewsSynced=true;}if(!d.huntLog)d.huntLog={};if(!d.money)d.money={taxRate:0.30,nut:3500,reserve:0,expenses:[],foundation:{}};if(!d.money.expenses)d.money.expenses=[];if(!d.money.foundation)d.money.foundation={};if(d.money.nut===undefined)d.money.nut=3500;if(d.money.taxRate===undefined)d.money.taxRate=0.30;if(d.money.reserve===undefined)d.money.reserve=0;return d;}
 function load(){
   try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return migrate(d);}catch(e){}
   return migrate({prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',contact:'',status:'New',last:'',due:today(),log:[]})),
@@ -330,7 +330,7 @@ function advance(p){
 function setPStatus(p,st){p.status=st;p.last=today();p.due=st==='Dead'?'':addDays(today(),CAD[st].days||0);p.log.unshift(today()+' → '+st);act(p.name+' → '+st);save();render();}
 
 /* ============ VIEWS ============ */
-const TABS=['Launch','Today','Hunt','Pricing','Pipeline','Prospects','Homeowners','Channels','Autopilot','Scripts','Find','Stats','Playbook'];
+const TABS=['Launch','Today','Hunt','Pricing','Money','Pipeline','Prospects','B2B Kit','Homeowners','Channels','Autopilot','Scripts','Find','Stats','Playbook'];
 let tab='Launch';
 function dueProspects(){return S.prospects.filter(p=>p.status!=='Dead'&&p.status!=='Active ✦'&&p.due&&p.due<=today());}
 function needReply(){return S.leads.filter(l=>l.stage==='New Lead');}
@@ -344,9 +344,10 @@ function render(){
     if(t==='Launch'){const n=launchRemaining();if(n)b='<span class="bdg">'+n+'</span>';}
     return '<button class="'+(tab===t?'on':'')+'" onclick="go(\''+t+'\')">'+t+b+'</button>';
   }).join('');
-  document.getElementById('view').innerHTML=({Launch:vLaunch,Today:vToday,Hunt:vHunt,Pricing:vPricing,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Channels:vChannels,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
+  document.getElementById('view').innerHTML=({Launch:vLaunch,Today:vToday,Hunt:vHunt,Pricing:vPricing,Money:vMoney,Pipeline:vPipe,Prospects:vPros,'B2B Kit':vB2BKit,Homeowners:vHome,Channels:vChannels,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
   document.getElementById('fab').innerHTML=tab==='Pipeline'?'<button class="b" onclick="addLeadUI()">+ New Lead</button>':
-    tab==='Prospects'?'<button class="b" onclick="addProspectUI()">+ New Prospect</button>':'';
+    tab==='Prospects'?'<button class="b" onclick="addProspectUI()">+ New Prospect</button>':
+    tab==='Money'?'<button class="b" onclick="addExpenseUI()">+ Log expense</button>':'';
 }
 function go(t){tab=t;render();window.scrollTo(0,0);}
 
@@ -612,9 +613,10 @@ function vPlay(){
   '<div class="card steps"><b>How Clean Plate gets jobs — the whole machine:</b>'+
   '<b>1 · Be findable (compounding)</b><span class="muted">Google Business Profile + reviews + the 12 city pages on cleanplatehaulingco.com. Post weekly, ask for a review after EVERY job. This becomes your #1 free lead source by month 2–3.</span>'+
   '<b>2 · Be fast (converts)</b><span class="muted">Reply in under 5 minutes. Missed-call auto-text on. Photos → firm price within the hour. The site is built around this promise — keep it.</span>'+
-  '<b>3 · B2B engine (repeat money) — Mike</b><span class="muted">5–10 touches a day from the Prospects tab, worked in the evenings. One property manager = monthly cleanouts forever. The Today tab runs the cadence for you.</span>'+
+  '<b>3 · B2B engine (repeat money) — Mike</b><span class="muted">5–10 touches a day from the Prospects tab, worked in the evenings. One property manager = monthly cleanouts forever. The Today tab runs the cadence — and when one says yes, the <b>B2B Kit</b> tab closes it: capability sheet, COI/W-9, and the prove-it offer.</span>'+
   '<b>4 · Paid taps (volume on demand)</b><span class="muted">Thumbtack now → Google Local Services Ads once GBP is verified + 5 reviews. Pay per lead, answer fast, win.</span>'+
-  '<b>5 · Log everything here</b><span class="muted">Every lead gets a source. Friday: open Stats, see what\'s working, do more of it.</span></div>'+
+  '<b>5 · Log everything here</b><span class="muted">Every lead gets a source. Friday: open Stats, see what\'s working, do more of it.</span>'+
+  '<b>6 · Keep the money — Mike + Sam</b><span class="muted">Getting paid isn\'t the same as keeping it. The <b>Money</b> tab tracks your real take-home, sets aside taxes automatically, shows your runway, and holds the legal/insurance foundation — so a busy month never ends in a tax-season surprise.</span></div>'+
   '<h3>Daily routine</h3><div class="card steps">'+
   '<b>Samantha — all day + ~1 hr</b><span class="muted">Answer every call/text in 5 min, get photos to Mike, text his quote back, book it. In your focused hour: one social post + reply to any "ISO" posts in groups/Nextdoor + fire the day\'s review texts.</span>'+
   '<b>Mike — after each job</b><span class="muted">Before/after photos → review text before you pull out of the driveway → log it.</span>'+
@@ -719,6 +721,112 @@ function vHunt(){
     +'<b>📱 Post (bonus):</b> published a Google update, Facebook, or Nextdoor post. Good habit, but it\'s not a direct human contact so it doesn\'t count toward your 20.'
     +'</div></details>';
 
+  return h;
+}
+
+/* ============ MONEY — the CEO survival dashboard ============ */
+const FOUND=[
+ ['bank','Separate business bank account + debit card','Run every job through it. Never mix business and personal money again.',''],
+ ['llc','Register an LLC with Michigan LARA','Protects your house and savings if a job ever goes wrong. ~$50.','https://cofs.lara.state.mi.us/'],
+ ['ein','Get a free EIN from the IRS (10 min online)','Your business tax ID — needed for the bank account and your W-9.','https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online'],
+ ['gl','General liability insurance','You lift heavy things in strangers’ homes. This is non-negotiable.',''],
+ ['auto','Commercial auto on the truck','A personal policy may deny a work-related accident. Confirm you’re covered.',''],
+ ['coi','Certificate of Insurance (COI) saved on your phone','Every B2B account asks for this BEFORE the first job. Have it ready to send.',''],
+ ['w9','W-9 filled out and saved','The other document every property manager / REO firm requests.','https://www.irs.gov/pub/irs-pdf/fw9.pdf'],
+ ['taxhabit','Move your tax % to savings every week','So tax season is a non-event instead of a crisis.',''],
+ ['cushion','Build a 30-day expense cushion','Your shock absorber for a slow week or a surprise truck repair.','']
+];
+function curMonth(){return today().slice(0,7);}
+function monthDoneLeads(){return S.leads.filter(l=>['Completed','Review Asked'].includes(l.stage)&&(l.updated||l.created||'').slice(0,7)===curMonth());}
+function moneyStats(){
+  const c=S.money;
+  const monthRev=monthDoneLeads().reduce((a,l)=>a+(parseFloat(l.quote)||0),0);
+  const monthExp=(c.expenses||[]).filter(e=>(e.d||'').slice(0,7)===curMonth()).reduce((a,e)=>a+(parseFloat(e.amt)||0),0);
+  const tax=Math.round(monthRev*(c.taxRate||0.3));
+  const take=Math.round(monthRev-monthExp-tax);
+  const allDone=S.leads.filter(l=>['Completed','Review Asked'].includes(l.stage));
+  const allRev=allDone.reduce((a,l)=>a+(parseFloat(l.quote)||0),0);
+  const allTax=Math.round(allRev*(c.taxRate||0.3));
+  const jobsDone=monthDoneLeads().length;
+  const netPerJob=jobsDone?Math.max(50,(monthRev-monthExp-tax)/jobsDone):200;
+  const jobsForNut=Math.ceil((c.nut||3500)/netPerJob);
+  const weeklyNut=Math.round((c.nut||3500)/4.33);
+  const runwayWk=weeklyNut?((c.reserve||0)/weeklyNut):0;
+  return {monthRev,monthExp,tax,take,allRev,allTax,jobsDone,netPerJob,jobsForNut,weeklyNut,runwayWk};
+}
+function mCfg(f,v){const n=parseFloat(v);if(isNaN(n)||n<0)return;S.money[f]=(f==='taxRate')?n/100:n;save();render();}
+function mSet(){const v=prompt('Cash cushion $ — how much you could live on with zero new income:',S.money.reserve||0);if(v===null)return;const n=parseFloat(v);if(!isNaN(n)&&n>=0){S.money.reserve=n;save();render();toast('Runway updated');}}
+function foundToggle(k){if(!S.money.foundation)S.money.foundation={};S.money.foundation[k]=!S.money.foundation[k];save();render();}
+function addExpenseUI(){const label=prompt('What was the expense? (e.g., Dump fee, Fuel, Gloves, Insurance, Ad spend)');if(!label)return;const amt=prompt('Amount $:');if(amt===null)return;const n=parseFloat(amt);if(isNaN(n)||n<0){toast('Enter a dollar amount');return;}S.money.expenses.unshift({d:today(),label:label.trim(),amt:n});act('Logged expense: '+label.trim()+' $'+n);save();render();toast('Expense logged — now your profit is real');}
+function delExpense(i){S.money.expenses.splice(i,1);save();render();}
+function vMoney(){
+  const m=moneyStats(),c=S.money,above=m.take>=c.nut;
+  let h='<h2>Money — Know Your Numbers</h2>';
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><b style="color:var(--e200)">The CEO view:</b> <span style="color:rgba(255,255,255,.85)">Getting jobs is half the game — <b>keeping</b> the money is the other half. A hauler with a full calendar still goes broke if he doesn’t set aside taxes or watch his real margin. This is your survival dashboard.</span></div>';
+  h+='<div class="card"><div class="row"><b class="grow">This month’s take-home</b><span class="pill '+(above?'win':'warn')+'">'+(above?'Above the nut 💪':'$'+Math.max(0,c.nut-m.take).toLocaleString()+' to go')+'</span></div>'
+    +'<div style="font-size:34px;font-weight:900;color:'+(m.take>=0?'var(--e400)':'var(--red)')+';line-height:1.1;margin-top:4px">$'+m.take.toLocaleString()+' <span style="font-size:15px;color:var(--tmuted)">/ $'+c.nut.toLocaleString()+' nut</span></div>'
+    +'<div style="background:var(--bl);border-radius:6px;height:10px;margin-top:8px;overflow:hidden"><div style="background:var(--e300);height:100%;width:'+Math.min(100,Math.max(0,Math.round(m.take/c.nut*100)))+'%"></div></div>'
+    +'<div class="muted" style="margin-top:8px;font-size:12.5px">Revenue $'+m.monthRev.toLocaleString()+' − expenses $'+m.monthExp.toLocaleString()+' − tax set-aside $'+m.tax.toLocaleString()+' = <b>$'+m.take.toLocaleString()+' actually in your pocket.</b></div></div>';
+  h+='<div class="card" style="border-left:5px solid var(--amber)"><div class="row"><b class="grow">🏦 Set aside for taxes</b><span style="font-size:24px;font-weight:900;color:var(--amber)">$'+m.tax.toLocaleString()+'</span></div>'
+    +'<div class="muted" style="font-size:12.5px;margin-top:4px">That’s '+Math.round((c.taxRate||.3)*100)+'% of this month’s revenue and <b>it was never yours.</b> Move it to a separate savings account every week — do that and tax season is a non-event. Owed across all jobs so far: ~$'+m.allTax.toLocaleString()+'.</div></div>';
+  h+='<div class="g2">'
+    +'<div class="card"><b>🎯 Break-even</b><div class="muted" style="font-size:12.5px;margin-top:4px">At ~$'+Math.round(m.netPerJob)+' kept per job, it takes <b>'+m.jobsForNut+' jobs/month (~'+Math.max(1,Math.round(m.jobsForNut/4.33))+'/week)</b> to cover the nut. <b>'+m.jobsDone+'</b> done this month.</div></div>'
+    +'<div class="card"><div class="row"><b class="grow">🛟 Runway</b><button class="b sm ghost" onclick="mSet()" style="padding:4px 9px">Set</button></div><div class="muted" style="font-size:12.5px;margin-top:4px">$'+(c.reserve||0).toLocaleString()+' cushion = <b>'+(c.reserve?m.runwayWk.toFixed(1)+' weeks':'—')+'</b> at zero income. '+(m.runwayWk<4?'Build toward 4+ weeks.':'Solid — protect it.')+'</div></div></div>';
+  h+='<h3>Expenses this month <span class="muted">($'+m.monthExp.toLocaleString()+')</span></h3><div class="card">';
+  const me=(c.expenses||[]).map((e,i)=>({e,i})).filter(o=>(o.e.d||'').slice(0,7)===curMonth());
+  if(!me.length)h+='<div class="muted">Nothing logged yet. Capture dump fees, fuel, gear, insurance, and ad spend so your take-home above is real, not a guess.</div>';
+  me.forEach(o=>{h+='<div class="row" style="margin-bottom:5px"><span class="grow">'+esc(o.e.label)+' <span class="muted">· '+fmt(o.e.d)+'</span></span><b>$'+(o.e.amt).toLocaleString()+'</b><button class="b sm ghost" onclick="delExpense('+o.i+')" style="color:var(--red);padding:3px 8px">✕</button></div>';});
+  h+='<div class="row" style="margin-top:8px"><button class="b sm" onclick="addExpenseUI()">+ Log expense</button></div></div>';
+  const f=c.foundation||{},fdone=FOUND.filter(x=>f[x[0]]).length;
+  h+='<h3>The foundation under the business <span class="muted">('+fdone+'/'+FOUND.length+')</span></h3>';
+  h+='<div class="card muted" style="font-size:12.5px">The boring stuff that lets you sleep at night — and that every B2B account checks before they’ll hire you. Knock out one a week and you’re bulletproof.</div>';
+  FOUND.forEach(x=>{const on=!!f[x[0]];
+    h+='<div class="card" style="'+(on?'opacity:.6;':'')+'padding:11px 13px"><div class="row" style="align-items:flex-start;gap:10px">'
+      +'<input type="checkbox" '+(on?'checked ':'')+'onchange="foundToggle(\''+x[0]+'\')" style="width:20px;height:20px;margin-top:1px;flex:none">'
+      +'<div class="grow"><div style="font-weight:700;'+(on?'text-decoration:line-through':'')+'">'+esc(x[1])+'</div><div class="muted" style="font-size:12px">'+esc(x[2])+(x[3]?' · <a href="'+x[3]+'" target="_blank">open →</a>':'')+'</div></div></div></div>';});
+  h+='<details style="margin-top:10px"><summary>⚙️ Your numbers — set them to reality</summary><div class="card"><div class="g2">'
+    +'<div><label>Monthly nut $ (what you MUST clear)</label><input type="number" value="'+c.nut+'" onchange="mCfg(\'nut\',this.value)"></div>'
+    +'<div><label>Tax set-aside %</label><input type="number" value="'+Math.round((c.taxRate||.3)*100)+'" onchange="mCfg(\'taxRate\',this.value)"></div>'
+    +'<div><label>Cash cushion $ (personal runway)</label><input type="number" value="'+(c.reserve||0)+'" onchange="mCfg(\'reserve\',this.value)"></div>'
+    +'</div><p class="muted" style="margin-top:8px;font-size:11.5px">Revenue auto-pulls from completed jobs in your <a onclick="go(\'Pipeline\')" style="cursor:pointer">Pipeline</a>. The 30% tax estimate is a safe self-employed default — confirm your exact Michigan + federal rate with a CPA once you’re rolling.</p></div></details>';
+  return h;
+}
+
+/* ============ B2B KIT — close the account ============ */
+const CAPSHEET="CLEAN PLATE HAULING CO. — Veteran-Owned Junk Removal & Cleanouts\nWixom, MI · 734-743-1877 · cleanplatehaulingco.com\n\nWHO WE ARE\nVeteran-owned, licensed & insured. Owner-operated — you work directly with me, every job. Serving Wixom, Novi, Farmington Hills, Northville, South Lyon, Southfield, Commerce, Walled Lake, Milford, West Bloomfield, White Lake, Livonia & Metro Detroit.\n\nWHAT WE DO FOR PROPERTY PROS\n• Rental & apartment turnovers — emptied and broom-swept on your deadline\n• Estate & probate cleanouts — donation-first, respectful, broom-clean for closing\n• REO / foreclosure trash-outs — photo-documented to your requirements\n• Construction & restoration debris — we load so your crews stay on the job\n• One item to a full property — the heavy stuff is our specialty\n\nWHY WE'RE EASY TO WORK WITH\n• Text photos → firm flat-rate price within the hour. No hourly surprises.\n• 7 days a week, often same-day.\n• Licensed & insured — COI sent on request.\n• Every job photo-documented and left broom-clean.\n\nLet's set up your account: 734-743-1877 · cleanplatehauling@gmail.com";
+const B2BCLOSE=[
+ ['Vendor setup — send with your COI + W-9',"Hi [name] — great connecting today. Attached is my Certificate of Insurance and W-9 to get Clean Plate set up in your vendor system. Whenever a unit needs clearing, just text photos to 734-743-1877 and you’ll have a firm flat-rate price within the hour. Looking forward to being your go-to crew."],
+ ['Prove-it offer — the close that wins the account',"Tell you what: send me your next turnover and I’ll quote it flat from photos, hit your deadline, and send you before/after pics. No risk on your end. If it isn’t the easiest cleanout you’ve booked, you owe me nothing more — that’s how confident I am in the work."],
+ ['Preferred per-unit pricing (recurring)',"For your regular turnovers I can hold a flat per-unit rate so your team can budget without re-quoting every time — say [$X for a standard 1-bed, $Y for a 2-bed], photos setting the number on the bigger ones. Want me to put that in writing for your file?"],
+ ['2-week reliability check-in',"Hi [name] — checking in. Anything in turnover or needing a cleanout this week? Text photos to 734-743-1877 and I’ll get you a firm price same day. Here whenever you need us."]
+];
+const B2BONBOARD=['Send the capability sheet (button above)','Send your Certificate of Insurance (COI)','Send your W-9','Send / agree a simple flat rate sheet','Mark them Active ✦ in the Prospects tab','Set a 2-week check-in so you stay top of mind'];
+function printCapSheet(){
+  const w=window.open('','_blank');if(!w){toast('Allow pop-ups to print the sheet');return;}
+  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Clean Plate Hauling — Capability Sheet</title><style>body{font-family:Helvetica,Arial,sans-serif;color:#111a14;max-width:720px;margin:0 auto;padding:40px}h1{background:#071810;color:#fff;font-size:25px;margin:0 -40px 4px;padding:22px 40px}h1 span{color:#4aab74}.sub{color:#3d5247;font-weight:700;font-size:13px;margin:0 -40px 22px;padding:0 40px 16px;border-bottom:3px solid #24804f}h2{color:#1d6340;font-size:13px;letter-spacing:.09em;text-transform:uppercase;margin:20px 0 6px}p,li{font-size:13.5px;line-height:1.55}ul{margin:0;padding-left:18px}.foot{margin-top:26px;padding-top:14px;border-top:1px solid #dde8e1;font-weight:800;color:#1d6340;font-size:14px}@media print{body{padding:24px}}</style></head><body>'
+   +'<h1>CLEAN PLATE HAULING CO. <span>★</span></h1><div class="sub">Veteran-Owned Junk Removal &amp; Cleanouts · Wixom, MI · 734-743-1877 · cleanplatehaulingco.com</div>'
+   +'<h2>Who we are</h2><p>Veteran-owned, licensed &amp; insured. Owner-operated — you work directly with me, every job. Serving Wixom, Novi, Farmington Hills, Northville, South Lyon, Southfield, Commerce, Walled Lake, Milford, West Bloomfield, White Lake, Livonia &amp; Metro Detroit.</p>'
+   +'<h2>What we do for property pros</h2><ul><li>Rental &amp; apartment turnovers — emptied and broom-swept on your deadline</li><li>Estate &amp; probate cleanouts — donation-first, broom-clean for closing</li><li>REO / foreclosure trash-outs — photo-documented to your requirements</li><li>Construction &amp; restoration debris — we load so your crews stay on the job</li><li>One item to a full property — the heavy stuff is our specialty</li></ul>'
+   +'<h2>Why we’re easy to work with</h2><ul><li>Text photos → firm flat-rate price within the hour. No hourly surprises.</li><li>7 days a week, often same-day.</li><li>Licensed &amp; insured — COI sent on request.</li><li>Every job photo-documented and left broom-clean.</li></ul>'
+   +'<div class="foot">Let’s set up your account — 734-743-1877 · cleanplatehauling@gmail.com</div>'
+   +'<scr'+'ipt>window.onload=function(){window.print()}</scr'+'ipt></body></html>');
+  w.document.close();
+}
+function vB2BKit(){
+  const f=(S.money&&S.money.foundation)||{},ready=f.coi&&f.w9;
+  let h='<h2>B2B Kit — Close the Account</h2>';
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><b style="color:var(--e200)">This is where B2B money is won.</b> <span style="color:rgba(255,255,255,.85)">The outreach gets you the meeting — this kit closes it. One property manager who says yes = cleanouts every month for years. That’s the floor under your income.</span></div>';
+  h+='<div class="card" style="border-left:5px solid '+(ready?'var(--e300)':'var(--amber)')+'"><div class="row"><b class="grow">'+(ready?'✅ You’re vendor-ready':'⚠ Get vendor-ready first')+'</b><span class="pill '+(ready?'win':'warn')+'">'+(ready?'COI + W-9 ✓':'COI + W-9 needed')+'</span></div>'
+    +'<div class="muted" style="font-size:12.5px;margin-top:4px">Every property manager, REO firm, and restoration company asks for a <b>Certificate of Insurance and a W-9 before they’ll hand you a job.</b> Have them on your phone so “send it over” takes 30 seconds, not 3 days. '+(ready?'You’re set — go close.':'<a onclick="go(\'Money\')" style="cursor:pointer">Knock these out in Money → foundation →</a>')+'</div></div>';
+  h+='<h3>① Your capability sheet (leave-behind / email)</h3><div class="card"><p class="muted" style="margin-bottom:8px">The one-pager you hand the front desk or email after a walk-in. Says “we’re a real, insured, easy-to-use company” in 30 seconds.</p>'
+    +'<div class="tpl">'+esc(CAPSHEET)+'</div>'
+    +'<div class="row" style="margin-top:8px"><button class="b sm" onclick="copy(CAPSHEET,\'Capability sheet copied — paste into an email or Notes\')">📋 Copy sheet</button><button class="b sm ghost" onclick="printCapSheet()">🖨 Print one-pager</button></div></div>';
+  h+='<h3>② The closing scripts (the 2nd conversation)</h3><div class="card muted" style="font-size:12.5px">Outreach opens the door; these close it. The <b>prove-it offer</b> is your strongest play — risk-free for them, and your work sells the account.</div>';
+  B2BCLOSE.forEach(s=>{h+='<div class="card"><div class="row"><b class="grow">'+esc(s[0])+'</b><button class="b sm" onclick="copy('+JSON.stringify(s[1]).replace(/"/g,'&quot;')+')">📋 Copy</button></div><div class="tpl">'+esc(s[1])+'</div></div>';});
+  h+='<h3>③ When they say yes — within 24 hours</h3><div class="card steps">';
+  B2BONBOARD.forEach(x=>{h+='<div class="row" style="margin-bottom:6px"><span style="color:var(--e400);font-weight:900">▸</span><span class="grow">'+esc(x)+'</span></div>';});
+  h+='</div>';
+  h+='<div class="card" style="border-left:5px solid var(--e300)"><b>The account is won on the 2nd and 3rd job, not the 1st.</b> <span class="muted">Show up when you said, quote fast every time, leave it broom-clean, send the before/after. In B2B, <b>reliability is the whole product</b> — be the easy button and they never call anyone else.</span></div>';
   return h;
 }
 
