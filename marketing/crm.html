@@ -234,7 +234,7 @@ const PROSPECT_EMAILS={
 "Wright's Renovations":'info@wrights-renovations.com'
 };
 let S=load();
-function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};if(!d.pricing)d.pricing={dumpTon:75,dumpMin:30,fuel:25,hourly:60,priceAdj:1};if(d.pricing.priceAdj===undefined)d.pricing.priceAdj=1;return d;}
+function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};if(!d.pricing)d.pricing={dumpTon:75,dumpMin:30,fuel:25,hourly:60,priceAdj:1};if(d.pricing.priceAdj===undefined)d.pricing.priceAdj=1;if(!d.metrics)d.metrics={reviews:1};return d;}
 function load(){
   try{const d=JSON.parse(localStorage.getItem(LS));if(d&&d.prospects)return migrate(d);}catch(e){}
   return migrate({prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',contact:'',status:'New',last:'',due:today(),log:[]})),
@@ -452,7 +452,22 @@ function vStats(){
   const newWk=L.filter(l=>l.created>=wk).length;
   const touchWk=S.activity.filter(a=>a.d>=wk).length;
   const bySrc={};L.forEach(l=>{bySrc[l.source||'?']=(bySrc[l.source||'?']||0)+1;});
-  let h='<h2>Numbers</h2><div class="g3">'+
+  const dn=Math.max(1,Math.min(ldayNum(),90)),goal=20000,gpct=Math.min(100,Math.round(rev/goal*100)),avg=done.length?Math.round(rev/done.length):0;
+  const rv=(S.metrics&&S.metrics.reviews)||0,nextMile=rv<5?5:rv<15?15:rv<40?40:rv+10,milePct=Math.min(100,Math.round(rv/nextMile*100));
+  const activeB2B=P.filter(p=>p.status==='Active ✦').length;
+  let h='<h2>Scoreboard</h2>';
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><div class="row"><b class="grow" style="color:var(--e200)">$20K in 90 Days</b><span style="color:rgba(255,255,255,.6);font-size:12px">Day '+dn+' of 90</span></div>'
+    +'<div style="font-size:30px;font-weight:900;margin-top:4px">$'+rev.toLocaleString()+' <span style="font-size:15px;color:rgba(255,255,255,.55)">/ $20,000</span></div>'
+    +'<div style="background:rgba(255,255,255,.15);border-radius:6px;height:10px;margin-top:8px;overflow:hidden"><div style="background:var(--e200);height:100%;width:'+gpct+'%"></div></div>'
+    +'<div style="color:rgba(255,255,255,.7);margin-top:6px;font-size:12px">'+done.length+' jobs done · avg $'+avg+' · '+gpct+'% of goal</div></div>';
+  h+='<h3>⭐ Reviews — your #1 growth lever</h3><div class="card"><div class="row"><div class="grow"><b style="font-size:24px">'+rv+'</b> <span class="muted">reviews · next milestone '+nextMile+'</span></div><button class="b sm ghost" onclick="reviewAdj(-1)">−</button><button class="b sm" onclick="reviewAdj(1)">+ New review</button></div>'
+    +'<div style="background:var(--bl);border-radius:6px;height:10px;margin-top:8px;overflow:hidden"><div style="background:var(--e300);height:100%;width:'+milePct+'%"></div></div>'
+    +'<div class="muted" style="margin-top:6px;font-size:12px">'+(rv<5?'Hit <b>5</b> to unlock Google Local Services Ads.':rv<15?'Push to <b>15</b> — that\'s map-pack territory.':rv<40?'Climbing to <b>40</b> — you\'ll own local.':'Elite. Never stop asking.')+' Tap <b>+ New review</b> each time one lands on Google.</div></div>';
+  h+='<h3>🎯 The 3 numbers that get you to $20K</h3><div class="card steps">'
+    +'<b>① Reviews: '+rv+' → 15 by day 30</b><span class="muted">The growth engine — every job ends with a review text.</span>'
+    +'<b>② Response time: under 5 minutes</b><span class="muted">Samantha\'s lane. Whoever answers first books the job.</span>'
+    +'<b>③ B2B accounts: '+activeB2B+' → 2–3 active</b><span class="muted">The floor under your income. One property manager = monthly cleanouts.</span></div>';
+  h+='<h3>Snapshot</h3><div class="g3">'+
   '<div class="stat"><b>'+L.length+'</b><span>Total leads</span></div>'+
   '<div class="stat"><b>'+done.length+'</b><span>Jobs done</span></div>'+
   '<div class="stat"><b>$'+rev.toLocaleString()+'</b><span>Revenue</span></div>'+
@@ -467,8 +482,11 @@ function vStats(){
 
 function vPlay(){
   return '<h2>The System (TLDR)</h2>'+
+  '<h3>Who does what — you + Samantha</h3>'+
+  '<div class="card steps"><b>Mike — the field</b><span class="muted">Run the jobs, drive, load, leave it swept clean. Price from photos in the Pricing tab. Ask for the review BEFORE you pull out of the driveway. Grow the in-person B2B relationships.</span>'+
+  '<b>Samantha — command center</b><span class="muted">Answer every call/text in under 5 min. Get photos → send to Mike → text the firm quote back. Log every lead, run the B2B sends (Today tab), post daily, fire the review texts, chase quotes at 24h.</span></div>'+
   '<div class="card steps"><b>How Clean Plate gets jobs — the whole machine:</b>'+
-  '<b>1 · Be findable (compounding)</b><span class="muted">Google Business Profile + reviews + the 8 city pages on cleanplatehaulingco.com. Post weekly, ask for a review after EVERY job. This becomes your #1 free lead source by month 2–3.</span>'+
+  '<b>1 · Be findable (compounding)</b><span class="muted">Google Business Profile + reviews + the 12 city pages on cleanplatehaulingco.com. Post weekly, ask for a review after EVERY job. This becomes your #1 free lead source by month 2–3.</span>'+
   '<b>2 · Be fast (converts)</b><span class="muted">Reply in under 5 minutes. Missed-call auto-text on. Photos → firm price within the hour. The site is built around this promise — keep it.</span>'+
   '<b>3 · B2B engine (repeat money)</b><span class="muted">10 touches a day from the Prospects tab. One property manager = monthly cleanouts forever. The Today tab runs the cadence for you.</span>'+
   '<b>4 · Paid taps (volume on demand)</b><span class="muted">Thumbtack now → Google Local Services Ads once GBP is verified + 5 reviews. Pay per lead, answer fast, win.</span>'+
@@ -478,7 +496,7 @@ function vPlay(){
   '<b>After each job</b><span class="muted">Before/after photos → review text (Pipeline tab has the button) → log it</span>'+
   '<b>7:00–7:45pm</b><span class="muted">Today tab → clear the outreach-due list → 1 social post → add 5 prospects if list is thin</span></div>'+
   '<h3>Docs (in your website repo under /marketing)</h3><div class="card muted">outreach-playbook.md · launch-kit.md · ready-to-send.md · lead-tracker.csv · press-release.md · flyer.html (print) · brand/ (logos + 8K print masters)</div>'+
-  '<h3>The goal</h3><div class="card" style="background:var(--e900);color:#fff;border:none">First 30 days: <b style="color:var(--e200)">10 reviews · 2 recurring B2B accounts · every lead answered in 5 minutes.</b> Do that and you outconvert every franchise in Metro Detroit.</div>';
+  '<h3>The goal</h3><div class="card" style="background:var(--e900);color:#fff;border:none">First 30 days: <b style="color:var(--e200)">15 reviews · 2–3 recurring B2B accounts · every lead answered in 5 minutes.</b> Do that and you outconvert every franchise in Metro Detroit.</div>';
 }
 
 /* ============ 90-DAY LAUNCH PLAN ============ */
@@ -640,6 +658,8 @@ function vLaunch(){
      '<span class="muted" style="color:rgba(255,255,255,0.7)">'+DOW[new Date(ldate(n)+'T12:00').getDay()]+' · '+fmt(ldate(n))+(isToday?' · TODAY':'')+'</span></div>'+
      '<div style="margin-top:6px;font-weight:800">Week '+plan.wk+' of 13 · '+plan.wkInfo.t+'</div>'+
      '<div class="muted" style="color:rgba(255,255,255,0.8);margin-top:4px">'+esc(plan.wkInfo.g)+'</div></div>';
+  const rvL=(S.metrics&&S.metrics.reviews)||0,nmL=rvL<5?5:rvL<15?15:rvL<40?40:rvL+10;
+  h+='<div class="card"><div class="row"><span class="grow">⭐ <b>'+rvL+'</b> Google reviews <span class="muted">· next goal '+nmL+'</span></span><button class="b sm ghost" onclick="reviewAdj(-1)">−</button><button class="b sm" onclick="reviewAdj(1)">+ New</button><button class="b sm ghost" onclick="go(\'Stats\')">Scoreboard →</button></div></div>';
   h+='<div class="card" style="border-left:5px solid var(--e300)"><b>Every day, no matter what:</b> <span class="muted">① answer every lead in 5 minutes · ② send the review text before you leave every job · ③ log every lead. The tasks below are the <i>build</i> work on top of those three.</span></div>';
   const total=plan.tasks.reduce((a,t)=>a+t.m,0),doneCount=done.filter(i=>i<plan.tasks.length).length;
   h+='<div class="row" style="margin:6px 2px 10px"><b class="grow">Today\'s tasks — '+doneCount+'/'+plan.tasks.length+' done</b><span class="pill">⏱ ~'+total+' min total</span></div>';
@@ -692,6 +712,8 @@ function pItem(k,d){PSEL.items[k]=Math.max(0,(PSEL.items[k]||0)+d);render();}
 function pAcc(k){const i=PSEL.access.indexOf(k);if(i>=0)PSEL.access.splice(i,1);else PSEL.access.push(k);render();}
 function pCfg(f,v){const n=parseFloat(v);if(!isNaN(n)&&n>=0){S.pricing[f]=n;save();render();}}
 function pReset(){PSEL={tier:'1/4',items:{},access:[]};render();}
+function reviewAdj(d){if(!S.metrics)S.metrics={reviews:0};S.metrics.reviews=Math.max(0,(S.metrics.reviews||0)+d);if(d>0)act('Logged a new review (total '+S.metrics.reviews+')');save();render();}
+function pLogLead(){const r=priceCalc();const name=prompt('Customer name for this quote:');if(!name)return;const phone=prompt('Phone (optional):')||'';const city=prompt('City (optional):')||'';S.leads.unshift({id:'l'+Date.now(),name:name,phone:phone,city:city,source:'Quote calc',items:PSEL.tier+' load',quote:String(r.suggested),stage:'Quoted',created:today(),updated:today()});act('Quoted '+name+' $'+r.suggested);save();go('Pipeline');toast('Saved as a Quoted lead — follow up in 24h');}
 function priceCalc(){
   const t=PTIERS.find(x=>x.k===PSEL.tier)||PTIERS[2],c=S.pricing;
   let hrs=t.hrs,tons=t.tons,sur=0,pct=0,wMult=1,flags=[];
@@ -711,7 +733,7 @@ function vPricing(){
     +'<div class="row"><div class="grow"><div style="font-size:11px;letter-spacing:.1em;color:rgba(255,255,255,.55);text-transform:uppercase">Quote this</div><div style="font-size:40px;font-weight:900;color:var(--e200);line-height:1.05">$'+r.suggested+'</div></div>'
     +'<div style="text-align:right"><span class="pill '+pc+'">'+esc(pmsg)+'</span><div style="color:rgba(255,255,255,.7);margin-top:6px;font-size:12px">your cost ~$'+Math.round(r.floor)+'<br/>profit ~$'+Math.round(r.profit)+'</div></div></div>'
     +(r.flags.length?'<div style="color:#ffd27a;margin-top:8px;font-size:12.5px">⚑ '+esc(r.flags.join(' · '))+'</div>':'')
-    +'<div class="row" style="margin-top:10px"><button class="b" onclick="pCopyQuote()">📋 Copy firm quote</button><button class="b ghost" onclick="pReset()">Reset</button></div></div>';
+    +'<div class="row" style="margin-top:10px"><button class="b" onclick="pCopyQuote()">📋 Copy firm quote</button><button class="b ghost" onclick="pLogLead()">+ Log as lead</button><button class="b ghost" onclick="pReset()">Reset</button></div></div>';
   h+='<div class="card"><div class="row muted"><span class="grow">Base — '+r.t.k+' load</span><b>$'+r.base+'</b></div>'
     +(r.sur?'<div class="row muted"><span class="grow">Special items</span><b>+$'+r.sur+'</b></div>':'')
     +(r.pct?'<div class="row muted"><span class="grow">Access surcharge</span><b>+'+Math.round(r.pct*100)+'%</b></div>':'')
