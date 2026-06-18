@@ -330,7 +330,7 @@ function advance(p){
 function setPStatus(p,st){p.status=st;p.last=today();p.due=st==='Dead'?'':addDays(today(),CAD[st].days||0);p.log.unshift(today()+' → '+st);act(p.name+' → '+st);save();render();}
 
 /* ============ VIEWS ============ */
-const TABS=['Launch','Today','Pricing','Pipeline','Prospects','Homeowners','Autopilot','Scripts','Find','Stats','Playbook'];
+const TABS=['Launch','Today','Pricing','Pipeline','Prospects','Homeowners','Channels','Autopilot','Scripts','Find','Stats','Playbook'];
 let tab='Launch';
 function dueProspects(){return S.prospects.filter(p=>p.status!=='Dead'&&p.status!=='Active ✦'&&p.due&&p.due<=today());}
 function needReply(){return S.leads.filter(l=>l.stage==='New Lead');}
@@ -344,7 +344,7 @@ function render(){
     if(t==='Launch'){const n=launchRemaining();if(n)b='<span class="bdg">'+n+'</span>';}
     return '<button class="'+(tab===t?'on':'')+'" onclick="go(\''+t+'\')">'+t+b+'</button>';
   }).join('');
-  document.getElementById('view').innerHTML=({Launch:vLaunch,Today:vToday,Pricing:vPricing,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
+  document.getElementById('view').innerHTML=({Launch:vLaunch,Today:vToday,Pricing:vPricing,Pipeline:vPipe,Prospects:vPros,Homeowners:vHome,Channels:vChannels,Autopilot:vAuto,Scripts:vScripts,Find:vFind,Stats:vStats,Playbook:vPlay})[tab]();
   document.getElementById('fab').innerHTML=tab==='Pipeline'?'<button class="b" onclick="addLeadUI()">+ New Lead</button>':
     tab==='Prospects'?'<button class="b" onclick="addProspectUI()">+ New Prospect</button>':'';
 }
@@ -508,6 +508,64 @@ function vFind(){
 }
 function openSearch(){const c=document.getElementById('fc').value,y=document.getElementById('fy').value;window.open('https://www.google.com/maps/search/'+encodeURIComponent(c+' near '+y),'_blank');}
 
+/* ============ CHANNELS (Thumbtack + Google Posts) ============ */
+const POSTTYPES=[
+ ['Garage cleanout',"Garage cleanout in {city} ✅ Loaded, hauled, and swept clean — usually in one trip. Veteran-owned Clean Plate Hauling does flat-rate junk removal across {city}. Text photos of what needs to go to 734-743-1877 for a firm price — no hidden fees."],
+ ['Single item (couch / mattress)',"Old couch or mattress gone in {city} 🛋️ Single-item pickups start at $75 — we lift it, haul it, and donate what we can. Veteran-owned, 7 days a week. Text a photo to 734-743-1877 for a flat-rate price."],
+ ['Appliance removal',"Appliance removal in {city} 🧊 Fridges, washers, dryers, stoves — hauled out and recycled responsibly. Flat-rate from photos, veteran-owned Clean Plate Hauling. Text 734-743-1877."],
+ ['Basement cleanout',"Basement cleanout in {city} 📦 Decades of storage cleared in a day, broom-clean when we leave. Heavy-duty truck, veteran-owned. Text photos to 734-743-1877 for a firm price."],
+ ['Estate cleanout',"Estate cleanout in {city} 🏡 We clear a full home with patience and care — donations first, broom-clean for closing. Veteran-owned. Firm quote from photos: 734-743-1877."],
+ ['Rental turnover',"Rental turnover in {city} 🔑 Tenant left a mess? We empty the unit and broom-sweep it on your deadline. Flat-rate from photos. Landlords & property managers: text 734-743-1877."],
+ ['Hot tub / heavy item',"Hot tub removal in {city} 💪 We cut it down, haul it out, and clean up after. The heavy stuff is our specialty. Veteran-owned. Text photos to 734-743-1877."],
+ ['Yard / debris',"Yard debris hauled in {city} 🍂 Fence teardown, deck demo, brush piles — we take what the trash truck won't. Veteran-owned, flat-rate. 734-743-1877."],
+ ['Donation run (after a job)',"Donation-first junk removal in {city} ♻️ Today's load went mostly to donation and recycling, not the landfill. That's the Clean Plate way. Veteran-owned. 734-743-1877."],
+ ['$20-off offer (use "Offer" type)',"$20 off your first haul in {city} 🇺🇸 Founding-customer special from Clean Plate Hauling — veteran-owned junk removal, flat-rate from photos, no hidden fees. Text 734-743-1877 and mention this post."]
+];
+const THUMBQR=[
+ ["First reply — send within minutes, speed wins","Hi [name] — thanks for reaching out! I'm [Mike] with Clean Plate Hauling, veteran-owned junk removal. I can likely get to you today or tomorrow. Send a couple photos of what needs to go and I'll text back a firm flat-rate price — no hidden fees. What's the city/zip so I can lock in timing?"],
+ ["After they send photos / details","Got it, thanks! For that I can do a firm $[X] — includes all labor, hauling, disposal, and sweep-up. No surprises. I've got [day/time] open — want me to put you down?"],
+ ["Thumbtack review request (after the job)","Thank you for choosing a local veteran-owned crew! If you have 60 seconds, a quick review on my Thumbtack profile helps a brand-new business more than you know. I really appreciate it 🇺🇸"]
+];
+function genPost(){const t=document.getElementById('pgType'),c=document.getElementById('pgCity');document.getElementById('pgOut').value=POSTTYPES[t.selectedIndex][1].replace(/{city}/g,c.value.replace(' MI',''));}
+function copyPost(){const v=document.getElementById('pgOut').value;if(v)copy(v,'Post copied — paste into Google, attach a photo, publish!');else toast('Tap ✨ Generate first');}
+function vChannels(){
+  let h='<h2>Get-Found Channels</h2>';
+  h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><b style="color:var(--e200)">The plan, in order:</b> <span style="color:rgba(255,255,255,.85)">Thumbtack <b>buys</b> you jobs + reviews this month while Google is still cold. Google Posts — a real before/after after every job — <b>warm the free engine</b>. At 5 reviews you flip on Local Services Ads and Google becomes your biggest tap. Both at once, in that order. That\'s the whole play.</span></div>';
+  /* THUMBTACK */
+  h+='<h3>① Thumbtack — paid leads THIS WEEK</h3>';
+  h+='<div class="card steps"><b>Why it works right now:</b><span class="muted">Pay-per-lead, so you can buy jobs before you rank on Google. New pros win on <b>speed + a complete profile + early reviews</b> — never on being cheapest.</span>'
+    +'<b>Set it up to win (once):</b>'
+    +'<span class="muted"><b>1 · Complete the profile 100%</b> — logo, 6+ before/after photos, a shot of you + the truck, the "Veteran-Owned" badge, service area = your 12 cities, and your "text photos → firm flat-rate price" process in the intro.<br/>'
+    +'<b>2 · Tighten Targeting</b> — in Targeting/Preferences set the job types you actually want, sizes, max travel distance, and a weekly budget cap (~$50–75 to start). This is what stops you paying for leads you don\'t want.<br/>'
+    +'<b>3 · Leave auto-bid / "Promote" OFF at first</b> — answer by hand so you control spend and quality. Switch it on later, only once you know your cost-per-job.<br/>'
+    +'<b>4 · Seed reviews</b> — Thumbtack lets you request reviews from past customers. Send that link to everyone you\'ve already hauled for. Thumbtack reviews are separate from Google and rank you <i>inside</i> Thumbtack.</span>'
+    +'<b>Every single day:</b><span class="muted">⚡ Reply to every Thumbtack lead in <b>under 5 minutes</b> — the first pro to answer usually books it. Turn on app push notifications. Spam or out-of-area lead? Hit <b>Report</b> — Thumbtack usually refunds the cost.</span>'
+    +'<div class="row" style="margin-top:8px"><a class="b sm" href="https://www.thumbtack.com/pro/" target="_blank" style="text-decoration:none">Open Thumbtack Pro →</a></div></div>';
+  h+='<div class="card"><b>Quick-reply scripts</b>';
+  THUMBQR.forEach(s=>{h+='<div class="row" style="margin-top:8px;align-items:flex-start"><span class="grow muted">'+esc(s[0])+'</span><button class="b sm" onclick="copy('+JSON.stringify(s[1]).replace(/"/g,'&quot;')+')">📋 Copy</button></div>';});
+  h+='</div>';
+  h+='<div class="card" style="border-left:5px solid var(--amber);font-size:12.5px"><b>Know your number.</b> <span class="muted">Log every Thumbtack lead in <a onclick="go(\'Pipeline\')" style="cursor:pointer">Pipeline</a> with source "Thumbtack" and jot the lead cost. Check <a onclick="go(\'Stats\')" style="cursor:pointer">Stats → leads by source</a> weekly. Rule of thumb: if Thumbtack costs more than ~15–20% of a job\'s revenue, tighten targeting; if it\'s under that, spend more.</span></div>';
+  /* GOOGLE POSTS */
+  h+='<h3>② Google Posts — the free ranking engine</h3>';
+  h+='<div class="card steps"><b>Why it works:</b><span class="muted">A profile that posts looks alive and <b>ranks higher in the map pack</b>. Every post lets you drop a service + a city + a photo — exactly what Google reads to match "junk removal near me." Free, and it compounds.</span>'
+    +'<b>The 5 rules that make it work:</b><span class="muted">① Post <b>2× a week minimum — ideally a real before/after after every job.</b> ② Always attach a <b>photo</b> (≈3× the views). ③ Lead with the <b>service + city</b> ("Garage cleanout in Novi"), not "another happy customer." ④ End with the <b>phone + a button</b>. ⑤ Rotate which of your 12 cities you name so you build relevance everywhere.</span></div>';
+  h+='<div class="card"><b>📝 Post generator</b><p class="muted" style="margin:4px 0 8px">Pick what you did + the city → a ready post. Tweak it, copy it, attach your photo.</p>'
+    +'<label>What you did</label><select id="pgType">'+POSTTYPES.map(p=>'<option>'+esc(p[0])+'</option>').join('')+'</select>'
+    +'<label>City</label><select id="pgCity">'+FINDCITIES.map(c=>'<option>'+c+'</option>').join('')+'</select>'
+    +'<div class="row" style="margin-top:10px"><button class="b" onclick="genPost()">✨ Generate post</button></div>'
+    +'<textarea id="pgOut" rows="5" style="margin-top:10px" placeholder="Your post appears here — then tap Copy post."></textarea>'
+    +'<div class="row" style="margin-top:8px"><button class="b sm" onclick="copyPost()">📋 Copy post</button><a class="b sm ghost" href="https://business.google.com/" target="_blank" style="text-decoration:none">Open Google → Add update</a></div></div>';
+  h+='<div class="card muted" style="font-size:12px"><b>How to post (2 min):</b> business.google.com — or the Google Maps app → your business → <b>Promote → Add update</b> → write/paste → <b>add a photo</b> → for the $20-off one choose the <b>"Offer"</b> type → Publish. Reuse the same photo + caption on your Facebook page so one job = two posts.</div>';
+  /* LSA NEXT */
+  h+='<h3>③ Next up: Local Services Ads (at 5 reviews)</h3>';
+  const rvc=(S.metrics&&S.metrics.reviews)||0;
+  h+='<div class="card"><div class="row"><span class="grow">⭐ <b>'+rvc+'</b> / 5 reviews to unlock LSA</span><button class="b sm ghost" onclick="go(\'Stats\')">Scoreboard →</button></div>'
+    +'<div style="background:var(--bl);border-radius:6px;height:8px;margin-top:8px;overflow:hidden"><div style="background:var(--e300);height:100%;width:'+Math.min(100,rvc/5*100)+'%"></div></div>'
+    +'<p class="muted" style="margin-top:8px;font-size:12.5px">The green "Google Guaranteed" badge sits at the very top of search, and you pay <b>per lead</b> — not per click. Needs your license/insurance + a free background check Google arranges. This becomes your #1 paid channel — but Thumbtack + posts come first to get you those 5 reviews.</p>'
+    +(rvc>=5?'<div class="row" style="margin-top:8px"><a class="b sm" href="https://ads.google.com/local-services-ads" target="_blank" style="text-decoration:none">You\'re ready — apply for LSA →</a></div>':'')+'</div>';
+  return h;
+}
+
 function vStats(){
   const L=S.leads,P=S.prospects;
   const done=L.filter(l=>['Completed','Review Asked'].includes(l.stage));
@@ -593,7 +651,7 @@ const LDAYS={
 1:[
  {t:"Upload ALL your photos to Google Business Profile (logo as profile pic, side-profile truck as cover, then the rest).",m:15},
  {t:"Set up the profile: your 12 cities, hours 7am–8pm, categories, check the Veteran-Owned badge, and turn Messaging ON.",m:10},
- {t:"Publish your first Google Post (\"We're open — text photos for a flat-rate quote\"). Copy is in launch-kit.md §2.",m:5,href:"launch-kit.md"},
+ {t:"Publish your first Google Post (\"We're open — text photos for a flat-rate quote\"). Use the Channels post generator.",m:5,go:"Channels"},
  {t:"Copy your Google review short link (Profile → \"Ask for reviews\") and save it in your phone notes — you'll use it daily.",m:5},
  {t:"⭐ Text your review link to EVERYONE you've already hauled for — your customers, your call. First reviews are the biggest boost a new profile gets. Script is in Scripts.",m:20,go:"Scripts",who:'M'},
  {t:"Post your Facebook page launch post, then PIN it to the top of the page. Full copy in launch-day-posts.md §1.",m:10,href:"launch-day-posts.md"},
@@ -604,7 +662,7 @@ const LDAYS={
  {t:"Email the press release to the 5 local outlets listed in press-release.md.",m:10,href:"press-release.md"}
 ],
 2:[
- {t:"Sign up for Thumbtack as a Junk Removal pro in your zip codes — first paid leads while Google warms up. Set a small weekly cap.",m:20},
+ {t:"Sign up for Thumbtack as a Junk Removal pro — first paid leads while Google warms up. Follow the Channels → Thumbtack win-setup (profile, targeting, budget cap).",m:20,go:"Channels"},
  {t:"Send your first 5 B2B intro emails — open the Today tab, the cadence is queued and each email is pre-written.",m:20,go:"Today"},
  {t:"Post a truck photo: \"Meet the workhorse — 2020 Sierra 3500HD. Your junk goes in ONE trip.\"",m:5},
  {t:"Test that your missed-call text and voicemail actually fire — call your own number from another phone.",m:5}
@@ -699,9 +757,9 @@ function rhythmTasks(n){
   const tasks=[];
   if(dow>=1&&dow<=5)tasks.push({t:"Send today's due B2B touches — intros + follow-ups, aim for 5–10 (Today tab).",m:20,go:"Today",who:'M'});
   if(dow===1)tasks.push({t:"Monday: add 5 fresh prospects so your B2B list never runs dry (Find tab).",m:10,go:"Find",who:'M'});
-  if(dow===2)tasks.push({t:"Post one update — a service spotlight or a tip (Scripts tab has copy).",m:10,go:"Scripts",who:'S'});
+  if(dow===2)tasks.push({t:"Post one Google update — pick the job + city in the Channels post generator.",m:10,go:"Channels",who:'S'});
   if(dow===3)tasks.push({t:"Add 5 new B2B prospects from a city you haven't mined (Find tab).",m:10,go:"Find",who:'M'});
-  if(dow===4)tasks.push({t:"Post a before/after from a recent job, or a truck/donation photo. Real work is your best content.",m:10,who:'S'});
+  if(dow===4)tasks.push({t:"Post a before/after from a recent job — run it through the Channels generator, attach the photo. Real work is your best content.",m:10,go:"Channels",who:'S'});
   if(dow===5){tasks.push({t:"Walk flyers into 2–3 realtor offices or storage facilities near a job today (print flyer.html).",m:30,href:"flyer.html",who:'M'});
               tasks.push({t:"Friday numbers: open Stats, log the week, and double down on what's working.",m:10,go:"Stats",who:'B'});}
   if(dow===6){tasks.push({t:"Neighbor blitz: a card on the 10 nearest doors after each job today (neighbor-flyer.html).",m:15,href:"neighbor-flyer.html",who:'M'});
