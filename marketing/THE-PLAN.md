@@ -4,7 +4,7 @@ Read this when you're fired up. Read it again when you're scared. It's the whole
 
 ---
 
-## 1. The truth: you're not behind. You're on Day 4.
+## 1. The truth: you're not behind. You're on Day 2.
 
 Every business on earth looked exactly like this in its first week — a real company, real tools, and a quiet phone. The quiet phone is not failure. It's the starting line. The only people who fail here are the ones who sit and wait for it to ring. You're not going to wait. You're going to go get the jobs.
 
