@@ -2,6 +2,9 @@
 
 You and Samantha run this together now — she's on the phones, booking, and the social posts (about a focused hour a day, around Lovelyn); you're on the truck and all the B2B outreach. This page is your orientation, but **your real daily driver is `crm.html` → the Launch tab.**
 
+> ## 🧭 Need the big picture? Read `THE-PLAN.md`
+> When the phone is quiet and you're wondering if this works: **`THE-PLAN.md`** is the whole strategy on one page — the math (you need ~4 jobs/week), why it can't fail, what a no-jobs day looks like, how to convert, and your first move tomorrow morning. Read it when you're fired up, and again when you're scared.
+
 > ## 📲 Do this every morning (the hand-holding, built in)
 > Open **`crm.html`** on your phone and tap the **Launch** tab. It knows what day of your 90-day plan it is and lays out **that day's exact tasks — each with a time estimate** — to check off as you go. No deciding, no guessing: open it, do what it says, tap the boxes. Launch day is ~90 minutes; after that it's ~30–45 min a day. Add the page to your phone's home screen so it's one tap away.
 
@@ -37,6 +40,7 @@ The day before, do the **Prep Day** checklist in `LAUNCH-CAMPAIGN.md` so launch 
 | File | What it's for |
 |---|---|
 | **START-HERE.md** | You're reading it. The daily 3 + launch day. |
+| **THE-PLAN.md** | ⭐ The big-picture strategy: the money math, the daily hunt, how to convert. Read when the phone's quiet. |
 | **LAUNCH-CAMPAIGN.md** | The 30-day plan, day by day. Your roadmap. |
 | **launch-day-posts.md** | Copy-paste Facebook + Nextdoor posts for go-live. |
 | **launch-kit.md** | Google profile text, voicemail, 14-day post rotation. |
