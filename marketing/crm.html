@@ -618,19 +618,26 @@ const LSPECIAL={
 90:[{t:"🎓 90-DAY GRADUATION — full quarter review in Stats. You built a real business. Set the next 90-day target with me, and let's talk about what's next.",m:25,go:"Stats"}]
 };
 
+const WHO={M:{n:'Mike',c:'#1d6340',bg:'#e8f3ec'},S:{n:'Samantha',c:'#2278c8',bg:'#e6f0fb'},B:{n:'Either',c:'#5b6b62',bg:'#eef2ef'}};
+let launchWho='all';
+function setLWho(k){launchWho=k;render();}
+function whoFor(s){const x=(s||'').toLowerCase();
+  if(/(walk flyers|walk into|realtor office|storage facilit|neighbor blitz|nearest door|record your voicemail|voicemail greeting|missed-call|respond with text|order .*magnet|test that your missed)/.test(x))return 'M';
+  if(/(google business profile|set up the profile|publish your first google|review short link|upload all your photos|week 1 review|two-week review|month 1 review|month 2 review|graduation|plan week|plan next week|friday numbers|reputation check|mid-month|systemiz)/.test(x))return 'B';
+  return 'S';}
 function rhythmTasks(n){
   const dow=new Date(ldate(n)+'T12:00').getDay();
   const tasks=[];
-  if(dow>=1&&dow<=5)tasks.push({t:"Today tab → reply to any lead, then send today's due B2B touches (intros + follow-ups). Aim for 5–10.",m:25,go:"Today"});
-  if(dow===1)tasks.push({t:"Monday reset: skim this week's goal above, and add 5 fresh prospects so you never run dry (Find tab).",m:10,go:"Find"});
-  if(dow===2)tasks.push({t:"Post one update — a service spotlight or a tip (Scripts tab has copy).",m:10,go:"Scripts"});
-  if(dow===3)tasks.push({t:"Add 5 new B2B prospects from a city you haven't mined (Find tab).",m:10,go:"Find"});
-  if(dow===4)tasks.push({t:"Post a before/after from a recent job, or a truck/donation photo. Real work is your best content.",m:10});
-  if(dow===5){tasks.push({t:"Walk flyers into 2–3 realtor offices or storage facilities near a job today (print flyer.html).",m:30,href:"flyer.html"});
-              tasks.push({t:"Friday numbers: open Stats, log the week, and double down on what's working.",m:10,go:"Stats"});}
-  if(dow===6){tasks.push({t:"Neighbor blitz: a card on the 10 nearest doors after each job today (neighbor-flyer.html).",m:15,href:"neighbor-flyer.html"});
-              tasks.push({t:"Answer any \"ISO junk removal\" posts in groups/Nextdoor — speed wins (Scripts tab).",m:10,go:"Scripts"});}
-  if(dow===0)tasks.push({t:"Plan next week + catch up on any review texts you owe. Then rest — time with Samantha and Lovelyn.",m:15});
+  if(dow>=1&&dow<=5)tasks.push({t:"Today tab → reply to any lead, then send today's due B2B touches (intros + follow-ups). Aim for 5–10.",m:25,go:"Today",who:'S'});
+  if(dow===1)tasks.push({t:"Monday reset: skim this week's goal above, and add 5 fresh prospects so you never run dry (Find tab).",m:10,go:"Find",who:'S'});
+  if(dow===2)tasks.push({t:"Post one update — a service spotlight or a tip (Scripts tab has copy).",m:10,go:"Scripts",who:'S'});
+  if(dow===3)tasks.push({t:"Add 5 new B2B prospects from a city you haven't mined (Find tab).",m:10,go:"Find",who:'S'});
+  if(dow===4)tasks.push({t:"Post a before/after from a recent job, or a truck/donation photo. Real work is your best content.",m:10,who:'S'});
+  if(dow===5){tasks.push({t:"Walk flyers into 2–3 realtor offices or storage facilities near a job today (print flyer.html).",m:30,href:"flyer.html",who:'M'});
+              tasks.push({t:"Friday numbers: open Stats, log the week, and double down on what's working.",m:10,go:"Stats",who:'B'});}
+  if(dow===6){tasks.push({t:"Neighbor blitz: a card on the 10 nearest doors after each job today (neighbor-flyer.html).",m:15,href:"neighbor-flyer.html",who:'M'});
+              tasks.push({t:"Answer any \"ISO junk removal\" posts in groups/Nextdoor — speed wins (Scripts tab).",m:10,go:"Scripts",who:'S'});}
+  if(dow===0)tasks.push({t:"Plan next week + catch up on any review texts you owe. Then rest — time with Samantha and Lovelyn.",m:15,who:'B'});
   return tasks;
 }
 
@@ -638,6 +645,7 @@ function launchPlan(n){
   const wk=lweek(n);
   let tasks=LDAYS[n]?LDAYS[n].slice():rhythmTasks(n);
   if(LSPECIAL[n])tasks=LSPECIAL[n].concat(tasks);
+  tasks=tasks.map(t=>Object.assign({},t,{who:t.who||whoFor(t.t)}));
   return {n,wk,wkInfo:LWEEKS[wk]||LWEEKS[13],tasks};
 }
 function launchRemaining(){const n=ldayNum();if(n<1||n>90)return 0;const dn=launchPlan(n);const done=(S.launch.done['d'+n]||[]);return Math.max(0,dn.tasks.length-done.filter(i=>i<dn.tasks.length).length);}
@@ -661,14 +669,20 @@ function vLaunch(){
   const rvL=(S.metrics&&S.metrics.reviews)||0,nmL=rvL<5?5:rvL<15?15:rvL<40?40:rvL+10;
   h+='<div class="card"><div class="row"><span class="grow">⭐ <b>'+rvL+'</b> Google reviews <span class="muted">· next goal '+nmL+'</span></span><button class="b sm ghost" onclick="reviewAdj(-1)">−</button><button class="b sm" onclick="reviewAdj(1)">+ New</button><button class="b sm ghost" onclick="go(\'Stats\')">Scoreboard →</button></div></div>';
   h+='<div class="card" style="border-left:5px solid var(--e300)"><b>Every day, no matter what:</b> <span class="muted">① answer every lead in 5 minutes · ② send the review text before you leave every job · ③ log every lead. The tasks below are the <i>build</i> work on top of those three.</span></div>';
-  const total=plan.tasks.reduce((a,t)=>a+t.m,0),doneCount=done.filter(i=>i<plan.tasks.length).length;
-  h+='<div class="row" style="margin:6px 2px 10px"><b class="grow">Today\'s tasks — '+doneCount+'/'+plan.tasks.length+' done</b><span class="pill">⏱ ~'+total+' min total</span></div>';
-  plan.tasks.forEach((t,i)=>{const d=done.indexOf(i)>=0;
-    h+='<div class="card" style="'+(d?'opacity:.55;':'')+'border-left:4px solid '+(d?'var(--e200)':'var(--bl)')+'">'+
+  const showT=t=>launchWho==='all'||t.who===launchWho||t.who==='B';
+  const mCount=plan.tasks.filter(t=>t.who==='M'||t.who==='B').length,sCount=plan.tasks.filter(t=>t.who==='S'||t.who==='B').length;
+  h+='<div class="row" style="gap:6px;margin:2px 0 6px;flex-wrap:wrap">'
+    +['all','M','S'].map(k=>'<button class="b sm '+(launchWho===k?'':'ghost')+'" onclick="setLWho(\''+k+'\')">'+(k==='all'?'👥 Everyone':WHO[k].n+'\'s list')+'</button>').join('')+'</div>';
+  h+='<div class="muted" style="margin:0 2px 10px;font-size:11.5px">Mike: '+mCount+' tasks · Samantha: '+sCount+' tasks · grey = either of you. Tap a name to see just that list.</div>';
+  const shown=plan.tasks.map((t,i)=>({t,i})).filter(o=>showT(o.t));
+  const total=shown.reduce((a,o)=>a+o.t.m,0),doneCount=shown.filter(o=>done.indexOf(o.i)>=0).length;
+  h+='<div class="row" style="margin:6px 2px 10px"><b class="grow">'+(launchWho==='all'?'Today\'s tasks':WHO[launchWho].n+'\'s tasks')+' — '+doneCount+'/'+shown.length+' done</b><span class="pill">⏱ ~'+total+' min</span></div>';
+  shown.forEach(o=>{const t=o.t,i=o.i,d=done.indexOf(i)>=0,w=WHO[t.who]||WHO.B;
+    h+='<div class="card" style="'+(d?'opacity:.55;':'')+'border-left:4px solid '+(d?'var(--e200)':w.c)+'">'+
        '<div class="row" style="align-items:flex-start;gap:10px">'+
        '<input type="checkbox" '+(d?'checked ':'')+'onchange="toggleL('+n+','+i+')" style="width:22px;height:22px;margin-top:1px;padding:0;flex:none">'+
        '<div class="grow"><div style="'+(d?'text-decoration:line-through;':'')+'font-weight:600">'+esc(t.t)+'</div>'+
-       '<div class="row" style="margin-top:6px"><span class="pill warn">⏱ '+t.m+' min</span>'+
+       '<div class="row" style="margin-top:6px"><span class="pill" style="background:'+w.bg+';color:'+w.c+';border-color:'+w.bg+'">'+w.n+'</span><span class="pill warn">⏱ '+t.m+' min</span>'+
        (t.go?'<button class="b sm" onclick="go(\''+t.go+'\')">Open '+t.go+' →</button>':'')+
        (t.href?'<a class="b sm ghost" href="'+t.href+'" target="_blank" style="text-decoration:none">Open file →</a>':'')+
        '</div></div></div></div>';});
