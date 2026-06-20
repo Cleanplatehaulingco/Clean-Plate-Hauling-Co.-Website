@@ -303,7 +303,7 @@ const PROSPECT_EMAILS={
 'Lear Management Inc':'info@learmanagement.com'
 };
 let S=load();
-function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});const existing=new Set(d.prospects.map(p=>p.name));SEED.forEach(r=>{if(!existing.has(r[1])){d.prospects.push({id:'p_s_'+r[1].replace(/\W/g,''),cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:PROSPECT_EMAILS[r[1]]||'',contact:CONTACTS[r[1]]||'',status:'New',last:'',due:today(),log:[]}); }});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};if(!d.launch.startSynced){d.launch.start='2026-06-18';d.launch.startSynced=true;}if(!d.launch.startSynced2){d.launch.start='2026-06-18';d.launch.startSynced2=true;}if(!d.launch.startSynced3){d.launch.start='2026-06-18';d.launch.startSynced3=true;}if(!d.pricing)d.pricing={dumpTon:75,dumpMin:30,fuel:25,hourly:60,priceAdj:1};if(d.pricing.priceAdj===undefined)d.pricing.priceAdj=1;if(!d.metrics)d.metrics={reviews:5};if(!d.metrics.reviewsSynced){d.metrics.reviews=Math.max(d.metrics.reviews||0,5);d.metrics.reviewsSynced=true;}if(!d.metrics.reviewsSynced2){d.metrics.reviews=Math.max(d.metrics.reviews||0,5);d.metrics.reviewsSynced2=true;}if(!d.huntLog)d.huntLog={};if(!d.money)d.money={taxRate:0.30,nut:3500,reserve:0,expenses:[],foundation:{}};if(!d.money.expenses)d.money.expenses=[];if(!d.money.foundation)d.money.foundation={};if(d.money.nut===undefined)d.money.nut=3500;if(d.money.taxRate===undefined)d.money.taxRate=0.30;if(d.money.reserve===undefined)d.money.reserve=0;return d;}
+function migrate(d){d.prospects.forEach(p=>{if(p.contact===undefined)p.contact='';if(p.email===undefined)p.email='';if(!p.contact&&CONTACTS[p.name])p.contact=CONTACTS[p.name];if(!p.email&&PROSPECT_EMAILS[p.name])p.email=PROSPECT_EMAILS[p.name];});const existing=new Set(d.prospects.map(p=>p.name));SEED.forEach(r=>{if(!existing.has(r[1])){d.prospects.push({id:'p_s_'+r[1].replace(/\W/g,''),cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:PROSPECT_EMAILS[r[1]]||'',contact:CONTACTS[r[1]]||'',status:'New',last:'',due:today(),log:[]}); }});if(!d.launch)d.launch={start:today(),done:{}};if(!d.launch.done)d.launch.done={};if(!d.launch.startSynced){d.launch.start='2026-06-18';d.launch.startSynced=true;}if(!d.launch.startSynced2){d.launch.start='2026-06-18';d.launch.startSynced2=true;}if(!d.launch.startSynced3){d.launch.start='2026-06-18';d.launch.startSynced3=true;}if(!d.launch.startSynced4){d.launch.start='2026-06-20';d.launch.startSynced4=true;}if(!d.pricing)d.pricing={dumpTon:75,dumpMin:30,fuel:25,hourly:60,priceAdj:1};if(d.pricing.priceAdj===undefined)d.pricing.priceAdj=1;if(!d.metrics)d.metrics={reviews:5};if(!d.metrics.reviewsSynced){d.metrics.reviews=Math.max(d.metrics.reviews||0,5);d.metrics.reviewsSynced=true;}if(!d.metrics.reviewsSynced2){d.metrics.reviews=Math.max(d.metrics.reviews||0,5);d.metrics.reviewsSynced2=true;}if(!d.huntLog)d.huntLog={};if(!d.money)d.money={taxRate:0.30,nut:3500,reserve:0,expenses:[],foundation:{}};if(!d.money.expenses)d.money.expenses=[];if(!d.money.foundation)d.money.foundation={};if(d.money.nut===undefined)d.money.nut=3500;if(d.money.taxRate===undefined)d.money.taxRate=0.30;if(d.money.reserve===undefined)d.money.reserve=0;return d;}
 function load(){
   try{const raw=localStorage.getItem(LS);const d=JSON.parse(raw);if(d&&d.prospects){const m=migrate(d);localStorage.setItem(LS,JSON.stringify(m));return m;}}catch(e){}
   return migrate({prospects:SEED.map((r,i)=>({id:'p'+i,cat:r[0],name:r[1],city:r[2],web:r[3],phone:r[4],notes:r[5],ek:r[6],email:'',contact:'',status:'New',last:'',due:today(),log:[]})),
@@ -572,6 +572,15 @@ function vChannels(){
   h+='<h3>④ Your brand story — the eco-veteran angle</h3>';
   h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><b style="color:var(--e200)">Why this matters:</b> <span style="color:rgba(255,255,255,.85)">Most junk haulers dump everything. You sort first: veterans organizations get usable items first, then other local charities, then metal/electronics are recycled, and only what truly can\'t be reused goes to the landfill. That\'s a real, authentic differentiator — and it saves you dump fees. Every couch that goes to a veteran instead of the landfill is money in your pocket AND a story people share.</span></div>';
   h+='<div class="card"><b>The sort order (run this on every job)</b><ol style="margin:8px 0 0 18px;padding:0;color:var(--fg)"><li style="margin-bottom:4px"><b>Veterans first</b> — Michigan Veterans Foundation, DAV Thrift Store, or similar</li><li style="margin-bottom:4px"><b>Other local charities</b> — Habitat for Humanity ReStore, Salvation Army, Goodwill</li><li style="margin-bottom:4px"><b>Recycle</b> — scrap metal, electronics (e-waste), cardboard</li><li><b>Dump</b> — only what truly can\'t go anywhere else</li></ol><p class="muted" style="margin-top:8px;font-size:12.5px">Tip: a small storage unit lets you batch donation and scrap runs instead of making extra stops per job — often nets positive once dump fees and scrap revenue are factored in.</p></div>';
+  h+='<div class="card"><b>📍 Where it goes — your divert list</b><div class="muted" style="font-size:12px;margin:4px 0 8px">Tap to call. Verify hours before you drive — they change. Build a relationship with Mann Metals + one veteran charity first; regulars get better treatment.</div>'
+   +'<div style="font-size:12.5px;line-height:1.75">'
+   +'<b style="color:var(--e400)">🇺🇸 Veterans first</b><br>Vietnam Vets / Pickup Please — <a href="tel:8007758387">800-775-8387</a> (does home pickups too)<br>Purple Heart Foundation, Westland — <a href="tel:8884144483">888-414-4483</a><br>VVA Chapter Pontiac — <a href="tel:2483940141">248-394-0141</a>'
+   +'<br><br><b style="color:var(--e400)">🏠 Charities (secondary)</b><br>Habitat ReStore, Waterford — <a href="tel:2483388392">248-338-8392</a> · free pickup line <a href="tel:2483654090">248-365-4090</a><br>Salvation Army, Walled Lake — <a href="tel:2486691443">248-669-1443</a> · Novi — <a href="tel:3138005670">313-800-5670</a><br>Goodwill, Commerce — <a href="tel:2488595927">248-859-5927</a> · Northville Civic Concern — <a href="tel:2483441033">248-344-1033</a>'
+   +'<br><br><b style="color:var(--e400)">♻️ Scrap &amp; e-waste (pays YOU)</b><br>Mann Metals, Walled Lake — <a href="tel:2489601200">248-960-1200</a> (call for copper/steel/aluminum rates)<br>PADNOS, Whitmore Lake — electronics &amp; circuit boards by the pound'
+   +'</div></div>';
+  h+='<div class="card"><b>🚚 The build-up — storage &amp; trailer</b><div class="muted" style="font-size:12.5px;line-height:1.65;margin-top:6px">'
+   +'<b>Storage</b> (lease it the moment batching loads costs you time): a 10×15 or 10×20 <b>drive-up</b>, month-to-month, ~$100–175/mo around Wixom/Commerce — CubeSmart, Public Storage, iStorage. Three zones: scrap corner · donation staging · tools. It pays for itself once dump-fee savings + scrap revenue beat the rent.<br><br>'
+   +'<b>Trailer</b> (your month-2 unlock): used 14ft dump trailer, ~14K GVWR — target $6,500–9,500 on Facebook Marketplace / Craigslist Detroit (search "dump trailer"). New from ~$7,895. Local dealer: American Trailer Mart, Waterford — <a href="tel:2487381600">248-738-1600</a>. Fund it from early jobs + scrap, not debt.</div></div>';
   h+='<div class="card"><b>Drop these onto every profile now</b><div class="muted" style="margin:6px 0 10px;font-size:12.5px">Copy-paste the Google Business Profile description below into your GBP → Edit profile → Business description. Same core message, tuned for each platform, is in Scripts.</div>';
   const ecoScripts=[9,10,11];
   ecoScripts.forEach(i=>{h+='<div class="row" style="margin-top:8px;align-items:flex-start"><span class="grow muted">'+esc(SCRIPTS[i][0])+'</span><button class="b sm" onclick="copyScript('+i+')">📋 Copy</button></div>';});
@@ -596,7 +605,8 @@ function vStats(){
   h+='<div class="card" style="background:var(--e900);color:#fff;border:none"><div class="row"><b class="grow" style="color:var(--e200)">$20K in 90 Days</b><span style="color:rgba(255,255,255,.6);font-size:12px">Day '+dn+' of 90</span></div>'
     +'<div style="font-size:30px;font-weight:900;margin-top:4px">$'+rev.toLocaleString()+' <span style="font-size:15px;color:rgba(255,255,255,.55)">/ $20,000</span></div>'
     +'<div style="background:rgba(255,255,255,.15);border-radius:6px;height:10px;margin-top:8px;overflow:hidden"><div style="background:var(--e200);height:100%;width:'+gpct+'%"></div></div>'
-    +'<div style="color:rgba(255,255,255,.7);margin-top:6px;font-size:12px">'+done.length+' jobs done · avg $'+avg+' · '+gpct+'% of goal</div></div>';
+    +'<div style="color:rgba(255,255,255,.7);margin-top:6px;font-size:12px">'+done.length+' jobs done · avg $'+avg+' · '+gpct+'% of goal</div>'
+    +'<div style="color:rgba(255,255,255,.62);margin-top:8px;font-size:11.5px;border-top:1px solid rgba(255,255,255,.12);padding-top:8px"><b style="color:rgba(255,255,255,.85)">The realistic ramp:</b> Mo 1 — hit your $3.5K nut · Mo 2 — $6–8K + buy the trailer · Mo 3 — $10K+. Hit those and $20K for the quarter takes care of itself.</div></div>';
   h+='<h3>⭐ Reviews — your #1 growth lever</h3><div class="card"><div class="row"><div class="grow"><b style="font-size:24px">'+rv+'</b> <span class="muted">reviews · next milestone '+nextMile+'</span></div><button class="b sm ghost" onclick="reviewAdj(-1)">−</button><button class="b sm" onclick="reviewAdj(1)">+ New review</button></div>'
     +'<div style="background:var(--bl);border-radius:6px;height:10px;margin-top:8px;overflow:hidden"><div style="background:var(--e300);height:100%;width:'+milePct+'%"></div></div>'
     +'<div class="muted" style="margin-top:6px;font-size:12px">'+(rv<5?'Hit <b>5</b> to unlock Google Local Services Ads.':rv<15?'Push to <b>15</b> — that\'s map-pack territory.':rv<40?'Climbing to <b>40</b> — you\'ll own local.':'Elite. Never stop asking.')+' Tap <b>+ New review</b> each time one lands on Google.</div></div>';
@@ -851,34 +861,30 @@ function ldate(n){return addDays(lstart(),n-1);}
 function lweek(n){return Math.min(13,Math.max(1,Math.floor((n-1)/7)+1));}
 
 const LWEEKS={
-1:{t:"🚀 LAUNCH WEEK",g:"Get everything live and make noise. By Sunday: Google profile published, first reviews requested, announced on every channel, and Thumbtack turned on."},
-2:{t:"📣 SATURATE",g:"This week's targets: 5 Google reviews, a neighbor card on every job, and 20+ B2B intro emails sent."},
-3:{t:"🔌 PAID & REFERRALS",g:"Get Thumbtack producing, apply for Google Local Services Ads the moment you hit 5 reviews, and launch your $25 referral offer."},
-4:{t:"⚙️ SYSTEMIZE",g:"Close month 1 strong: 15 Google reviews, 2–3 B2B accounts in conversation, and you KNOW your #1 lead source."},
-5:{t:"📈 BUILD — LSA LIVE",g:"Month 2 starts. Get Local Services Ads running, keep the review engine on, and turn warm B2B prospects into recurring accounts."},
-6:{t:"📈 BUILD — SCALE WHAT WORKS",g:"Pour time into whatever booked the most last month. Cut anything that doesn't pay back at least 2×."},
-7:{t:"📈 BUILD — RECURRING B2B",g:"Lock in property managers and realtors as repeat accounts. One good PM = cleanouts every month, forever."},
-8:{t:"📈 BUILD — CLOSE MONTH 2",g:"Aim for 40+ reviews, a calendar that's full most weeks, and a clear read on your cost-per-job by channel."},
-9:{t:"🏆 COMPOUND — DOUBLE DOWN",g:"Month 3. You know what works — go all in on it. This is where the business starts running itself."},
-10:{t:"🏆 COMPOUND — REPUTATION",g:"Reviews and referrals should now be your biggest source. Keep the flywheel spinning."},
-11:{t:"🏆 COMPOUND — EFFICIENCY",g:"Tighten routes, dump runs, and pricing. Every saved hour is another job — or time with Lovelyn."},
-12:{t:"🏆 COMPOUND — RECURRING REVENUE",g:"Your B2B accounts should carry a revenue floor now. Nurture them like gold."},
-13:{t:"🏆 COMPOUND — PLAN THE NEXT 90",g:"Review the full quarter, decide if it's time for a helper or a dump trailer, and set the next 90-day target."}
+1:{t:"🚀 LAUNCH WEEK — system on",g:"Profile's live and you already have 5 reviews — now stand up the machine. By Sunday: LSA applied for, the donate/scrap 4-pile sort running on every load, and 6+ in-person B2B drops done. Hunt hard with the truck."},
+2:{t:"📣 MISSION & SATURATE",g:"Make noise with a message. Send the press release that states your mission — veteran-owned, donate-to-veterans-first, keep usable items out of the landfill. Targets: a neighbor card on every job, 20+ B2B intro emails, first donation + scrap runs banked toward the trailer."},
+3:{t:"🔌 PAID & REFERRALS",g:"Get Thumbtack producing, keep Local Services Ads running (you're past 5 reviews), and launch your $25 referral offer. Every scrap run + spare dollar goes into the trailer fund."},
+4:{t:"⚙️ SYSTEMIZE — close month 1",g:"Goal: hit your $3,500 nut, 15+ reviews, 2–3 B2B accounts in conversation, and you KNOW your #1 lead source. Tally the trailer fund."},
+5:{t:"📈 BUILD — the trailer push",g:"Month 2. The 14ft dump trailer is the unlock — every job + scrap run funds it. Keep LSA + reviews humming, turn warm B2B prospects into recurring accounts."},
+6:{t:"📈 BUILD — buy the trailer",g:"Target: enough banked to buy a used 14ft dump trailer (~$7,500). Capacity per trip jumps — now you can clear a full estate in one go. Lease storage the moment batching loads costs you time."},
+7:{t:"📈 BUILD — recurring B2B",g:"Lock in property managers and realtors as repeat accounts. One good PM = cleanouts every month, forever. With the trailer you can finally say yes to the big ones."},
+8:{t:"📈 BUILD — close month 2",g:"Aim for a $6–8K month, 40+ reviews, a calendar that's full most weeks, the trailer working, and a clear read on cost-per-job by channel."},
+9:{t:"🏆 SCALE — double down",g:"Month 3. You've got the truck + trailer + reviews. Go all in on whatever books the most. This is where $10K+/mo becomes real."},
+10:{t:"🏆 SCALE — reputation engine",g:"Reviews and referrals should now be your biggest source. The veteran/donation story is your edge — keep posting it."},
+11:{t:"🏆 SCALE — efficiency",g:"Tighten routes, batch your dump/donation/scrap runs, sharpen pricing. Every saved hour is another job — or time with Lovelyn."},
+12:{t:"🏆 SCALE — recurring revenue",g:"Your B2B accounts should carry a revenue floor now. Nurture them like gold. Reassess storage + whether it's time for a helper."},
+13:{t:"🏆 SCALE — plan the next 90",g:"Review the full quarter — you went from a truck to a truck + trailer + recurring accounts. Set the next target: a helper, a second trailer, or a bigger radius."}
 };
 
 const LDAYS={
 1:[
- {t:"Upload ALL your photos to Google Business Profile (logo as profile pic, side-profile truck as cover, then the rest).",m:15},
- {t:"Set up the profile: your 12 cities, hours 7am–8pm, categories, check the Veteran-Owned badge, and turn Messaging ON.",m:10},
- {t:"Publish your first Google Post (\"We're open — text photos for a flat-rate quote\"). Use the Channels post generator.",m:5,go:"Channels"},
- {t:"Copy your Google review short link (Profile → \"Ask for reviews\") and save it in your phone notes — you'll use it daily.",m:5},
- {t:"⭐ Text your review link to EVERYONE you've already hauled for — your customers, your call. First reviews are the biggest boost a new profile gets. Script is in Scripts.",m:20,go:"Scripts",who:'M'},
- {t:"Post your Facebook page launch post, then PIN it to the top of the page. Full copy in launch-day-posts.md §1.",m:10,href:"launch-day-posts.md"},
- {t:"Post your Nextdoor intro — your best free channel. Copy in launch-day-posts.md §2.",m:5,href:"launch-day-posts.md"},
- {t:"Post in 3 local Facebook groups — the short, humble version. Copy in launch-day-posts.md §3.",m:10,href:"launch-day-posts.md"},
- {t:"Set your missed-call auto-text on your phone (Scripts tab has the exact words). A missed call becomes a lead, not a lost job.",m:3,go:"Scripts"},
- {t:"Record your voicemail greeting (Scripts tab). Warm, ~15 seconds, tells them to text photos.",m:3,go:"Scripts"},
- {t:"Email the press release to the 5 local outlets listed in press-release.md.",m:10,href:"press-release.md"}
+ {t:"Paste your new donation-first description into Google Business Profile (Channels → ④ → 'Google Business Profile description'). This mission statement is your differentiator — get it live first thing.",m:10,go:"Channels"},
+ {t:"🟢 You already have 5 reviews — apply for Google Local Services Ads TODAY (ads.google.com/localservices). The green 'Guaranteed' badge is the top spot on Google. Don't wait on this.",m:30,href:"launch-kit.md"},
+ {t:"Save your divert contacts in your phone now — Mann Metals (scrap) 248-960-1200 · VVA veteran pickup 800-775-8387 · Habitat ReStore 248-338-8392 · Salvation Army Walled Lake 248-669-1443. Full list in Channels → ④.",m:10,go:"Channels"},
+ {t:"Learn the 4-pile sort — Donate / Scrap metal / Electronics / Dump. Starting today, sort EVERY load before you touch it. Donations + scrap are money you DON'T pay at the dump.",m:5,go:"Channels"},
+ {t:"Pick ONE city and do 6 in-person B2B drops before lunch — property mgmt, realtors, storage, restoration. Truck out front, shirt on, cards in hand. This is the whole game.",m:120,go:"Today",who:'M'},
+ {t:"Post your first donation-angle Google update — run the 'Donation run' or 'Eco angle' template through the Channels generator.",m:10,go:"Channels",who:'S'},
+ {t:"⭐ Text your review link to anyone you've hauled for who hasn't left one yet. You're at 5 — every new one compounds. Confirm your missed-call auto-text + voicemail still fire.",m:15,go:"Scripts",who:'M'}
 ],
 2:[
  {t:"Sign up for Thumbtack as a Junk Removal pro — first paid leads while Google warms up. Follow the Channels → Thumbtack win-setup (profile, targeting, budget cap).",m:20,go:"Channels"},
@@ -912,6 +918,7 @@ const LDAYS={
  {t:"Plan week 2: your focus is reviews (target 5) and the B2B sprint. Then rest — you earned it.",m:10}
 ],
 8:[
+ {t:"📣 Send the press release to the 5 local outlets (press-release.md). Lead with the mission: veteran-owned, donate-to-veterans-first, keeping usable items out of the landfill. This is your story — make them want to tell it. (Tue–Thu morning gets the best pickup.)",m:20,href:"press-release.md",who:'S'},
  {t:"B2B sprint: send 5 intro emails today (Today tab).",m:20,go:"Today",who:'M'},
  {t:"Post a before/after from any job this week (even a small one).",m:10},
  {t:"Make sure your review link is everywhere: phone notes, your text signature, and on deck for the truck QR.",m:10}
@@ -949,16 +956,17 @@ const LDAYS={
 };
 
 const LSPECIAL={
-15:[{t:"🟢 BIG ONE: if you're near 5 reviews, apply for Google Local Services Ads today (ads.google.com/localservices). The green 'Guaranteed' badge is the top spot on Google. Checklist in launch-kit.md §4.",m:30,href:"launch-kit.md"},
+15:[{t:"LSA check: if your application's approved, set your weekly budget to only as many jobs as you can do RIGHT — never buy leads faster than you can do them well. Still pending? Call Google to push it through.",m:20,href:"launch-kit.md"},
     {t:"Launch your referral offer: text past customers \"$25 to you AND your friend for every booking.\" Script is in the Homeowners tab.",m:15,go:"Homeowners"}],
-22:[{t:"Re-touch your best quiet B2B prospects — \"still glad to be your turnover vendor.\" The Today tab queues them.",m:15,go:"Today"}],
-30:[{t:"🏁 MONTH 1 REVIEW — open Stats. Target check: 15 reviews · 2–3 B2B convos · you know your #1 source. Pour next month into whatever booked the most.",m:20,go:"Stats"}],
-31:[{t:"If LSA is approved, set your budget to how many jobs/week you can actually handle well — never buy leads faster than you can do them right.",m:10}],
-45:[{t:"Mid-month-2 check: is LSA paying back at least 2×? If yes, scale it. If not, tighten your service area and response time.",m:15,go:"Stats"}],
-60:[{t:"🏁 MONTH 2 REVIEW — open Stats. Calendar should be full most weeks now. Decide: is it time for a helper or a dump trailer?",m:20,go:"Stats"}],
-61:[{t:"Month 3 is about systemizing. If you're turning down jobs, tell me — I'll build you a crew checklist and a hiring post.",m:10}],
-75:[{t:"Reputation check: are reviews + referrals now your biggest source? That's the goal — the flywheel turning on its own.",m:15,go:"Stats"}],
-90:[{t:"🎓 90-DAY GRADUATION — full quarter review in Stats. You built a real business. Set the next 90-day target with me, and let's talk about what's next.",m:25,go:"Stats"}]
+22:[{t:"💰 Trailer fund check: tally what you've banked from jobs + scrap so far. Target is a used 14ft dump trailer (~$7,500) by end of month 2 — it's your biggest capacity unlock.",m:10},
+    {t:"Re-touch your best quiet B2B prospects — \"still glad to be your turnover vendor.\" The Today tab queues them.",m:15,go:"Today"}],
+30:[{t:"🏁 MONTH 1 REVIEW — open Stats. Targets: hit your $3,500 nut · 15+ reviews · 2–3 B2B convos · #1 source known · trailer fund growing. Pour next month into whatever booked the most.",m:20,go:"Stats"}],
+31:[{t:"Month 2 is the trailer push — every job + scrap run funds it. The moment you've got ~$7,500 banked, buy the used 14ft dump trailer. It's what unlocks the big cleanouts.",m:10}],
+45:[{t:"Mid-month-2: got the trailer yet? Once it's hitched you can clear a full estate in one trip — go after the big B2B cleanouts. And check: is LSA paying back at least 2×?",m:15,go:"Stats"}],
+60:[{t:"🏁 MONTH 2 REVIEW — open Stats. Target: a $6–8K month · trailer working · 40+ reviews · calendar full. Is batching donation/scrap loads costing you time? If yes, lease the storage unit now.",m:20,go:"Stats"}],
+61:[{t:"Month 3: scale on capacity + reputation, target $10K+/mo. If you're turning down jobs, tell me — I'll build you a crew checklist and a hiring post.",m:10}],
+75:[{t:"Reputation check: are reviews + referrals now your biggest source? That's the flywheel turning on its own. Keep the veteran/donation story front and center — it's your edge.",m:15,go:"Stats"}],
+90:[{t:"🎓 90-DAY GRADUATION — full quarter review in Stats. You went from a truck to a truck + trailer + recurring accounts. Set the next 90-day target with me, and let's talk about what's next.",m:25,go:"Stats"}]
 };
 
 const WHO={M:{n:'Mike',c:'#1d6340',bg:'#e8f3ec'},S:{n:'Samantha',c:'#2278c8',bg:'#e6f0fb'},B:{n:'Either',c:'#5b6b62',bg:'#eef2ef'}};
